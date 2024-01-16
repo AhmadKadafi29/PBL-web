@@ -4,11 +4,11 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\KategoriobatController;
 use App\Http\Controllers\Api\ObatController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\DashboardController;
 
 
-use App\Http\Controllers\supplierController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,7 +32,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware(['auth:san
 Route::get('/kategori_obat', [KategoriobatController::class, 'index'])->middleware(['auth:sanctum']);
 Route::get('/obat', [ObatController::class, 'index'])->middleware(['auth:sanctum']);
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth:sanctum']);
-Route::resource('/supplier', supplierController::class)->middleware(['auth:sanctum']);
+Route::resource('/supplier', SupplierController::class)->middleware(['auth:sanctum']);
 Route::get('/obat_kadaluara', [ObatController::class, 'kadaluarsa'])->middleware(['auth:sanctum']);
 
 Route::get('/user', [UserController::class, 'index'])->middleware(['auth:sanctum']);

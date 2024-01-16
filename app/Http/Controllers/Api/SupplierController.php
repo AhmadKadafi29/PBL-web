@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 
-class supplierController extends Controller
+class SupplierController extends Controller
 {
     public function index(Request $request)
     {
         $supplier = Supplier::all();
-        return view('pages.supplier.index', compact('supplier'));
+
+        return response()->json($supplier);
     }
     public function create()
     {
@@ -24,10 +26,11 @@ class supplierController extends Controller
             'alamat' => 'required|String|max:255'
         ]);
 
-        Supplier::create($request->all());
-
-        return redirect()->route('Supplier.index')
-            ->with('success', 'Supplier telah tersimpan.');
+        $supplier = Supplier::create($request->all());
+        return response()->json([
+            'message' => 'Supplier berhasil ditambah',
+            'supplier' => $supplier
+        ]);
     }
 
     public function edit($id)
@@ -47,16 +50,18 @@ class supplierController extends Controller
         $supplier = Supplier::find($id);
         $supplier->update($request->all());
 
-
-        return redirect()->route('Supplier.index')
-            ->with('success', 'Supplier telah diperbarui');
+        return response()->json([
+            'message' => 'Supplier berhasil diubah',
+            'supplier' => $supplier
+        ]);
     }
     public function destroy(Request $request, $id)
     {
         $supplier = Supplier::find($id);
         $supplier->delete();
 
-        return redirect()->route('Supplier.index')
-            ->with('success', 'Supplier telah dihapus');
+        return response()->json([
+            'message' => 'Supplier berhasil dihapus',
+        ]);
     }
 }

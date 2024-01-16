@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -39,5 +40,31 @@ class LaporanPembelianController extends Controller
             'bulan' => $bulan,
             'tahun' => $tahun,
         ]);
+    }
+
+    public function cetaklaporan(Request $request)
+    {
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+
+        $laporanPembelian = DB::table('pembelian')
+            ->join('obat', 'pembelian.id_obat', '=', 'obat.id')
+            ->select('pembelian.*', 'obat.nama_obat')
+            ->whereMonth('pembelian.tanggal_pembelian', $bulan)
+            ->whereYear('pembelian.tanggal_pembelian', $tahun)
+            ->get();
+        $total = DB::table('pembelian')
+            ->whereMonth('tanggal_pembelian', $bulan)
+            ->whereYear('tanggal_pembelian', $tahun)
+            ->sum('total_harga');
+
+        $pdf = PDF::loadView('pages.laporan_pembelian.cetak_pembelian', [
+            'laporanPembelian' => $laporanPembelian,
+            'total' => $total,
+            'bulan' => $bulan,
+            'tahun' => $tahun,
+        ]);
+
+        return $pdf->stream('laporan_pembelian_' . $bulan . '_' . $tahun . '.pdf');
     }
 }

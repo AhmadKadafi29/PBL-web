@@ -16,11 +16,10 @@
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
                     <div class="breadcrumb-item"><a href="#">Laporan</a></div>
-                    <div class="breadcrumb-item"><a href="#"> Laporan Penjualan</a></div>
+                    <div class="breadcrumb-item"><a href="#">Laporan Penjualan</a></div>
                 </div>
             </div>
             <div class="section-body">
-
                 <div class="container mt-4">
                     <h2>Generate Laporan Penjualan per Bulan</h2>
                     <form action="{{ route('laporan-penjualan.generate') }}" method="post">
@@ -64,7 +63,7 @@
                                 <tr>
                                     <th>ID Penjualan</th>
                                     <th>Nama Obat</th>
-                                    <th>Jumlah</th>
+                                    <th>Jumlah Penjualan</th>
                                     <th>Total Harga</th>
                                     <th>Tanggal Penjualan</th>
                                 </tr>
@@ -86,15 +85,22 @@
                                 </tr>
                             </tbody>
                         </table>
+
+                        <form action="{{ route('laporan-penjualan.cetak') }}" method="get">
+                            @csrf
+                            <input type="hidden" name="bulan" value="{{ $bulan }}">
+                            <input type="hidden" name="tahun" value="{{ $tahun }}">
+                            <button type="submit" align="right" class="btn btn-success">Cetak Laporan</button>
+                        </form>
                     @endif
                 </div>
-
+            </div>
         </section>
     </div>
 @endsection
 
 @push('scripts')
-    <!-- JS Libraies -->
+    <!-- JS Libraries -->
     <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
 
     <!-- Page Specific JS File -->

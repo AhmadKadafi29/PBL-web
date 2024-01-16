@@ -20,7 +20,6 @@
                 </div>
             </div>
             <div class="section-body">
-
                 <div class="container mt-4">
                     <h2>Generate Laporan Pembelian per Bulan</h2>
                     <form action="{{ route('laporan-pembelian.generate') }}" method="post">

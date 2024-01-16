@@ -30,11 +30,18 @@
                     </li>
                 </ul>
             </li>
-            <li class="nav-item">
+            @can('isPemilik')
+                <li class="nav-item">
 
-                <a class="nav-link" href="{{ route('Supplier.index') }}"><i
-                        class="fas fa-boxes-packing"></i><span>Supplier</span></a>
-            </li>
+                    <a class="nav-link" href="{{ route('Supplier.index') }}"><i
+                            class="fas fa-boxes-packing"></i><span>Supplier</span></a>
+                </li>
+                <li class="nav-item">
+
+                    <a class="nav-link" href="{{ route('user.index') }}"><i class="fa fa-user-circle"
+                            aria-hidden="true"></i><span>User</span></a>
+                </li>
+            @endcan
             <li class="nav-item">
 
                 <a class="nav-link" href="{{ route('Pembelian.index') }}">
@@ -46,12 +53,13 @@
                 <a class="nav-link" href="{{ route('Stok_opname.index') }}">
                     <i class="fa-solid fa-tablets"></i><span>Stok Opname</span></a>
             </li>
+            @can('isKaryawan')
+                <li class="nav-item">
 
-            <li class="nav-item">
-
-                <a class="nav-link" href="{{ route('penjualan.index') }}">
-                    <i class="fa-solid fa-cart-shopping"></i><span>Penjualan</span></a>
-            </li>
+                    <a class="nav-link" href="{{ route('penjualan.index') }}">
+                        <i class="fa-solid fa-cart-shopping"></i><span>Penjualan</span></a>
+                </li>
+            @endcan
             <li class="nav-item dropdown ">
                 <a href="" class="nav-link has-dropdown"><i class="fa fa-clipboard"
                         aria-hidden="true"></i><span>Laporan</span></a>
@@ -63,10 +71,11 @@
                         <a class="nav-link" href="{{ route('laporan-pembelian.index') }}">Laporan Pembelian</a>
                     </li>
                     <li>
-                        <a class="nav-link" href="#">Laporan Laba & Rugi</a>
+                        <a class="nav-link" href="{{ route('labarugi.index') }}">Laporan Laba & Rugi</a>
                     </li>
                 </ul>
             </li>
+
 
         </ul>
     </aside>
