@@ -31,7 +31,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function store(Request $request)
     {
         User::create([
             'name' => $request['name'],
@@ -42,7 +42,7 @@ class UserController extends Controller
             // 'address'=>$request['address']
         ]);
 
-        return redirect('pages.user.index')->with('success', 'User baru berhasil ditambahkan');
+        return redirect()->route('user.index')->with('success', 'User baru berhasil ditambahkan');
     }
 
     public function edit(User $user)
@@ -70,8 +70,9 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
+        $user = User::find($id);
         $user->delete();
         return redirect()->route('user.index')->with('success', 'user berhasil dihapus');
     }
