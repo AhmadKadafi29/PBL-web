@@ -13,18 +13,14 @@ return new class extends Migration
     {
         Schema::create('pembelian', function (Blueprint $table) {
             $table->bigIncrements('id_pembelian');
-            $table->bigInteger('id_obat')->unsigned();
             $table->bigInteger('id_supplier')->unsigned();
-            $table->bigInteger('nofaktur');
-            $table->double('harga_satuan');
-            $table->integer('quantity');
+            $table->bigInteger('no_faktur');
             $table->double('total_harga');
             $table->date('tanggal_pembelian');
             $table->string('status_pembayaran')->default('lunas');
             $table->timestamps();
 
-            $table->foreign('id_obat')->references('id')->on('obat')->cascade();
-            $table->foreign('id_supplier')->references('id')->on('supplier')->cascade();
+            $table->foreign('id_supplier')->references('id_supplier')->on('supplier')->cascadeOnDelete();
         });
     }
 
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pembelian');
+        Schema::dropIfExists('table_pembelian');
     }
 };

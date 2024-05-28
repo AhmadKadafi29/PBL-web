@@ -1,73 +1,51 @@
-@extends('admin.master')
+@extends('layouts.app')
 
-@section('title')
-    Bibliografi Kategori
-@stop
+@section('title', 'Edit Kategori Obat')
 
-@section('css')
+@push('style')
+    <!-- CSS Libraries -->
+@endpush
 
-@stop
+@section('main')
+    <div class="main-content">
+        <section class="section">
+            <div class="section-header">
+                <h1>New Kategori Obat</h1>
+                <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                    <div class="breadcrumb-item"><a href="#">Kategori Obat</a></div>
+                    <div class="breadcrumb-item">Edit Kategori Obat</div>
+                </div>
+            </div>
 
-@section('content')
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0">Edit Bibliografi Kategori</h1>
-                    </div><!-- /.col -->
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('bibliografi_kategori.index') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Bibliografi Kategori</li>
-                        </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </div>
-        <!-- /.content-header -->
+            <div class="section-body">
+                <div class="card">
 
-        <!-- Main content -->
-        <section class="content">
-            <div class="container-fluid">
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <strong>Maaf!</strong> Terdapat kesalahan dengan inputan Anda.<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                    <form action="{{ route('Kategori.update', $ko) }}" method="POST">
+                        @csrf
+                        @method('PUT')
 
-                <form action="{{ route('bibliografi_kategori.update', $bk->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    {{ $bk }}
-
-                    <div class="row">
-                        <div class="col-xs-6 col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <strong>Deskripsi:</strong>
-                                <input type="text" name="deskripsi" value="{{ $bk->deskripsi }}" class="form-control"
-                                    placeholder="Deskripsi">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <strong>Nama Kategori</strong>
+                                    <input type="text" name="nama_kategori" class="form-control"
+                                        value="{{ $ko->nama_kategori }}">
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 text-left">
+                                <button type="submit" class="btn btn-primary">Simpan</button>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 text-left">
-                            <button type="submit" class="btn btn-primary">Simpan</button>
-                        </div>
-                    </div>
-
-                </form>
-
-            </div><!-- /.container-fluid -->
+                    </form>
+                </div>
+            </div>
         </section>
-        <!-- /.content -->
     </div>
 @endsection
 
-@section('js')
-
-@endsection
+@push('scripts')
+    <!-- JS Libraies -->
+    @section('js')
+    @endsection
+@endpush

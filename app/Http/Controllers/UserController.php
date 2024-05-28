@@ -18,7 +18,7 @@ class UserController extends Controller
             ->when($request->input('name'), function ($query, $name) {
                 return $query->where('name', 'like', '%' . $name . '%');
             })
-            ->select('id', 'name', 'email', 'role', DB::raw('DATE_FORMAT(created_at, "%d %M %Y") as created_at'))
+            ->select('id', 'name', 'email', 'role', 'alamat', 'no_telp')
             ->paginate(10);
         return view('pages.user.index', compact('users'));
     }
@@ -38,6 +38,8 @@ class UserController extends Controller
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
             'role' => $request['role'],
+            'alamat' => $request['alamat'],
+            'no_telp' => $request['no_telp']
             // 'phone'=>$request['phone'],
             // 'address'=>$request['address']
         ]);
@@ -63,6 +65,8 @@ class UserController extends Controller
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'role' => $request->input('role'),
+            'alamat' => $request->input('alamat'),
+            'no_telp' => $request->input('no_telp')
         ]);
 
         return redirect()->route('user.index')->with('success', 'User updated successfully');

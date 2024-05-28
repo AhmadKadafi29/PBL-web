@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailObat;
+use App\Models\DetailPembelian;
+use App\Models\DetailPenjualan;
 use App\Models\Obat;
 use App\Models\Penjualan;
 use Illuminate\Http\Request;
@@ -17,60 +20,82 @@ class PenjualanController extends Controller
         $totalBayar = 0;
 
         foreach ($keranjang as $item) {
-            $totalBayar += $item['harga_obat'] * $item['jumlah'];
+            $totalBayar += $item['harga_jual_obat'] * $item['jumlah'];
         }
         return view('pages.penjualan.index', compact('keranjang', 'totalBayar'));
     }
 
     public function cariObat(Request $request)
     {
-        $idObat = $request->input('id_obat');
-        $obat = Obat::find($idObat);
+        $nama = $request->input('nama_obat');
+        $obat = DetailObat::whereHas('obat', function ($query) use ($nama) {
+            $query->where('nama_obat', $nama);
+        })
+            ->where('stok_obat', '>', 0)
+            ->where('tanggal_kadaluarsa', '>', now())
+            ->orderBy('tanggal_kadaluarsa')
+            ->first();
 
         if (!$obat) {
-            return response()->json(['error' => 'Obat tidak ditemukan'], 404);
+            return response()->json(['error' => 'Obat tidak ditemukan atau sudah habis/stok tidak mencukupi'], 404);
         }
 
         return response()->json([
-            'nama_obat' => $obat->nama_obat,
+            'nama_obat' => $obat->obat->nama_obat,
             'stok_obat' => $obat->stok_obat,
-            'harga_obat' => $obat->harga_obat,
+            'harga_obat' => $obat->obat->harga_obat,
         ]);
     }
 
     public function tambahKeKeranjang(Request $request)
     {
         $request->validate([
-            'id_obat' => 'required',
-            'stok_obat' => 'required|numeric|min:0',
-            'harga_obat' => 'required|numeric|min:0',
+            'nama_obat' => 'required',
             'jumlah' => 'required|numeric|min:1',
         ]);
 
-        $stokObat = $request->stok_obat;
+        $namaObat = $request->nama_obat;
         $jumlah = $request->jumlah;
 
-        if ($stokObat - $jumlah < 0) {
+        $obat = DetailObat::whereHas('obat', function ($query) use ($namaObat) {
+            $query->where('nama_obat', $namaObat);
+        })
+            ->where('stok_obat', '>', 0)
+            ->where('tanggal_kadaluarsa', '>', now())
+            ->orderBy('tanggal_kadaluarsa')
+            ->first();
+
+        if (!$obat) {
+            return redirect()->back()->with('error', 'Obat tidak ditemukan atau sudah habis/stok tidak mencukupi.');
+        }
+
+        $stokObat = $obat->stok_obat;
+
+        if ($stokObat < $jumlah) {
             return redirect()->back()->with('error', 'Stok obat tidak mencukupi.');
         }
 
-        $stokObat -= $jumlah;
+        // Perbarui stok obat
+        $obat->stok_obat -= $jumlah;
+        $obat->save();
 
-        $obat = [
-            'id_obat' => $request->id_obat,
-            'nama_obat' => $request->nama_obat,
-            'harga_obat' => $request->harga_obat,
+        $obatData = [
+            'kode_obat' => $obat->obat->kode_obat,
+            'nama_obat' => $namaObat,
+            'harga_obat' => $obat->obat->harga_obat,
             'jumlah' => $jumlah,
-            'total_harga' => $request->harga_obat * $jumlah,
+            'stok_obat' => $obat->stok_obat,
+            'total_harga' => $obat->obat->harga_obat * $jumlah,
         ];
 
         $keranjang = session('keranjang', []);
-        $keranjang[] = $obat;
+        $keranjang[] = $obatData;
         session(['keranjang' => $keranjang]);
 
-        DB::table('obat')->where('id', $request->id_obat)->update(['stok_obat' => $stokObat]);
         return redirect()->back()->with('success', 'Obat berhasil ditambahkan ke keranjang.');
     }
+
+
 
     public function checkout(Request $request)
     {
@@ -81,18 +106,35 @@ class PenjualanController extends Controller
 
         $keranjang = session('keranjang', []);
 
+        $penjualan = Penjualan::create([
+            'tanggal_penjualan' => now(),
+        ]);
+
+
         foreach ($keranjang as $item) {
-            Penjualan::create([
+            $detailPembelian = DetailPembelian::where('id_obat', $item['id_obat'])->latest()->first();
+
+            DetailPenjualan::create([
+                'id_penjualan' => $penjualan->id,
                 'id_obat' => $item['id_obat'],
-                'harga_obat' => $item['harga_obat'],
                 'jumlah' => $item['jumlah'],
-                'total_harga' => $item['total_harga'],
-                'tanggal_penjualan' => now(),
+                'harga_jual_obat' => $item['harga_obat'],
+                'harga_beli_obat' => $detailPembelian->harga_beli_satuan,
             ]);
         }
+        // $penjualan = Penjualan::all();
+        $totalBayar = 0;
+
+        foreach ($keranjang as $item) {
+            $totalBayar += $item['harga_obat'] * $item['jumlah'];
+        }
+
+        $totalBayar;
+        // $pdf = PDF::loadView('pages.penjualan.nota', compact('keranjang', 'totalBayar'));
+        // $pdf->download('nota_penjualan.pdf');
 
         session()->forget('keranjang');
-        $this->cetakNota($request, $keranjang);
+
 
         return redirect()->back()->with('success', 'Transaksi berhasil.');
     }
@@ -115,27 +157,33 @@ class PenjualanController extends Controller
     public function hapusItemKeranjang(Request $request, $index)
     {
         $keranjang = session('keranjang', []);
-        $idObat = $request->input('id_obat');
-        try {
+
+        if (isset($keranjang[$index])) {
+            $item = $keranjang[$index];
+
             // Mulai transaksi database
             DB::beginTransaction();
 
-            $obat = Obat::find($idObat);
-            $obat->stok_obat += $keranjang[$index]['jumlah'];
-            DB::table('obat')->where('id', $idObat)->update(['stok_obat' => $obat->stok_obat]);
+            try {
+                $obat = Obat::where('nama_obat', $item['nama_obat'])->first();
+                $obat->stok_obat += $item['jumlah'];
+                $obat->save();
 
-            unset($keranjang[$index]);
-            session()->put('keranjang', $keranjang);
+                unset($keranjang[$index]);
+                session()->put('keranjang', $keranjang);
 
-            // Commit transaksi
-            DB::commit();
+                // Commit transaksi
+                DB::commit();
 
-            return redirect()->back()->with('success', 'Obat berhasil dihapus dari keranjang.');
-        } catch (\Exception $e) {
-            DB::rollback();
+                return redirect()->back()->with('success', 'Obat berhasil dihapus dari keranjang.');
+            } catch (\Exception $e) {
+                DB::rollback();
 
-            return redirect()->back()->with('error', 'Terjadi kesalahan. Obat gagal dihapus dari keranjang.');
+                return redirect()->back()->with('error', 'Terjadi kesalahan. Obat gagal dihapus dari keranjang.');
+            }
         }
+
+        return redirect()->back()->with('error', 'Item keranjang tidak ditemukan.');
     }
 
     public function hapusKeranjang()
@@ -145,7 +193,7 @@ class PenjualanController extends Controller
 
         foreach ($keranjang as $item) {
             $stokObat = $item['stok_obat'] + $item['jumlah'];
-            DB::table('obat')->where('id', $item['id_obat'])->update(['stok_obat' => $stokObat]);
+            DB::table('obat')->where('nama_obat', $item['nama_obat'])->update(['stok_obat' => $stokObat]);
         }
 
         // Hapus seluruh keranjang

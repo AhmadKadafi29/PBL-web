@@ -9,36 +9,35 @@ class Obat extends Model
 {
     use HasFactory;
     protected $table = 'obat';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'id_obat';
     protected $fillable = [
-        'nama_obat',
-        'jenis_obat',
         'kategori_obat_id',
-        'stok_obat',
-        'harga_obat',
-        'tanggal_masuk',
-        'exp_date',
-        'status'
+        'kode_obat',
+        'nama_brand_obat',
+        'jenis_obat',
+        'satuan_obat',
+        'harga_jual_obat',
+        'status_obat',
     ];
 
-    public function penjualan()
+    public function detailPembelian()
     {
-        return $this->hasMany(Penjualan::class, 'id_obat', 'id_obat');
+        return $this->hasMany(DetailPembelian::class, 'id_obat');
     }
 
-    public function Kategoriobat()
+    public function detailObat()
+    {
+        return $this->hasMany(DetailObat::class, 'id_obat');
+    }
+
+    public function detailPenjualan()
+    {
+        return $this->hasMany(DetailPenjualan::class, 'id_obat');
+    }
+
+    public function kategoriObat()
     {
         return $this->belongsTo(Kategori_obat::class, 'kategori_obat_id');
-    }
-
-    public function kadaluarsas()
-    {
-        return $this->hasMany(ObatKadaluarsa::class, 'id_obat');
-    }
-
-    public function pembelian()
-    {
-        return $this->hasMany(Pembelian::class, 'id_obat');
     }
 
     public function stokopname()

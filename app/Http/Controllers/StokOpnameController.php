@@ -31,7 +31,7 @@ class StokOpnameController extends Controller
             'id_obat' => 'required|exists:obat,id',
             'stok_fisik' => 'required|integer',
             'status' => 'required|in:belum kadaluarsa,kadaluarsa',
-            'tanggal_kadaluarsa' => 'date',
+            'tanggal_opname' => 'date',
         ]);
 
         try {
@@ -45,7 +45,6 @@ class StokOpnameController extends Controller
             $obat->update([
                 'stok_obat' => $request->stok_fisik,
                 'status' => $request->status,
-                'tanggal_kadaluarsa' => $request->tanggal_kadaluarsa,
             ]);
 
             return redirect()->route('Stok_opname.index')->with('success', 'Stok opname berhasil disimpan.');
@@ -54,5 +53,49 @@ class StokOpnameController extends Controller
 
             return redirect()->route('Stok_opname.index')->with('error', 'Terjadi kesalahan. Stok opname gagal disimpan.');
         }
+    }
+
+    public function edit($id)
+    {
+        $op = StokOpname::find($id);
+        $obat = Obat::all();
+        return view('pages.stok_opname.edit', compact('op', 'obat'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'id_obat' => 'required|exists:obat,id',
+            'stok_fisik' => 'required|integer',
+            'status' => 'required|in:belum kadaluarsa,kadaluarsa',
+            'tanggal_opname' => 'date',
+        ]);
+
+        try {
+
+            // Simpan data stok opname
+            $stokOpnameData = StokOpname::findOrFail($id);
+            $stokOpnameData['id_user'] = Auth::id();
+            $stokOpnameData->save();
+
+            $obat = Obat::findOrFail($request->id_obat);
+            $obat->update([
+                'stok_obat' => $request->stok_fisik,
+                'status' => $request->status,
+            ]);
+
+            return redirect()->route('Stok_opname.index')->with('success', 'Stok opname berhasil diubah.');
+        } catch (\Exception $e) {
+
+
+            return redirect()->route('Stok_opname.index')->with('error', 'Terjadi kesalahan. Stok opname gagal disimpan.');
+        }
+    }
+    public function destroy(Request $request, $id)
+    {
+        $op = StokOpname::find($id);
+        $op->delete();
+        return redirect()->route('Stok_opname.index')
+            ->with('success', 'Stok opname telah dihapus');
     }
 }

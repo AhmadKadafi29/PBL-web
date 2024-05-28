@@ -1,73 +1,118 @@
-@extends('admin.master')
+@extends('layouts.app')
 
-@section('title')
-    Bibliografi Kategori
-@stop
+@section('title', 'Edit Pembelian')
 
-@section('css')
+@push('style')
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
+@endpush
 
-@stop
-
-@section('content')
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0">Edit Bibliografi Kategori</h1>
-                    </div><!-- /.col -->
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('bibliografi_kategori.index') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Bibliografi Kategori</li>
-                        </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </div>
-        <!-- /.content-header -->
-
-        <!-- Main content -->
-        <section class="content">
-            <div class="container-fluid">
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <strong>Maaf!</strong> Terdapat kesalahan dengan inputan Anda.<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+@section('main')
+    <div class="main-content">
+        <section class="section">
+            <div class="section-header">
+                <h1>Edit Pembelian</h1>
+                <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                    <div class="breadcrumb-item"><a href="">Pembelian</a></div>
+                    <div class="breadcrumb-item"><a href="#"> Edit Pembelian</a></div>
+                </div>
+            </div>
+            <div class="section-body">
+                <div class="row">
+                    <div class="col-12">
+                        @include('layouts.alert')
                     </div>
-                @endif
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <div class="card">
+                            <form action="{{ route('Pembelian.update', $pembelian) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <strong>Nama Obat</strong>
+                                                <select class="form-control" id="position-option" name="id_obat"
+                                                    >
+                                                    @foreach ($obat as $ob)
+                                                        <option value="{{ $ob->id }}"
+                                                            {{ $ob->id == $pembelian->id_obat ? 'selected' : '' }}>
+                                                            {{ $ob->nama_obat }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
 
-                <form action="{{ route('bibliografi_kategori.update', $bk->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    {{ $bk }}
-
-                    <div class="row">
-                        <div class="col-xs-6 col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <strong>Deskripsi:</strong>
-                                <input type="text" name="deskripsi" value="{{ $bk->deskripsi }}" class="form-control"
-                                    placeholder="Deskripsi">
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 text-left">
-                            <button type="submit" class="btn btn-primary">Simpan</button>
+                                            <div class="form-group">
+                                                <strong>Nama Supplier</strong>
+                                                <select class="form-control" id="position-option" name="id_supplier"
+                                                    >
+                                                    @foreach ($supplier as $sp)
+                                                        <option value="{{ $sp->id }}"
+                                                            {{ $sp->id == $pembelian->id_supplier ? 'selected' : '' }}>
+                                                            {{ $sp->nama_supplier }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="tanggal_pembelian">Tanggal Pembelian</label>
+                                                <input type="date" class="form-control datepicker" id="tanggal_pembelian"
+                                                    name="tanggal_pembelian" value="{{ $pembelian->tanggal_pembelian }}"
+                                                    >
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="status_pembayaran">Status Pembayaran</label>
+                                                <input type="text" name="status_pembayaran" class="form-control"
+                                                    value="{{ $pembelian->status_pembayaran }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <strong>Harga satuan</strong>
+                                                <input type="text" name="harga_satuan" class="form-control"
+                                                    value="{{ $pembelian->harga_satuan }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Quantity</label>
+                                                <input type="text" class="form-control " name="quantity"
+                                                    value="{{ $pembelian->quantity }}" onchange="updateTotal()">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="total_harga">Total Harga</label>
+                                                <input type="number" name="total_harga" class="form-control"
+                                                    value="{{ $pembelian->total_harga }}" onchange="updateTotal()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer text-right">
+                                    <button class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-
-                </form>
-
-            </div><!-- /.container-fluid -->
+                </div>
+            </div>
         </section>
-        <!-- /.content -->
     </div>
 @endsection
 
-@section('js')
+@push('scripts')
+    <script>
+        function updateTotal() {
+            var hargaSatuan = document.getElementsByName('harga_satuan')[0].value;
+            var quantity = document.getElementsByName('quantity')[0].value;
+            var totalHarga = hargaSatuan * quantity;
+            document.getElementsByName('total_harga')[0].value = totalHarga;
+        }
+    </script>
+    <!-- JS Libraries -->
+    <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
 
-@endsection
+    <!-- Page Specific JS File -->
+    <script src="{{ asset('js/page/features-posts.js') }}"></script>
+@endpush

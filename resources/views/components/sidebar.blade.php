@@ -8,13 +8,9 @@
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header mt-4">Apotek Sarkara</li>
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Dashboard</span></a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a class="nav-link" href="{{ route('home') }}">General Dashboard</a>
-                    </li>
-                </ul>
+            <li class="nav-item item">
+                <a href="{{ route('home') }}" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
+
             </li>
             <li class="nav-item dropdown ">
                 <a href="" class="nav-link has-dropdown"><i class="fas fa-pills"></i><span>Obat</span></a>
@@ -22,12 +18,13 @@
                     <li>
                         <a class="nav-link" href="{{ route('Obat.index') }}">Obat list</a>
                     </li>
+
                     <li>
                         <a class="nav-link" href="{{ route('Kategori.index') }}">Kategori obat</a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <a class="nav-link" href="{{ route('Obatkadaluarsa.index') }}">Obat Kadaluarsa list</a>
-                    </li>
+                    </li> --}}
                 </ul>
             </li>
             @can('isPemilik')
@@ -41,14 +38,14 @@
                     <a class="nav-link" href="{{ route('user.index') }}"><i class="fa fa-user-circle"
                             aria-hidden="true"></i><span>User</span></a>
                 </li>
+                <li class="nav-item">
+
+                    <a class="nav-link" href="{{ route('Pembelian.index') }}">
+                        <i class="fa-solid fa-cart-shopping"></i><span>Pembelian</span></a>
+                </li>
             @endcan
-            <li class="nav-item">
 
-                <a class="nav-link" href="{{ route('Pembelian.index') }}">
-                    <i class="fa-solid fa-cart-shopping"></i><span>Pembelian</span></a>
-            </li>
-
-            <li class="nav-item">
+            {{-- <li class="nav-item">
 
                 <a class="nav-link" href="{{ route('Stok_opname.index') }}">
                     <i class="fa-solid fa-tablets"></i><span>Stok Opname</span></a>
@@ -74,7 +71,7 @@
                         <a class="nav-link" href="{{ route('labarugi.index') }}">Laporan Laba & Rugi</a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
 
 
         </ul>

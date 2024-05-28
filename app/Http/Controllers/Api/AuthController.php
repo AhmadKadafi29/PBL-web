@@ -16,7 +16,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:user'],
+            'email' => ['required', 'string', 'email', 'max:255', ],
             'roles' => ['required'],
             'password' => ['required', 'string', 'min:8'],
         ]);
@@ -60,11 +60,17 @@ class AuthController extends Controller
             ], 401);
         }
 
+        if ($user->role !== 'pemilik') {
+            return response()->json([
+                'message' => 'Unauthorized. Only pemilik are allowed to log in.'
+            ], 401);
+        }
+
         $token = $user->createToken('api-token')->plainTextToken;
         return response()->json([
             'token' => $token,
             'user' => new UserResource($user),
-        ]);
+        ],200);
     }
 
 

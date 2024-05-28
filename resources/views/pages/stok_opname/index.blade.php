@@ -44,7 +44,7 @@
                                             <th>Nama User</th>
                                             <th>Stok Fisik</th>
                                             <th>Status</th>
-                                            <th>Tanggal Kadaluarsa</th>
+                                            <th>Tanggal opname</th>
                                             <th>Action</th>
                                         </tr>
 
@@ -56,8 +56,28 @@
                                                 <td>
                                                     <span class="badge badge-success">{{ $op->status }}</span>
                                                 </td>
-                                                <td>{{ $op->tanggal_kadaluarsa }}</td>
+                                                <td>{{ $op->tanggal_opname }}</td>
+                                                <td>
+                                                    <div class="d-flex ">
 
+                                                        <a href="{{ route('Stok_opname.edit', $op->id) }}"
+                                                            class="btn btn-sm btn-info">
+                                                            <i class="fas fa-edit"></i>
+                                                            Edit
+                                                        </a>
+
+                                                        <form action="{{ route('Stok_opname.destroy', $op->id) }}"
+                                                            class="ml-2" method="POST">
+                                                            <input type="hidden" name="_method" value="DELETE">
+                                                            <input type="hidden" name="_token"
+                                                                value="{{ csrf_token() }}">
+                                                            <button class="btn btn-sm btn-danger btn-icon confirm-delete">
+                                                                <i class="fas fa-times"></i>
+                                                                Delete
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         @endforeach
 

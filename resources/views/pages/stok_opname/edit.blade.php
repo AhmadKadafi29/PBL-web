@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Stok Opname')
+@section('title', 'Edit Stok Opname')
 
 @push('style')
     <!-- CSS Libraries -->
@@ -10,18 +10,19 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Tambah Stok Opname</h1>
+                <h1>Edit Stok Opname</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Stok Opname</a></div>
-                    <div class="breadcrumb-item">Tambah Stok Opname</div>
+                    <div class="breadcrumb-item"><a href="{{ route('Stok_opname.index') }}">Stok Opname</a></div>
+                    <div class="breadcrumb-item">Edit Stok Opname</div>
                 </div>
             </div>
 
             <div class="section-body">
                 <div class="card">
-                    <form action="{{ route('Stok_opname.store') }}" method="POST">
+                    <form action="{{ route('Stok_opname.update', $op) }}" method="POST">
                         @csrf
+                        @method('PUT')
                         <div class="row">
                             <div class="col-lg-6">
                                 <input type="hidden" name="id_user">
@@ -35,7 +36,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="stok_fisik">Stok Fisik</label>
-                                    <input type="text" name="stok_fisik" class="form-control">
+                                    <input type="text" name="stok_fisik" class="form-control"
+                                        value="{{ $op->stok_fisik }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="status">status</label>
@@ -47,7 +49,8 @@
 
                                 <div class="form-group">
                                     <label for="tanggal_opname">Tanggal opname</label>
-                                    <input type="date" name="tanggal_opname" class="form-control">
+                                    <input type="date" name="tanggal_opname" class="form-control"
+                                        value="{{ $op->tanggal_opname }}">
                                 </div>
 
                                 <div class="card-footer text-right">

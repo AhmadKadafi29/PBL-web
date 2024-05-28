@@ -1,35 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Posts')
+@section('title', 'Obat')
 
 @push('style')
     <!-- CSS Libraries -->
     <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 @endpush
 
 @section('main')
     <div class="main-content">
-        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal Confirm</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p class="mb-2">You can easily change the default browser confirmation box with a
-                            bootstrap modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+
         <section class="section">
             <div class="section-header">
                 <h1>Obat</h1>
@@ -54,48 +35,54 @@
                                 </div>
                             </div>
                             <div class="card-body">
+                                <div class="float-right">
+                                    <form method="GET" action="{{ route('Obat.index') }}">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search"
+                                                name="nama_obat">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                                 <div class="clearfix"></div>
                                 <div class="table-responsive">
                                     <table class="table-striped table">
                                         <tr>
+                                            <th>Kode Obat</th>
                                             <th>Nama Obat</th>
                                             <th>Jenis Obat</th>
+                                            <th>Satuan Obat</th>
                                             <th>Kategori Obat</th>
-                                            <th>Stok obat</th>
-                                            <th>Harga</th>
+                                            <th>Harga Jual Satuan</th>
                                             <th>Action</th>
                                         </tr>
                                         @foreach ($obat as $ob)
                                             <tr>
+                                                <td>{{ $ob->kode_obat }} </td>
                                                 <td>{{ $ob->nama_obat }} </td>
                                                 <td>{{ $ob->jenis_obat }} </td>
+                                                <td>{{ $ob->satuan_obat }} </td>
                                                 <td>{{ $ob->Kategoriobat->nama_kategori }}</td>
-                                                <td>{{ $ob->stok_obat }}</td>
-                                                <td>{{ $ob->harga_obat }}</td>
+                                                <td>{{ $ob->harga_jual_obat }}</td>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <a href="{{ route('Obat.show', $ob->id) }}"
+                                                        <a href="{{ route('Obat.show', $ob->id_obat) }}"
                                                             class="btn btn-sm btn-warning btn-icon">
                                                             <i class="fas fa-eye"></i>
                                                             Detail
                                                         </a>
-                                                        <a href="{{ route('Obat.edit', $ob->id) }}"
+                                                        <a href="{{ route('Obat.edit', $ob->id_obat) }}"
                                                             class="btn btn-sm btn-info btn-icon ml-2">
                                                             <i class="fas fa-edit"></i>
                                                             Edit
                                                         </a>
-                                                        <button class="btn btn-sm btn-danger btn-icon confirm-delete ml-2"
-                                                            data-id="{{ $ob->id }}" data-name="{{ $ob->nama_obat }}">
-                                                            <i class="fas fa-times"></i>
-                                                            Delete
-                                                        </button>
+
                                                     </div>
                                                 </td>
+
                                             </tr>
-
-                                            <!-- Confirmation Modal for Delete -->
-
-                                            <!-- End of Confirmation Modal -->
                                         @endforeach
                                     </table>
                                 </div>
@@ -103,61 +90,53 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="confirmDeleteModal-{{ $ob->id }}" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Modal Confirm
-                                </h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <p class="mb-2">Do you want to delete {{ $ob->nama_obat }}?
-                                </p>
-                            </div>
-                            <div class="modal-footer">
-                                <form action="{{ route('Obat.destroy', $ob->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
             </div>
         </section>
+    </div>
+    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog"
+        aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmationModalLabel">Konfirmasi Hapus</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Apakah anda yakin ingin menghapus obat <span id="deleteObjectName"></span>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <form id="deleteForm" method="POST" action="">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Hapus</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
 @push('scripts')
-    <!-- JS Libraries -->
+    <script>
+        $('#deleteConfirmationModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+            var name = button.data('name');
+            var modal = $(this);
+
+            modal.find('.modal-body #deleteObjectName').text(name);
+            modal.find('.modal-footer #deleteForm').attr('action', '{{ url('Obat') }}/' + id);
+        });
+    </script>
     <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/page/features-posts.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            $('.confirm-delete').on('click', function() {
-                var obatId = $(this).data('id');
-                var obatName = $(this).data('name');
+    <script src="{{ asset('library/prismjs/prism.js') }}"></script>
 
-                $('#confirmDeleteModal .modal-body').html(
-                    '<p class="mb-2">Apakah anda yakin ingin menghapus obat ' +
-                    obatName + '?</p>');
-                $('#confirmDeleteBtn').attr('data-id', obatId);
-                $('#confirmDeleteModal').modal('show');
-            });
-
-            $('#confirmDeleteBtn').on('click', function() {
-                var obatId = $(this).data('id');
-                $('#confirmDeleteModal').modal('hide');
-            });
-        });
-    </script>
+    <!-- Page Specific JS File -->
+    <script src="{{ asset('js/page/bootstrap-modal.js') }}"></script>
 @endpush

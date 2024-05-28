@@ -76,6 +76,16 @@
                                     </label>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="alamat" class="d-block">Alamat</label>
+                                <input id="alamat" type="alamat" class="form-control" name="alamat">
+
+                            </div>
+                            <div class="form-group">
+                                <label for="no_telp" class="d-block">No Telpon</label>
+                                <input id="no_telp" type="no_telp" class="form-control" name="no_telp">
+
+                            </div>
                         </div>
                         <div class="card-footer text-right">
                             <button class="btn btn-primary">Submit</button>

@@ -8,11 +8,12 @@ use Illuminate\Http\Request;
 
 class SupplierController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $supplier = Supplier::all();
-
-        return response()->json($supplier);
+        $data=Supplier::all();
+        return response()->json([
+            'data'=>$data
+        ]);
     }
     public function create()
     {

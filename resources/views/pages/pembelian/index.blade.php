@@ -60,9 +60,8 @@
                                 <div class="table-responsive">
                                     <table class="table-striped table">
                                         <tr>
-                                            <th>Nama Obat</th>
                                             <th>Nama Supplier</th>
-                                            <th>No faktur</th>
+                                            <th>No Faktur</th>
                                             <th>Total Harga</th>
                                             <th>Tanggal beli</th>
                                             <th>Status bayar</th>
@@ -71,30 +70,23 @@
 
                                         @foreach ($pembelian as $beli)
                                             <tr>
-                                                <td>{{ $beli->obat->nama_obat }}</td>
                                                 <td>{{ $beli->supplier->nama_supplier }} </td>
-                                                <td> {{ $beli->noFaktur }} </td>
-                                                <td> {{ $beli->total_harga }} </td>
+                                                <td> {{ $beli->no_faktur }} </td>
+                                                <td>Rp. {{ number_format($beli->total_harga, 2) }} </td>
                                                 <td>{{ $beli->tanggal_pembelian }}</td>
                                                 <td>
                                                     <span class="badge badge-success">{{ $beli->status_pembayaran }}</span>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex ">
-                                                        <a href="{{ route('Pembelian.edit', $beli->id) }}"
-                                                            class="btn btn-sm btn-info">
-                                                            <i class="fas fa-edit"></i>
-                                                            Edit
-                                                        </a>
 
                                                         <button class="btn btn-sm btn-danger btn-icon confirm-delete ml-2"
-                                                            data-id="{{ $beli->id }}"
-                                                            data-name="{{ $beli->obat->nama_obat }}">
+                                                            data-id="{{ $beli->id_pembelian }}" data-toggle="modal"
+                                                            data-target="#deleteConfirmationModal">
                                                             <i class="fas fa-times"></i>
                                                             Delete
                                                         </button>
                                                     </div>
-
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -107,61 +99,49 @@
                         </div>
                     </div>
                 </div>
-                {{-- <div class="modal fade" id="confirmDeleteModal-{{ $beli->id }}" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Modal Confirm
-                                </h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <p class="mb-2">Do you want to delete {{ $beli->nama_obat }}?
-                                </p>
-                            </div>
-                            <div class="modal-footer">
-                                <form action="{{ route('Pembelian.destroy', $beli->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div> --}}
             </div>
         </section>
-    </div>
-@endsection
+        <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog"
+            aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteConfirmationModalLabel">Konfirmasi Hapus</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Apakah anda yakin ingin menghapus data pembelian obat <span id="deleteObjectName"></span>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <form id="deleteForm" method="POST" action="">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Hapus</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endsection
 
-@push('scripts')
-    <!-- JS Libraies -->
-    <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
+    @push('scripts')
+        <script>
+            $('#deleteConfirmationModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var name = button.data('name');
+                var modal = $(this);
 
-    <!-- Page Specific JS File -->
-    <script src="{{ asset('js/page/features-posts.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            $('.confirm-delete').on('click', function() {
-                var obatId = $(this).data('id');
-                var obatName = $(this).data('name');
-
-                $('#confirmDeleteModal .modal-body').html(
-                    '<p class="mb-2">Apakah anda yakin ingin menghapus pembelian obat ' +
-                    obatName + '?</p>');
-                $('#confirmDeleteBtn').attr('data-id', obatId);
-                $('#confirmDeleteModal').modal('show');
+                modal.find('.modal-body #deleteObjectName').text(name);
+                modal.find('.modal-footer #deleteForm').attr('action', '{{ url('Pembelian') }}/' + id);
             });
+        </script>
+        <!-- JS Libraies -->
+        <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
 
-            $('#confirmDeleteBtn').on('click', function() {
-                var obatId = $(this).data('id');
-                $('#confirmDeleteModal').modal('hide');
-            });
-        });
-    </script>
-@endpush
+        <!-- Page Specific JS File -->
+        <script src="{{ asset('js/page/features-posts.js') }}"></script>
+    @endpush

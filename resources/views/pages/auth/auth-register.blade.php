@@ -48,13 +48,23 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="roles" class="form-label">Roles</label>
-                    <select class="form-control" id="roles" name="roles">
-                        <option>admin</option>
-                        <option>kasir</option>
+                    <label for="role" class="form-label">Role</label>
+                    <select class="form-control" id="role" name="role">
+                        <option>pemilik</option>
+                        <option>karyawan</option>
                     </select>
                 </div>
 
+                <div class="form-group">
+                    <label for="alamat" class="d-block">Alamat</label>
+                    <input id="alamat" type="alamat" class="form-control" name="alamat">
+
+                </div>
+                <div class="form-group">
+                    <label for="no_telp" class="d-block">No Telpon</label>
+                    <input id="no_telp" type="no_telp" class="form-control" name="no_telp">
+
+                </div>
                 <div class="row">
                     <div class="form-group col-12">
                         <label for="password" class="d-block">Password</label>

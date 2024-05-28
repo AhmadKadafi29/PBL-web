@@ -30,6 +30,11 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
+                                        <strong>Kode Obat</strong>
+                                        <input type="text" name="kode_obat" class="form-control"
+                                            value="{{ $kodeobat }}" readonly>
+                                    </div>
+                                    <div class="form-group">
                                         <strong>Nama Obat</strong>
                                         <input type="text" name="nama_obat" class="form-control">
                                     </div>
@@ -38,31 +43,23 @@
                                         <input type="text" name="jenis_obat" class="form-control">
                                     </div>
                                     <div class="form-group">
+                                        <strong>Satuan Obat</strong>
+                                        <input type="text" name="satuan_obat" class="form-control">
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
                                         <strong>Kategori Obat</strong>
                                         <select class="form-control" id="position-option" name="kategori_obat_id">
                                             @foreach ($kategori as $kg)
-                                                <option value="{{ $kg->id }}">{{ $kg->nama_kategori }}</option>
+                                                <option value="{{ $kg->id_kategori }}">{{ $kg->nama_kategori }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <strong>Stok Obat</strong>
-                                        <input type="text" name="stok_obat" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <strong>Harga Obat</strong>
-                                        <input type="text" name="harga_obat" class="form-control">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Tanggal Masuk</label>
-                                        <input type="text" name="tanggal_masuk" class="form-control datepicker">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Expired Date</label>
-                                        <input type="text" name="exp_date" class="form-control datepicker">
+                                        <strong>Harga Jual Obat</strong>
+                                        <input type="text" name="harga_jual_obat" class="form-control">
                                     </div>
                                     <div class="card-footer text-right">
                                         <button type="submit" class="btn btn-primary"

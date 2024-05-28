@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ChartController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriobatController;
 use App\Http\Controllers\LabaRugiController;
@@ -32,13 +33,14 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('home', [DashboardController::class, 'index'])->name('home');
+    Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::resource('Obat', ObatController::class);
     Route::resource('Kategori', KategoriobatController::class);
     Route::resource('Supplier', SupplierController::class);
     Route::resource('Pembelian', PembelianController::class);
     Route::get('obatkadaluarsa', [ObatKadaluarsaController::class, 'index'])->name('Obatkadaluarsa.index');
     Route::post('obatkadaluarsa/kadaluarsa', [ObatKadaluarsaController::class, 'storekadaluarsa'])->name('Obatkadaluarsa.storekadaluarsa');
-    Route::post('obatkadaluarsa', [ObatKadaluarsaController::class, 'destroy'])->name('Obatkadaluarsa.destroy');
+    Route::delete('obatkadaluarsa/{id}', [ObatKadaluarsaController::class, 'destroy'])->name('Obatkadaluarsa.destroy');
     Route::resource('Stok_opname', StokOpnameController::class);
     Route::get('/laporan-penjualan', [LaporanPenjualanController::class, 'index'])->name('laporan-penjualan.index');
     Route::post('/laporan-penjualan/generate', [LaporanPenjualanController::class, 'generate'])->name('laporan-penjualan.generate');

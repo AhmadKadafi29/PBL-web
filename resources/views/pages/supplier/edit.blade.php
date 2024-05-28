@@ -1,73 +1,64 @@
-@extends('admin.master')
+@extends('layouts.app')
 
-@section('title')
-    Bibliografi Kategori
-@stop
+@section('title', 'Edit Supplier')
 
-@section('css')
+@push('style')
+    <!-- CSS Libraries -->
+@endpush
 
-@stop
+@section('main')
+    <div class="main-content">
+        <section class="section">
+            <div class="section-header">
+                <h1>Edit supplier</h1>
+                <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                    <div class="breadcrumb-item"><a href="#">Supplier</a></div>
+                    <div class="breadcrumb-item">Edit Supplier</div>
+                </div>
+            </div>
 
-@section('content')
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0">Edit Bibliografi Kategori</h1>
-                    </div><!-- /.col -->
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('bibliografi_kategori.index') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Bibliografi Kategori</li>
-                        </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </div>
-        <!-- /.content-header -->
-
-        <!-- Main content -->
-        <section class="content">
-            <div class="container-fluid">
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <strong>Maaf!</strong> Terdapat kesalahan dengan inputan Anda.<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
-                <form action="{{ route('bibliografi_kategori.update', $bk->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    {{ $bk }}
-
-                    <div class="row">
-                        <div class="col-xs-6 col-sm-6 col-md-6">
+            <div class="section-body">
+                <div class="card">
+                    <form action="{{ route('Supplier.update', $supplier) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="card-body">
                             <div class="form-group">
-                                <strong>Deskripsi:</strong>
-                                <input type="text" name="deskripsi" value="{{ $bk->deskripsi }}" class="form-control"
-                                    placeholder="Deskripsi">
+                                <label>Nama Supplier</label>
+                                <input type="text"
+                                    class="form-control @error('nama_supplier')
+                                is-invalid
+                            @enderror"
+                                    name="nama_supplier" value="{{ $supplier->nama_supplier }}">
+                                @error('nama_supplier')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label>No Telpon</label>
+                                <input type="text" class="form-control" name="no_telpon"
+                                    value="{{ $supplier->no_telpon }}">
+                            </div>
+                            <div class="form-group mb-0">
+                                <label>Alamat</label>
+                                <input type="text" class="form-control" name="alamat" value="{{ $supplier->alamat }}">
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 text-left">
-                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        <div class="card-footer text-right">
+                            <button class="btn btn-primary">Submit</button>
                         </div>
-                    </div>
-
-                </form>
-
-            </div><!-- /.container-fluid -->
+                    </form>
+                </div>
+            </div>
         </section>
-        <!-- /.content -->
     </div>
 @endsection
 
-@section('js')
+@push('scripts')
+    <!-- JS Libraies -->
 
-@endsection
+    <!-- Page Specific JS File -->
+@endpush

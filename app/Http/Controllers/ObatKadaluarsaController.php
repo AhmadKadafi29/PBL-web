@@ -22,16 +22,13 @@ class ObatKadaluarsaController extends Controller
             if (!$existingRecord) {
                 ObatKadaluarsa::create([
                     'id_obat' => $ob->id,
-                    'tanggal_kadaluarsa' => $obat->exp_date,
+                    'tanggal_kadaluarsa' => $ob->exp_date,
                 ]);
-                return redirect()->route('Obatkadaluarsa.index')
-                    ->with('success', 'Obat-obat kadaluarsa telah dipindahkan ke tabel kadaluarsa.');
-            } else {
-                return redirect()->route('Obatkadaluarsa.index')
-                    ->with('danger', 'Obat sudah ada');
             }
         }
+        return redirect()->route('Obatkadaluarsa.index')->with('success', 'Obat-obat kadaluarsa telah dipindahkan ke tabel kadaluarsa.');
     }
+
 
     public function destroy($id)
     {

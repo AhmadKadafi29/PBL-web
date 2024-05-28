@@ -38,15 +38,10 @@
                                             class="mb-3">
                                             @csrf
                                             <div class="form-row">
-                                                <div class="form-group col-md-2">
-                                                    <label for="id_obat">ID Obat</label>
-                                                    <input type="text" name="id_obat" id="id_obat"
-                                                        class="form-control">
-                                                </div>
                                                 <div class="form-group col-md-3">
                                                     <label for="nama_obat">Nama Obat</label>
                                                     <input type="text" name="nama_obat" id="nama_obat"
-                                                        class="form-control" readonly>
+                                                        class="form-control">
                                                 </div>
                                                 <div class="form-group col-md-1">
                                                     <label for="stok_obat">Stok</label>
@@ -82,7 +77,7 @@
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
                                             <tr>
-                                                <th>ID Obat</th>
+                                                <th>Kode Obat</th>
                                                 <th>Nama Obat</th>
                                                 <th>Harga</th>
                                                 <th>Jumlah</th>
@@ -92,7 +87,7 @@
                                             {{-- @dd($keranjang) --}}
                                             @foreach ($keranjang as $index => $item)
                                                 <tr>
-                                                    <td>{{ $item['id_obat'] }}</td>
+                                                    <td>{{ $item['kode_obat'] }}</td>
                                                     <td>{{ $item['nama_obat'] }}</td>
                                                     <td>{{ $item['harga_obat'] }}</td>
                                                     <td>{{ $item['jumlah'] }}</td>
@@ -118,41 +113,6 @@
                                                 <td>Rp. {{ $totalBayar }}</td>
                                                 <td></td>
                                             </tr>
-                                            {{-- <tr>
-                                                <td colspan="4" align="right">Jumlah Dibayar :
-                                                </td>
-                                                <td>
-                                                    <form action="{{ url('/penjualan/checkout') }}" method="post">
-                                                        @csrf
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text">Rp.</span>
-                                                                <input type="number" name="jumlah_dibayar"
-                                                                    id="jumlah_dibayar" class="form-control" required>
-                                                            </div>
-                                                        </div>
-
-                                                    </form>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td colspan="4" align="right">Kembalian :</td>
-                                                <td>
-                                                    <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text">Rp</span>
-                                                        </div>
-                                                        <input type="number" name="kembalian" id="kembalian"
-                                                            class="form-control" readonly>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="6" align="right">
-                                                    <button type="submit" class="btn btn-primary">Checkout</button>
-                                                </td>
-                                            </tr> --}}
                                         </table>
                                     </div>
                                     <form action="{{ url('/penjualan/checkout') }}" method="post">
@@ -210,21 +170,17 @@
 
     <script>
         $(document).ready(function() {
-            // Tangkap peristiwa input pada kolom "ID Obat"
-            $('#id_obat').on('input', function() {
+            $('#nama_obat').on('input', function() {
                 // Ambil nilai ID obat dari input
-                var idObat = $(this).val();
-
-                // Kirim permintaan Ajax ke server untuk mendapatkan data obat
+                var nama = $(this).val();
                 $.ajax({
                     url: "{{ url('/penjualan/cari-obat') }}",
                     method: 'POST',
                     data: {
                         _token: "{{ csrf_token() }}",
-                        id_obat: idObat
+                        nama_obat: nama
                     },
                     success: function(response) {
-                        // Perbarui nilai input untuk setiap kolom berdasarkan respons dari server
                         $('#nama_obat').val(response.nama_obat);
                         $('#stok_obat').val(response.stok_obat);
                         $('#harga_obat').val(response.harga_obat);

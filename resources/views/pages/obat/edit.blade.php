@@ -4,6 +4,10 @@
 
 @push('style')
     <!-- CSS Libraries -->
+    <link rel="stylesheet" href="{{ asset('library/bootstrap-daterangepicker/daterangepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
+    <link rel="stylesheet" href="{{ asset('library/bootstrap-tagsinput/dist/bootstrap-tagsinput.css') }}">
 @endpush
 
 @section('main')
@@ -24,55 +28,53 @@
                         @csrf
                         @method('PUT')
                         <div class="card-body">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <strong>Nama Obat</strong>
-                                    <input type="text" name="nama_obat" class="form-control"
-                                        value="{{ $obat->nama_obat }}">
-                                </div>
-                                <div class="form-group">
-                                    <strong>Jenis Obat</strong>
-                                    <input type="text" name="jenis_obat" class="form-control"
-                                        value="{{ $obat->jenis_obat }}">
-                                </div>
-                                <div class="form-group">
-                                    <strong>Kategori Obat</strong>
-                                    <select class="form-control" id="position-option" name="kategori_obat_id">
-                                        @foreach ($kategori as $kg)
-                                            <option value="{{ $kg->id }}"
-                                                {{ $kg->id == $obat->kategori_obat_id ? 'selected' : '' }}>
-                                                {{ $kg->nama_kategori }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <strong>Stok Obat</strong>
-                                    <input type="text" name="stok_obat" class="form-control"
-                                        value="{{ $obat->stok_obat }}">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <strong>Harga Obat</strong>
-                                    <input type="text" name="harga_obat" class="form-control"
-                                        value="{{ $obat->harga_obat }}">
-                                </div>
-                                <div class="form-group">
-                                    <label>Tanggal Masuk</label>
-                                    <input type="text" class="form-control datepicker"
-                                        value="{{ $obat->tanggal_masuk }}">
-                                </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <strong>Kode Obat</strong>
+                                        <input type="text" name="kode_obat" class="form-control"
+                                            value="{{ $obat->kode_obat }}" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nama_obat">Nama Obat</label>
+                                        <input type="text" name="nama_obat" class="form-control"
+                                            value="{{ $obat->nama_obat }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="jenis_obat">Jenis Obat</label>
+                                        <input type="text" name="jenis_obat" class="form-control"
+                                            value="{{ $obat->jenis_obat }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="satuan_obat">Satuan Obat</label>
+                                        <input type="text" name="satuan_obat" class="form-control"
+                                            value="{{ $obat->satuan_obat }}">
+                                    </div>
 
-                                <div class="form-group">
-                                    <label>Expired Date</label>
-                                    <input type="text" class="form-control datepicker" value="{{ $obat->exp_date }}">
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="kategori_obat_id">Kategori Obat</label>
+                                        <select class="form-control" id="position-option" name="kategori_obat_id">
+                                            @foreach ($kategori as $kg)
+                                                <option value="{{ $kg->id_kategori }}"
+                                                    {{ $kg->id_kategori == $obat->kategori_obat_id ? 'selected' : '' }}>
+                                                    {{ $kg->nama_kategori }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="harga_jual_obat">Harga Obat</label>
+                                        <input type="text" name="harga_jual_obat" class="form-control"
+                                            value="{{ $obat->harga_jual_obat }}">
+                                    </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="card-footer text-right">
-                                <button class="btn btn-primary">Submit</button>
-                            </div>
+                        <div class="card-footer text-right">
+                            <button class="btn btn-primary">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -82,7 +84,11 @@
 @endsection
 
 @push('scripts')
-    <!-- JS Libraies -->
+    <!-- JS Libraries -->
 
     <!-- Page Specific JS File -->
+    <script src="{{ asset('library/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+    <script src="{{ asset('library/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js') }}"></script>
+    <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
 @endpush

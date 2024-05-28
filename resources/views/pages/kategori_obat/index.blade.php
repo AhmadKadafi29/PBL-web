@@ -42,23 +42,29 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Kategori</th>
+                                            @can('isPemilik')
+
                                             <th>Action</th>
+                                            @endcan
                                         </tr>
 
 
                                         @foreach ($kategoriobat as $kategori)
                                             <tr>
-                                                <td>{{ $kategori->id }} </td>
+                                                <td>{{ $kategori->id_kategori }} </td>
                                                 <td> {{ $kategori->nama_kategori }} </td>
+                                                @can('isPemilik')
+
+
                                                 <td>
                                                     <div class="d-flex ">
-                                                        <a href="{{ route('Kategori.edit', $kategori->id) }}"
+                                                        <a href="{{ route('Kategori.edit', $kategori->id_kategori) }}"
                                                             class="btn btn-sm btn-info btn-icon">
                                                             <i class="fas fa-edit"></i>
                                                             Edit
                                                         </a>
 
-                                                        <form action="{{ route('Kategori.destroy', $kategori->id) }}"
+                                                        <form action="{{ route('Kategori.destroy', $kategori->id_kategori) }}"
                                                             class="ml-2" method="POST">
                                                             <input type="hidden" name="_method" value="DELETE">
                                                             <input type="hidden" name="_token"
@@ -71,6 +77,7 @@
                                                     </div>
 
                                                 </td>
+                                                @endcan
                                             </tr>
                                         @endforeach
 

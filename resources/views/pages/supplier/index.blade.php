@@ -54,29 +54,24 @@
                                                 <td> {{ $sp->alamat }} </td>
                                                 <td>
                                                     <div class="d-flex ">
-                                                        <a href="{{ route('Supplier.edit', $sp->id) }}"
+                                                        <a href="{{ route('Supplier.edit', $sp->id_supplier) }}"
                                                             class="btn btn-sm btn-info btn-icon">
                                                             <i class="fas fa-edit"></i>
                                                             Edit
                                                         </a>
 
-                                                        <form action="{{ route('Supplier.destroy', $sp->id) }}"
-                                                            class="ml-2" method="POST">
-                                                            <input type="hidden" name="_method" value="DELETE">
-                                                            <input type="hidden" name="_token"
-                                                                value="{{ csrf_token() }}">
-                                                            <button class="btn btn-sm btn-danger btn-icon confirm-delete">
-                                                                <i class="fas fa-times"></i>
-                                                                Delete
-                                                            </button>
-                                                        </form>
+                                                        <button class="btn btn-sm btn-danger btn-icon confirm-delete ml-2"
+                                                            data-id="{{ $sp->id_supplier }}"
+                                                            data-name="{{ $sp->nama_supplier }}" data-toggle="modal"
+                                                            data-target="#deleteConfirmationModal">
+                                                            <i class="fas fa-times"></i>
+                                                            Delete
+                                                        </button>
                                                     </div>
 
                                                 </td>
                                             </tr>
                                         @endforeach
-
-
                                     </table>
                                 </div>
                                 {{-- <div class="float-right">
@@ -88,13 +83,47 @@
                 </div>
             </div>
         </section>
-    </div>
-@endsection
+        <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog"
+            aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteConfirmationModalLabel">Konfirmasi Hapus</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Apakah anda yakin ingin menghapus supplier <span id="deleteObjectName"></span>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <form id="deleteForm" method="POST" action="">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Hapus</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endsection
 
-@push('scripts')
-    <!-- JS Libraies -->
-    <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
+    @push('scripts')
+        <script>
+            $('#deleteConfirmationModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var name = button.data('name');
+                var modal = $(this);
 
-    <!-- Page Specific JS File -->
-    <script src="{{ asset('js/page/features-posts.js') }}"></script>
-@endpush
+                modal.find('.modal-body #deleteObjectName').text(name);
+                modal.find('.modal-footer #deleteForm').attr('action', '{{ url('Supplier') }}/' + id);
+            });
+        </script>
+        <!-- JS Libraies -->
+        <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
+
+        <!-- Page Specific JS File -->
+        <script src="{{ asset('js/page/features-posts.js') }}"></script>
+    @endpush

@@ -9,24 +9,37 @@ use Illuminate\Http\Request;
 
 class ObatController extends Controller
 {
+
     public function index()
     {
-        $obat = Obat::all();
+        $data = Obat::with(['kategoriobat'])->get();
         return response()->json([
-            'obat' => $obat
+            "data" => $data
         ]);
     }
 
-    public function kadaluarsa()
+    public function hampir_kadaluarsa()
     {
-        $obatsKadaluarsa = Obat::where('tanggal_kadaluarsa', '<', now())->get();
+        $obatHampirKadaluarsa = Obat::whereDate('exp_date', '>', now())
+        ->with(['kategoriobat'])
+            ->whereDate('exp_date', '<=', now()->addDays(7))
+            ->get();
 
-        foreach ($obatsKadaluarsa as $obatKadaluarsa) {
-            $obatKadaluarsa->kadaluarsas()->create([
-                'tanggal_kadaluarsa' => $obatKadaluarsa->tanggal_kadaluarsa,
+            return response()->json([
+                "data" => $obatHampirKadaluarsa->map(function ($obat) {
+                    return [
+                        "id_obat" => $obat->id,
+                        "nama_obat" => $obat->nama_obat,
+                        "jenis_obat" => $obat->jenis_obat,
+                        "kategori_obat_id" => $obat->kategori_obat_id,
+                        "kategori_obat" => $obat->kategoriobat->nama_kategori,
+                        "stok_obat" => $obat->stok_obat,
+                        "harga_obat" => $obat->harga_obat,
+                        "tanggal_masuk" => $obat->tanggal_masuk,
+                        "exp_date" => $obat->exp_date,
+                        "status" => $obat->status,
+                    ];
+                }),
             ]);
-        }
-
-        return response()->json(['message' => 'Obat kadaluarsa dipindahkan.']);
     }
 }

@@ -3,7 +3,7 @@
 @section('title', 'Tambah Pembelian')
 
 @push('style')
-    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
 @endpush
 
 @section('main')
@@ -28,7 +28,7 @@
                                     <strong>Nama Obat</strong>
                                     <select class="form-control" name="id_obat" onchange="updateNoFaktur()">
                                         @foreach ($obat as $ob)
-                                            <option value="{{ $ob->id }}">{{ $ob->nama_obat }}</option>
+                                            <option value="{{ $ob->id_obat }}">{{ $ob->nama_obat }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -37,7 +37,7 @@
                                     <strong>Nama Supplier</strong>
                                     <select class="form-control" name="id_supplier" onchange="updateNoFaktur()">
                                         @foreach ($supplier as $sp)
-                                            <option value="{{ $sp->id }}">{{ $sp->nama_supplier }}</option>
+                                            <option value="{{ $sp->id_supplier }}">{{ $sp->nama_supplier }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -47,11 +47,9 @@
                                         name="tanggal_pembelian" onchange="updateNoFaktur()">
                                 </div>
                                 <div class="form-group">
-                                    <label for="noFaktur">No Faktur</label>
-                                    <input type="text" name="noFaktur" id="noFaktur" class="form-control" readonly>
+                                    <label for="no_faktur">No Faktur</label>
+                                    <input type="text" name="no_faktur" id="no_faktur" class="form-control" readonly>
                                 </div>
-
-
                                 <div class="form-group">
                                     <label for="status_pembayaran">Status Pembayaran</label>
                                     <select class="form-control" id="status_pembayaran" name="status_pembayaran">
@@ -63,7 +61,8 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <strong>Harga satuan</strong>
-                                    <input type="text" name="harga_satuan" class="form-control" onchange="updateTotal()">
+                                    <input type="text" name="harga_beli_satuan" class="form-control"
+                                        onchange="updateTotal()">
                                 </div>
                                 <div class="form-group">
                                     <label>Quantity</label>
@@ -72,6 +71,11 @@
                                 <div class="form-group">
                                     <label for="total_harga">Total Harga</label>
                                     <input type="number" name="total_harga" class="form-control" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tanggal_kadaluarsa">Tanggal Kadaluarsa</label>
+                                    <input type="date" class="form-control datepicker" id="tanggal_kadaluarsa"
+                                        name="tanggal_kadaluarsa" >
                                 </div>
                                 <div class="card-footer text-right">
                                     <button class="btn btn-primary"
@@ -91,7 +95,7 @@
     @section('js')
         <script>
             function updateTotal() {
-                var hargaSatuan = document.getElementsByName('harga_satuan')[0].value;
+                var hargaSatuan = document.getElementsByName('harga_beli_satuan')[0].value;
                 var quantity = document.getElementsByName('quantity')[0].value;
                 var totalHarga = hargaSatuan * quantity;
                 document.getElementsByName('total_harga')[0].value = totalHarga;
@@ -108,7 +112,7 @@
                     var noFaktur = idObat + idSupplier + tanggalPembelian.replace(/-/g, '');
 
                     // Set nilai no_faktur pada input field
-                    document.getElementsByName('noFaktur')[0].value = noFaktur;
+                    document.getElementsByName('no_faktur')[0].value = noFaktur;
                 }
             }
         </script>

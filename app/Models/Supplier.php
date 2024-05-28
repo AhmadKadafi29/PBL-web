@@ -9,6 +9,7 @@ class Supplier extends Model
 {
     use HasFactory;
     protected $table = 'supplier';
+    protected $primaryKey = 'id_supplier';
     protected $fillable = [
         'nama_supplier',
         'no_telpon',
@@ -17,6 +18,6 @@ class Supplier extends Model
 
     public function pembelian()
     {
-        return $this->hasMany(Pembelian::class, 'id_supplier', 'id');
+        return $this->hasMany(Pembelian::class, 'id_supplier');
     }
 }

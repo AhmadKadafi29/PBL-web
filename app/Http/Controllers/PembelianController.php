@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailObat;
+use App\Models\DetailPembelian;
 use App\Models\Obat;
 use App\Models\Pembelian;
 use App\Models\Supplier;
@@ -17,7 +19,8 @@ class PembelianController extends Controller
     public function index(Request $request)
     {
         $pembelian = Pembelian::all();
-        return view('pages.pembelian.index', compact('pembelian'));
+        $supplier = Supplier::all();
+        return view('pages.pembelian.index', compact('pembelian','supplier'));
     }
 
     /**
@@ -36,75 +39,49 @@ class PembelianController extends Controller
      */
     public function store(Request $request)
     {
-
-        $request->validate([
-            'id_supplier' => 'required',
-            'id_obat' => 'required',
-            'harga_satuan' => 'required|integer',
-            'quantity' => 'required|integer',
-            'tanggal_pembelian' => 'required',
-            'status_pembayaran' => 'required|string'
-        ]);
-
-
         $noFaktur = "{$request->id_obat}{$request->id_supplier}" . date('Ymd', strtotime($request->tanggal_pembelian));
-        $totalHarga = $request->quantity * $request->harga_satuan;
+        $harga_beli_satuan = $request->input('harga_beli_satuan');
+        $quantity = $request->input('quantity');
 
-        // Simpan data pembelian ke database
-        Pembelian::create([
-            'id_obat' => $request->id_obat,
-            'id_supplier' => $request->id_supplier,
-            'noFaktur' => $noFaktur,
-            'harga_satuan' => $request->harga_satuan,
-            'quantity' => $request->quantity,
-            'total_harga' => $totalHarga,
-            'tanggal_pembelian' => $request->tanggal_pembelian,
-            'status_pembayaran' => $request->status_pembayaran,
+        $pembelian = new Pembelian;
+        $pembelian->id_supplier = $request->input('id_supplier');
+        $pembelian->no_faktur = $noFaktur;
+        $pembelian->total_harga = $harga_beli_satuan * $quantity;
+        $pembelian->tanggal_pembelian = $request->input('tanggal_pembelian');
+        $pembelian->status_pembayaran = $request->input('status_pembayaran');
+        $pembelian->save();
+
+        $id_obat = $request->id_obat;
+
+        $detailPembelian = [
+            'id_pembelian' => $pembelian->id_pembelian,
+            'id_obat' => $id_obat,
+            'harga_beli_satuan' => $harga_beli_satuan,
+            'quantity' => $quantity,
+        ];
+
+
+        DetailPembelian::create($detailPembelian);
+        DetailObat::create([
+            'id_pembelian' => $pembelian->id_pembelian,
+            'id_obat' => $id_obat,
+            'stok_obat' => $quantity,
+            'tanggal_kadaluarsa' => $request->tanggal_kadaluarsa
         ]);
 
-        return redirect()->route('Pembelian.index')->with('success', 'Data pembelian berhasil');
+        return redirect()->route('Pembelian.index')->with('success', 'Pembelian berhasil ditambahkan');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+
+    public function show($id)
     {
-        $pembelian = Pembelian::find($id);
+        $pembelian = Pembelian::findOrFail($id);
         $supplier = Supplier::all();
         $obat = Obat::all();
-        return view('pages.pembelian.edit', compact('pembelian'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'id_supplier' => 'required',
-            'id_obat' => 'required',
-            'harga_satuan' => 'required|integer',
-            'quantity' => 'required|integer',
-            'tanggal_pembelian' => 'required',
-            'status_pembayaran' => 'required|string'
-        ]);
-
-
-        $pembelian = Pembelian::find($id);
-        $totalHarga = $request->quantity * $request->harga_satuan;
-        $noFaktur = "{$request->id_obat}{$request->id_supplier}" . date('Ymd', strtotime($request->tanggal_pembelian));
-        $pembelian->update([
-            'id_obat' => $request->id_obat,
-            'id_supplier' => $request->id_supplier,
-            'noFaktur' => $noFaktur,
-            'quantity' => $request->quantity,
-            'harga_satuan' => $request->harga_satuan,
-            'total_harga' => $totalHarga,
-            'tanggal_pembelian' => $request->tanggal_pembelian,
-            'status_pembayaran' => $request->status_pembayaran,
-        ]);
-        return redirect()->route('Pembelian.index')->with('success', 'Data Pembelian berhasil diupdate');
+        return view('pages.pembelian.show', compact('pembelian', 'supplier', 'obat'));
     }
 
     /**

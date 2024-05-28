@@ -72,50 +72,20 @@
 
                                                 <td>
                                                     <div class="d-flex">
-                                                        <button class="btn btn-sm btn-danger btn-icon confirm-delete ml-2"
-                                                            data-id="{{ $kadaluarsa->id }} "
-                                                            data-name="{{ $kadaluarsa->obat->nama_obat }}">
-                                                            <i class="fas fa-times"></i>
-                                                            Delete
-                                                        </button>
+                                                        <form
+                                                            action="{{ route('Obatkadaluarsa.destroy', $kadaluarsa->id) }}"
+                                                            class="ml-2" method="POST">
+                                                            <input type="hidden" name="_method" value="DELETE">
+                                                            <input type="hidden" name="_token"
+                                                                value="{{ csrf_token() }}">
+                                                            <button class="btn btn-sm btn-danger btn-icon confirm-delete">
+                                                                <i class="fas fa-times"></i>
+                                                                Delete
+                                                            </button>
+                                                        </form>
                                                     </div>
                                                 </td>
                                             </tr>
-
-                                            <div class="modal fade" id="confirmDeleteModal-{{ $kadaluarsa->id }}"
-                                                tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                                                aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Modal Confirm
-                                                            </h5>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <p class="mb-2">Do you want to delete
-                                                                {{ $kadaluarsa->obat->nama_obat }}?
-                                                            </p>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <form
-                                                                action="{{ route('Obatkadaluarsa.destroy', $kadaluarsa->id) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit"
-                                                                    class="btn btn-danger">Delete</button>
-                                                            </form>
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-dismiss="modal">Cancel</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
                                         @endforeach
                                     </table>
                                 </div>
@@ -135,27 +105,4 @@
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/page/features-posts.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            $('.confirm-delete').on('click', function() {
-                var obatId = $(this).data('id');
-                var obatName = $(this).data('name');
-
-                $('#confirmDeleteModal .modal-body').html(
-                    '<p class="mb-2">Apakah anda yakin ingin menghapus obat kadaluarsa ' +
-                    obatName + '?</p>');
-                $('#confirmDeleteBtn').attr('data-id', obatId);
-                $('#confirmDeleteModal').modal('show');
-            });
-
-            $('#confirmDeleteBtn').on('click', function() {
-                var obatId = $(this).data('id');
-                // Perform delete operation here using obatId
-                // ...
-
-                // Close the modal
-                $('#confirmDeleteModal').modal('hide');
-            });
-        });
-    </script>
 @endpush
