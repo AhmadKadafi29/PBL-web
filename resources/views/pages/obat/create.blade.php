@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
     <link rel="stylesheet" href="{{ asset('library/bootstrap-tagsinput/dist/bootstrap-tagsinput.css') }}">
+    
 @endpush
 
 @section('main')
@@ -36,20 +37,29 @@
                                     </div>
                                     <div class="form-group">
                                         <strong>Nama Obat</strong>
-                                        <input type="text" name="nama_obat" class="form-control">
+                                        <input type="text" name="merek_obat" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <strong>Jenis Obat</strong>
-                                        <input type="text" name="jenis_obat" class="form-control">
+                                        <strong>Dosis Obat</strong>
+                                        <input type="text" name="dosis" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <strong>Satuan Obat</strong>
-                                        <input type="text" name="satuan_obat" class="form-control">
+                                        <strong>Kemasan Obat</strong>
+                                        <input type="text" name="kemasan" class="form-control">
                                     </div>
+
 
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
+                                        <div class="form-group">
+                                            <strong>Kegunaan Obat</strong>
+                                            <input type="text" name="kegunaan" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <strong>Efek Samping</strong>
+                                            <input type="text" name="efek_samping" class="form-control">
+                                        </div>
                                         <strong>Kategori Obat</strong>
                                         <select class="form-control" id="position-option" name="kategori_obat_id">
                                             @foreach ($kategori as $kg)
@@ -57,10 +67,10 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <strong>Harga Jual Obat</strong>
                                         <input type="text" name="harga_jual_obat" class="form-control">
-                                    </div>
+                                    </div> --}}
                                     <div class="card-footer text-right">
                                         <button type="submit" class="btn btn-primary"
                                             style="width: 90px; height:40px; font-size:15px">Submit</button>

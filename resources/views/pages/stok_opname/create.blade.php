@@ -24,12 +24,12 @@
                         @csrf
                         <div class="row">
                             <div class="col-lg-6">
-                                <input type="hidden" name="id_user">
+
                                 <div class="form-group">
                                     <strong>Nama Obat</strong>
                                     <select class="form-control" name="id_obat">
                                         @foreach ($obat as $ob)
-                                            <option value="{{ $ob->id }}">{{ $ob->nama_obat }}</option>
+                                            <option value="{{ $ob->id_obat }}">{{ $ob->merek_obat }}</option>
                                         @endforeach
                                     </select>
                                 </div>

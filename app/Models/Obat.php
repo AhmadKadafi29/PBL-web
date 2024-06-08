@@ -13,12 +13,13 @@ class Obat extends Model
     protected $fillable = [
         'kategori_obat_id',
         'kode_obat',
-        'nama_brand_obat',
-        'jenis_obat',
-        'satuan_obat',
-        'harga_jual_obat',
-        'status_obat',
+        'merek_obat',
+        'dosis',
+        'kegunaan',
+        'efek_samping',
+        'kemasan',
     ];
+
 
     public function detailPembelian()
     {

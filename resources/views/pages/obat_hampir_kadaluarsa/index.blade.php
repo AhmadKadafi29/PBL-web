@@ -62,11 +62,11 @@
                                         <tr>
                                             <th>Merek Obat</th>
                                             <th>Nama Supplier</th>
-                                            <th>Jumlah Kadaluarsa</th>
+                                            <th>Stok Obat</th>
                                             <th>Tanggal Kadaluarsa</th>
 
                                         </tr>
-                                        @foreach ($obatkadaluarsa as $kadaluarsa)
+                                        @foreach ($obat as $kadaluarsa)
                                             <tr>
 
                                                 <td>{{ $kadaluarsa->obat->merek_obat }}</td>

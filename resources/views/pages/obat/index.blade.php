@@ -51,21 +51,24 @@
                                     <table class="table-striped table">
                                         <tr>
                                             <th>Kode Obat</th>
-                                            <th>Nama Obat</th>
-                                            <th>Jenis Obat</th>
-                                            <th>Satuan Obat</th>
                                             <th>Kategori Obat</th>
-                                            <th>Harga Jual Satuan</th>
+                                            <th>Merek Obat</th>
+                                            <th>Dosis Obat</th>
+                                            <th>Kegunaan</th>
+                                            <th>Efek Samping</th>
+                                            <th>Kemasan</th>
                                             <th>Action</th>
                                         </tr>
                                         @foreach ($obat as $ob)
                                             <tr>
                                                 <td>{{ $ob->kode_obat }} </td>
-                                                <td>{{ $ob->nama_obat }} </td>
-                                                <td>{{ $ob->jenis_obat }} </td>
-                                                <td>{{ $ob->satuan_obat }} </td>
                                                 <td>{{ $ob->Kategoriobat->nama_kategori }}</td>
-                                                <td>{{ $ob->harga_jual_obat }}</td>
+                                                <td>{{ $ob->merek_obat }} </td>
+                                                <td>{{ $ob->dosis }} </td>
+                                                <td>{{ $ob->kegunaan }} </td>
+                                                <td>{{ $ob->efek_samping }}</td>
+                                                <td>{{ $ob->kemasan }}</td>
+
                                                 <td>
                                                     <div class="d-flex">
                                                         <a href="{{ route('Obat.show', $ob->id_obat) }}"

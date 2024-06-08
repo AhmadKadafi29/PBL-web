@@ -17,7 +17,6 @@ return new class extends Migration
             $table->unsignedBigInteger('id_obat');
             $table->bigInteger('harga_beli_satuan');
             $table->integer('quantity');
-
             $table->timestamps();
             $table->foreign('id_obat')->references('id_obat')->on('obat');
             $table->foreign('id_pembelian')->references('id_pembelian')->on('pembelian')->onDelete('cascade');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailObat;
 use App\Models\Obat;
 use App\Models\StokOpname;
 use App\Models\User;
@@ -13,7 +14,7 @@ class StokOpnameController extends Controller
 {
     public function index()
     {
-        $opname = StokOpname::with(['user', 'obat'])->get();
+        $opname = StokOpname::with(['user', 'obat.detailobat'])->get();
         return view('pages.stok_opname.index', compact('opname'));
     }
 
@@ -25,33 +26,35 @@ class StokOpnameController extends Controller
         return view('pages.stok_opname.create', compact('obat', 'user'));
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request){
+
         $request->validate([
-            'id_obat' => 'required|exists:obat,id',
-            'stok_fisik' => 'required|integer',
-            'status' => 'required|in:belum kadaluarsa,kadaluarsa',
-            'tanggal_opname' => 'date',
+        'id_obat' => 'required|exists:obat,id_obat',
+        'stok_fisik' => 'required|integer',
+       'status' => 'required|in:belum kadaluarsa,kadaluarsa',
+        'tanggal_opname' => 'date',
+    ]);
+
+    try {
+        $obatStok = DB::table('obat')
+            ->join('detail_obat', 'obat.id_obat', '=', 'detail_obat.id_obat')
+            ->where('obat.id_obat', $request->id_obat)
+            ->where('detail_obat.tanggal_kadaluarsa', '>',now())
+            ->sum('detail_obat.stok_obat');
+
+        $selisihStok =  $request->stok_fisik-$obatStok;
+        StokOpname::create([
+            'id_obat' => $request->id_obat,
+            'stok_fisik' => $request->stok_fisik,
+            'status' => $request->status,
+            'harga_jual_satuan' => $selisihStok,
+            'tanggal_opname' => $request->tanggal_opname,
+            'id_user' => Auth::id(),
         ]);
 
-        try {
-
-            // Simpan data stok opname
-            $stokOpnameData = $request->all();
-            $stokOpnameData['id_user'] = Auth::id();
-            StokOpname::create($stokOpnameData);
-
-            $obat = Obat::findOrFail($request->id_obat);
-            $obat->update([
-                'stok_obat' => $request->stok_fisik,
-                'status' => $request->status,
-            ]);
-
-            return redirect()->route('Stok_opname.index')->with('success', 'Stok opname berhasil disimpan.');
-        } catch (\Exception $e) {
-
-
-            return redirect()->route('Stok_opname.index')->with('error', 'Terjadi kesalahan. Stok opname gagal disimpan.');
-        }
+        return redirect()->route('Stok_opname.index')->with('success', 'Stok opname berhasil disimpan.');
+    } catch (\Exception $e) {
+        return redirect()->route('Stok_opname.index')->with('error', 'Terjadi kesalahan. Stok opname gagal disimpan.');
+    }
     }
 }

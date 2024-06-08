@@ -28,26 +28,25 @@ class DatabaseSeeder extends Seeder
         //     'no_telp' => '628141294238',
         //     'password' => Hash::make('12345678')
         // ]);
-        
+
         Supplier::create([
             'nama_supplier' => 'PT. Sehat',
             'no_telpon' => '0897124145',
             'alamat' => 'Banyuwangi'
         ]);
 
-        Kategori_obat::create([
-            'nama_kategori' => 'obat bebas'
-        ]);
+        // Kategori_obat::create([
+        //     'nama_kategori' => 'obat bebas'
+        // ]);
 
-        Obat::create([
-            'kategori_obat_id' => 1,
-            'kode_obat' => 'OB001',
-            'nama_obat' => 'komix',
-            'jenis_obat' => 'sirup',
-            'satuan_obat' => 'sachet',
-            'harga_jual_obat' => 5000,
-            'status' => 'belum kadaluarsa'
-        ]);
+        // Obat::create([
+        //     'kategori_obat_id' => 1,
+        //     'kode_obat' => 'OB001',
+        //     'nama_brand_obat' => 'komix',
+        //     'jenis_obat' => 'sirup',
+        //     'satuan_obat' => 'sachet',
+        //     'status' => 'belum kadaluarsa'
+        // ]);
 
         $this->call([
             UserSeeder::class,

@@ -31,62 +31,62 @@
                             <div class="card-header">
                                 <h4>Stok Opname</h4>
                                 <div class="section-header-button">
-                                    <a href="{{ route('Stok_opname.create') }}" class="btn btn-primary">Tambah Stok
-                                        Opname</a>
+                                    <a href="{{ route('Stok_opname.create') }}" class="btn btn-primary">Tambah Stok Opname</a>
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="clearfix "></div>
+                                <div class="clearfix"></div>
                                 <div class="table-responsive">
                                     <table class="table-striped table">
                                         <tr>
                                             <th>Nama Obat</th>
                                             <th>Nama User</th>
+                                            <th>Stok Sistem</th>
                                             <th>Stok Fisik</th>
+                                            <th>Hasil Selisih Opname</th>
                                             <th>Status</th>
                                             <th>Tanggal opname</th>
-                                            <th>Action</th>
                                         </tr>
 
                                         @foreach ($opname as $op)
                                             <tr>
-                                                <td>{{ $op->obat->nama_obat }}</td>
+                                                <td>{{ $op->obat->merek_obat }}</td>
                                                 <td>{{ $op->user->name }} </td>
-                                                <td> {{ $op->stok_fisik }} </td>
+                                                <td>
+                                                    @php
+                                                        $totalStok = $op->obat->detailObat->sum('stok_obat');
+                                                    @endphp
+                                                    {{ $totalStok }}
+                                                </td>
+                                                <td>{{ $op->stok_fisik }}</td>
+                                                <td>{{ $op->harga_jual_satuan }}</td>
                                                 <td>
                                                     <span class="badge badge-success">{{ $op->status }}</span>
                                                 </td>
                                                 <td>{{ $op->tanggal_opname }}</td>
                                                 <td>
-                                                    <div class="d-flex ">
-
-                                                        <a href="{{ route('Stok_opname.edit', $op->id) }}"
-                                                            class="btn btn-sm btn-info">
-                                                            <i class="fas fa-edit"></i>
-                                                            Edit
+                                                    <div class="d-flex">
+                                                        {{-- Uncomment the following lines if you want to enable Edit and Delete actions --}}
+                                                        {{--
+                                                        <a href="{{ route('Stok_opname.edit', $op->id) }}" class="btn btn-sm btn-info">
+                                                            <i class="fas fa-edit"></i> Edit
                                                         </a>
-
-                                                        <form action="{{ route('Stok_opname.destroy', $op->id) }}"
-                                                            class="ml-2" method="POST">
+                                                        <form action="{{ route('Stok_opname.destroy', $op->id_stok_opname) }}" class="ml-2" method="POST">
                                                             <input type="hidden" name="_method" value="DELETE">
-                                                            <input type="hidden" name="_token"
-                                                                value="{{ csrf_token() }}">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                                             <button class="btn btn-sm btn-danger btn-icon confirm-delete">
-                                                                <i class="fas fa-times"></i>
-                                                                Delete
+                                                                <i class="fas fa-times"></i> Delete
                                                             </button>
                                                         </form>
+                                                        --}}
                                                     </div>
                                                 </td>
                                             </tr>
                                         @endforeach
-
-
                                     </table>
                                 </div>
-                                {{-- <div class="float-right">
-                                    {{ $users->withQueryString()->links() }}
-                                </div> --}}
+                                {{-- Uncomment the following line if you want to enable pagination --}}
+                                {{-- <div class="float-right">{{ $users->withQueryString()->links() }}</div> --}}
                             </div>
                         </div>
                     </div>
@@ -97,7 +97,7 @@
 @endsection
 
 @push('scripts')
-    <!-- JS Libraies -->
+    <!-- JS Libraries -->
     <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
 
     <!-- Page Specific JS File -->

@@ -22,9 +22,12 @@
                     <li>
                         <a class="nav-link" href="{{ route('Kategori.index') }}">Kategori obat</a>
                     </li>
-                    {{-- <li>
+                    <li>
+                        <a class="nav-link" href="{{ route('Obathampirkadaluarsa.index') }}">Obat Hampir Kadaluarsa</a>
+                    </li>
+                    <li>
                         <a class="nav-link" href="{{ route('Obatkadaluarsa.index') }}">Obat Kadaluarsa list</a>
-                    </li> --}}
+                    </li>
                 </ul>
             </li>
             @can('isPemilik')
@@ -43,13 +46,21 @@
                     <a class="nav-link" href="{{ route('Pembelian.index') }}">
                         <i class="fa-solid fa-cart-shopping"></i><span>Pembelian</span></a>
                 </li>
+
+                <li class="nav-item">
+
+                    <a class="nav-link" href="{{ route('Stok_opname.index') }}">
+                        <i class="fa-solid fa-tablets"></i><span>Stok Opname</span></a>
+                </li>
             @endcan
+
+
 
             {{-- <li class="nav-item">
 
                 <a class="nav-link" href="{{ route('Stok_opname.index') }}">
                     <i class="fa-solid fa-tablets"></i><span>Stok Opname</span></a>
-            </li>
+            </li> --}}
             @can('isKaryawan')
                 <li class="nav-item">
 
@@ -71,7 +82,7 @@
                         <a class="nav-link" href="{{ route('labarugi.index') }}">Laporan Laba & Rugi</a>
                     </li>
                 </ul>
-            </li> --}}
+            </li>
 
 
         </ul>

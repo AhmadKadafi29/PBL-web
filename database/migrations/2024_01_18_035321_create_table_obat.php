@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('obat', function (Blueprint $table) {
             $table->bigIncrements('id_obat');
             $table->unsignedBigInteger('kategori_obat_id');
-            $table->string('kode_obat');
-            $table->string('nama_brand_obat');
-            $table->string('jenis_obat');
-            $table->string('satuan_obat');
-            $table->bigInteger('harga_jual_obat');
-            $table->enum('status', ['belum kadaluarsa', 'kadaluarsa'])->default('belum kadaluarsa');
+            $table->string('merek_obat');
+            $table->string('dosis');
+            $table->string('kemasan');
+            $table->string('kegunaan');
+            $table->string('efek_samping');
             $table->timestamps();
 
             $table->foreign('kategori_obat_id')->references('id_kategori')->on('kategori_obat');

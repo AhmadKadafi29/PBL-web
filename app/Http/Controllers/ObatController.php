@@ -14,8 +14,8 @@ class ObatController extends Controller
 {
     public function index(Request $request)
     {
-        $obat  = Obat::when($request->input('nama_obat'), function ($query, $nama_obat) {
-            return $query->where('nama_obat', 'like', '%' . $nama_obat . '%');
+        $obat  = Obat::when($request->input('merek_OBAT'), function ($query, $merek_obat) {
+            return $query->where('merek_obat', 'like', '%' . $merek_obat . '%');
         })
             ->select('*')
             ->paginate(10);
@@ -36,12 +36,14 @@ class ObatController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'kode_obat'=>'required',
             'kategori_obat_id' => 'integer',
-            'nama_brand_obat' => 'required',
-            'jenis_obat' => 'required',
-            'satuan_obat' => 'required',
-            'harga_jual_obat' => 'required',
-            'status' => 'string'
+            'merek_obat' => 'required',
+            'dosis' => 'required',
+            'kemasan' => 'required',
+            'kegunaan' => 'required',
+            'efek_samping' => 'required',
+
         ]);
         $lastObat = DB::table('obat')->orderBy('id_obat', 'desc')->first();
         $nextCodeNumber = $lastObat ? substr($lastObat->kode_obat, 2) + 1 : 1;
@@ -71,12 +73,13 @@ class ObatController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'kode_obat'=>'required',
             'kategori_obat_id' => 'integer',
-            'nama_obat' => 'required',
-            'jenis_obat' => 'required',
-            'satuan_obat' => 'required',
-            'harga_jual_obat' => 'required',
-            'status_obat' => 'integer'
+            'merek_obat' => 'required',
+            'dosis' => 'required',
+            'kemasan' => 'required',
+            'kegunaan' => 'required',
+            'efek_samping' => 'required',
 
         ]);
         $obat = Obat::find($id);

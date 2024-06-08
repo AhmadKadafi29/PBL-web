@@ -3,11 +3,13 @@
 use App\Http\Controllers\Api\ChartController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HargaObatController;
 use App\Http\Controllers\KategoriobatController;
 use App\Http\Controllers\LabaRugiController;
 use App\Http\Controllers\LaporanPembelianController;
 use App\Http\Controllers\LaporanPenjualanController;
 use App\Http\Controllers\ObatController;
+use App\Http\Controllers\ObatHampirKadaluarsa;
 use App\Http\Controllers\ObatKadaluarsaController;
 use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\PenjualanController;
@@ -39,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('Supplier', SupplierController::class);
     Route::resource('Pembelian', PembelianController::class);
     Route::get('obatkadaluarsa', [ObatKadaluarsaController::class, 'index'])->name('Obatkadaluarsa.index');
+    Route::get('obathampirkadaluarsa', [ObatHampirKadaluarsa::class,'index'])->name('Obathampirkadaluarsa.index');
     Route::post('obatkadaluarsa/kadaluarsa', [ObatKadaluarsaController::class, 'storekadaluarsa'])->name('Obatkadaluarsa.storekadaluarsa');
     Route::delete('obatkadaluarsa/{id}', [ObatKadaluarsaController::class, 'destroy'])->name('Obatkadaluarsa.destroy');
     Route::resource('Stok_opname', StokOpnameController::class);
@@ -74,5 +77,6 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('user', UserController::class);
         Route::get('/chart/weekly', [ChartController::class, 'weeklyChart']);
         Route::get('/chart/monthly', [ChartController::class, 'monthlyChart']);
+
     });
 });

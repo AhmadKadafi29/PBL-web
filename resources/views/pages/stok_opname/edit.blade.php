@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
 @section('title', 'Edit Stok Opname')
 
@@ -70,4 +70,4 @@
     <!-- JS Libraies -->
     @section('js')
     @endsection
-@endpush
+@endpush --}}

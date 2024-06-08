@@ -41,6 +41,7 @@ class PembelianController extends Controller
     {
         $noFaktur = "{$request->id_obat}{$request->id_supplier}" . date('Ymd', strtotime($request->tanggal_pembelian));
         $harga_beli_satuan = $request->input('harga_beli_satuan');
+        $harga_jual_satuan = $request->input('harga_jual_satuan');
         $quantity = $request->input('quantity');
 
         $pembelian = new Pembelian;
@@ -66,7 +67,8 @@ class PembelianController extends Controller
             'id_pembelian' => $pembelian->id_pembelian,
             'id_obat' => $id_obat,
             'stok_obat' => $quantity,
-            'tanggal_kadaluarsa' => $request->tanggal_kadaluarsa
+            'tanggal_kadaluarsa' => $request->tanggal_kadaluarsa,
+            'harga_jual' =>$harga_jual_satuan
         ]);
 
         return redirect()->route('Pembelian.index')->with('success', 'Pembelian berhasil ditambahkan');

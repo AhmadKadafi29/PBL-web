@@ -15,6 +15,7 @@ class DetailPembelian extends Model
         'id_obat',
         'harga_beli_satuan',
         'quantity',
+        // 'harga_jual_satuan'
     ];
 
     public function pembelian()

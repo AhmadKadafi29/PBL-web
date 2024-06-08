@@ -14,7 +14,8 @@ class StokOpname extends Model
         'id_user',
         'stok_fisik',
         'status',
-        'tanggal_opname'
+        'tanggal_opname',
+        'harga_jual_satuan'
     ];
 
     public function obat()

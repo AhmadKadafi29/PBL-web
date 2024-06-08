@@ -28,7 +28,7 @@
                                     <strong>Nama Obat</strong>
                                     <select class="form-control" name="id_obat" onchange="updateNoFaktur()">
                                         @foreach ($obat as $ob)
-                                            <option value="{{ $ob->id_obat }}">{{ $ob->nama_obat }}</option>
+                                            <option value="{{ $ob->id_obat }}">{{ $ob->merek_obat }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -57,13 +57,12 @@
                                         <option value="Belum_lunas">Belum lunas</option>
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <strong>Harga Beli satuan</strong>
+                                    <input type="text" name="harga_beli_satuan" class="form-control" onchange="updateTotal()" onchange=" updateHargaJual()">
+                                </div>
                             </div>
                             <div class="col-lg-6">
-                                <div class="form-group">
-                                    <strong>Harga satuan</strong>
-                                    <input type="text" name="harga_beli_satuan" class="form-control"
-                                        onchange="updateTotal()">
-                                </div>
                                 <div class="form-group">
                                     <label>Quantity</label>
                                     <input type="text" class="form-control " name="quantity" onchange="updateTotal()">
@@ -72,15 +71,29 @@
                                     <label for="total_harga">Total Harga</label>
                                     <input type="number" name="total_harga" class="form-control" readonly>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="tanggal_kadaluarsa">Tanggal Kadaluarsa</label>
                                     <input type="date" class="form-control datepicker" id="tanggal_kadaluarsa"
                                         name="tanggal_kadaluarsa" >
                                 </div>
+                                <div class="form-group">
+                                    <label for="total_harga">Margin</label>
+                                    <input type="number" name="margin" class="form-control" onchange="updateHargaJual()">
+                                </div>
+                                <div class="form-group">
+                                    <label for="total_harga">Ongkir Pembelian</label>
+                                    <input type="number" name="ongkir" class="form-control" onchange="updateHargaJual()">
+                                </div>
+                                <div class="form-group">
+                                    <strong>Harga Jual satuan</strong>
+                                    <input type="text" name="harga_jual_satuan" class="form-control" readonly>
+                                </div>
                                 <div class="card-footer text-right">
                                     <button class="btn btn-primary"
                                         style="width: 90px; height:40px; font-size:15px">Submit</button>
                                 </div>
+
                             </div>
                         </div>
                     </form>
@@ -114,7 +127,19 @@
                     // Set nilai no_faktur pada input field
                     document.getElementsByName('no_faktur')[0].value = noFaktur;
                 }
+
+
             }
+
+            function updateHargaJual(){
+                    var hargaSatuan = Number(document.getElementsByName('harga_beli_satuan')[0].value);
+                    var quantity = Number(document.getElementsByName('quantity')[0].value);
+                    var margin = Number(document.getElementsByName('margin')[0].value);
+                    var ongkir = Number(document.getElementsByName('ongkir')[0].value)
+                    const ongkirsatuan= ongkir/quantity;
+                    var hargajual = hargaSatuan +  margin+ ongkirsatuan;
+                    document.getElementsByName('harga_jual_satuan')[0].value = hargajual;
+                }
         </script>
     @endsection
 @endpush
