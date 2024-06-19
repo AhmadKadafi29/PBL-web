@@ -12,7 +12,6 @@
         <section class="section">
             <div class="section-header">
                 <h1>Penjualan</h1>
-
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
                     <div class="breadcrumb-item"><a href="#">Penjualan</a></div>
@@ -39,8 +38,8 @@
                                             @csrf
                                             <div class="form-row">
                                                 <div class="form-group col-md-3">
-                                                    <label for="nama_obat">Nama Obat</label>
-                                                    <input type="text" name="nama_obat" id="nama_obat"
+                                                    <label for="merek_obat">Nama Obat</label>
+                                                    <input type="text" name="merek_obat" id="merek_obat"
                                                         class="form-control">
                                                 </div>
                                                 <div class="form-group col-md-1">
@@ -49,8 +48,8 @@
                                                         class="form-control" readonly>
                                                 </div>
                                                 <div class="form-group col-md-2">
-                                                    <label for="harga_obat">Harga</label>
-                                                    <input type="text" name="harga_obat" id="harga_obat"
+                                                    <label for="harga_jual">Harga</label>
+                                                    <input type="text" name="harga_jual" id="harga_jual"
                                                         class="form-control" readonly>
                                                 </div>
                                                 <div class="form-group col-md-2">
@@ -71,7 +70,6 @@
                                             </button>
                                         </form>
                                     </div>
-
                                 </div>
                                 <div class="container">
                                     <div class="table-responsive">
@@ -84,14 +82,13 @@
                                                 <th>Total</th>
                                                 <th>Action</th>
                                             </tr>
-                                            {{-- @dd($keranjang) --}}
                                             @foreach ($keranjang as $index => $item)
                                                 <tr>
                                                     <td>{{ $item['kode_obat'] }}</td>
-                                                    <td>{{ $item['nama_obat'] }}</td>
-                                                    <td>{{ $item['harga_obat'] }}</td>
+                                                    <td>{{ $item['merek_obat'] }}</td>
+                                                    <td>{{ $item['harga_jual'] }}</td>
                                                     <td>{{ $item['jumlah'] }}</td>
-                                                    <td>{{ $item['harga_obat'] * $item['jumlah'] }}</td>
+                                                    <td>{{ $item['harga_jual'] * $item['jumlah'] }}</td>
                                                     <td>
                                                         <div class="d-flex">
                                                             <form
@@ -143,7 +140,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="row mt-2">
                                             <div class="col-md-12 text-right">
                                                 <button type="submit" class="btn btn-primary">Checkout</button>
@@ -156,7 +152,6 @@
                     </div>
                 </div>
             </div>
-
         </section>
     </div>
 @endsection
@@ -170,38 +165,31 @@
 
     <script>
         $(document).ready(function() {
-            $('#nama_obat').on('input', function() {
-                // Ambil nilai ID obat dari input
+            $('#merek_obat').on('input', function() {
                 var nama = $(this).val();
                 $.ajax({
                     url: "{{ url('/penjualan/cari-obat') }}",
                     method: 'POST',
                     data: {
                         _token: "{{ csrf_token() }}",
-                        nama_obat: nama
+                        merek_obat: nama
                     },
                     success: function(response) {
-                        $('#nama_obat').val(response.nama_obat);
+
+                        $('#merek_obat').val(response.merek_obat);
                         $('#stok_obat').val(response.stok_obat);
-                        $('#harga_obat').val(response.harga_obat);
+                        $('#harga_jual').val(response.harga_jual);
+
                     },
-                    error: function(error) {
-                        console.log(error);
-                    }
+
                 });
             });
 
             $('#jumlah_dibayar').on('input', function() {
-                // Ambil nilai total bayar dan jumlah dibayar
                 var totalBayar = parseFloat('{{ $totalBayar }}');
                 var jumlahDibayar = parseFloat($(this).val());
-
-                // Hitung kembalian
                 var kembalian = jumlahDibayar - totalBayar;
-
-                // Perbarui nilai input kembalian
-                $('#kembalian').val(kembalian
-                    .toFixed()); // Menampilkan kembalian dengan dua angka di belakang koma
+                $('#kembalian').val(kembalian.toFixed(2));
             });
         });
     </script>

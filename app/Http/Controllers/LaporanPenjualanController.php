@@ -28,7 +28,7 @@ class LaporanPenjualanController extends Controller
 
         $laporanPenjualan = DB::table('penjualan')
             ->join('obat', 'penjualan.id_obat', '=', 'obat.id')
-            ->select('penjualan.*', 'obat.nama_obat')
+            ->select('penjualan.*', 'obat.merek_obat')
             ->whereMonth('penjualan.tanggal_penjualan', $bulan)
             ->whereYear('penjualan.tanggal_penjualan', $tahun)
             ->get();

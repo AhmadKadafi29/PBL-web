@@ -24,9 +24,9 @@ class LaporanPembelianController extends Controller
         $bulan = $request->bulan;
         $tahun = $request->tahun;
 
-        $laporanPembelian = DB::table('pembelian')
-            ->join('obat', 'pembelian.id_obat', '=', 'obat.id')
-            ->select('pembelian.*', 'obat.nama_obat')
+        $laporanPembelian = DB::table('detail_pembelian')
+            ->join('obat', 'detail_pembelian.id_obat', '=', 'obat.id_obat')
+            ->select('pembelian.*', 'obat.merek_obat')
             ->whereMonth('pembelian.tanggal_pembelian', $bulan)
             ->whereYear('pembelian.tanggal_pembelian', $tahun)
             ->get();

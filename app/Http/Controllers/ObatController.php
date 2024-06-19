@@ -14,7 +14,7 @@ class ObatController extends Controller
 {
     public function index(Request $request)
     {
-        $obat  = Obat::when($request->input('merek_OBAT'), function ($query, $merek_obat) {
+        $obat  = Obat::when($request->input('merek_obat'), function ($query, $merek_obat) {
             return $query->where('merek_obat', 'like', '%' . $merek_obat . '%');
         })
             ->select('*')
@@ -67,6 +67,7 @@ class ObatController extends Controller
     public function edit($id)
     {
         $obat = Obat::findOrFail($id);
+        $kategori = Kategori_obat::all();
         return view('pages.obat.edit', compact('obat', 'kategori'));
     }
 
