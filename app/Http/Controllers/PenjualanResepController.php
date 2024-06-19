@@ -7,23 +7,46 @@ use App\Models\DetailPembelian;
 use App\Models\DetailPenjualan;
 use App\Models\Obat;
 use App\Models\Penjualan;
+use App\Models\PenjualanResep;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class PenjualanController extends Controller
+class PenjualanResepController extends Controller
 {
     public function index()
     {
         $keranjang = session('keranjang', []);
         $totalBayar = 0;
+        $pasien=PenjualanResep::get();
 
         foreach ($keranjang as $item) {
             $totalBayar += $item['harga_jual_obat'] * $item['jumlah'];
         }
-        return view('pages.penjualan.index', compact('keranjang', 'totalBayar'));
+        return view('pages.penjualan_resep.index', compact('keranjang', 'totalBayar', 'pasien'));
     }
+
+
+    public function create(){
+        return view('pages.penjualan_resep.create');
+
+    }
+
+    public function store(Request $request){
+        $request->validate([
+            'nama_pasien'=>'required',
+            'alamat_pasien'=>'required',
+            'jenis_kelamin'=>'required',
+            'nama_dokter'=>'required',
+            'nomor_sip'=>'required',
+            'tanggal_penjualan'=>'required'
+        ]);
+
+        PenjualanResep::create($request->all());
+        return redirect()->route('penjualanresep.index')->with('succes', 'berhasil tambah data penebus resep');
+    }
+
 
     public function cariObat(Request $request)
     {
@@ -108,17 +131,15 @@ class PenjualanController extends Controller
 
         $keranjang = session('keranjang', []);
 
-        $penjualan = Penjualan::create([
-            'tanggal_penjualan' => now(),
-        ]);
-        $idPenjualan = $penjualan->id_penjualan;
+        $lastPenjualanResep = PenjualanResep::orderBy('created_at', 'desc')->first();
+        $idPenjualan = $lastPenjualanResep->id_penjualan_resep;
 
 
         foreach ($keranjang as $item) {
             $detailPembelian = DetailPembelian::where('id_obat', $item['id_obat'])->latest()->first();
 
             DetailPenjualan::create([
-                'id_penjualan' => $idPenjualan,
+                'id_penjualan_resep' => $idPenjualan,
                 'id_obat' => $item['id_obat'],
                 'jumlah_jual' => $item['jumlah'],
                 'harga_jual_satuan' => $item['harga_jual_obat'],

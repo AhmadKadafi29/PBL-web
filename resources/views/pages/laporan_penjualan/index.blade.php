@@ -22,8 +22,9 @@
             <div class="section-body">
                 <div class="container mt-4">
                     <h2>Generate Laporan Penjualan per Bulan</h2>
-                    <form action="{{ route('laporan-penjualan.generate') }}" method="post">
+                    <form action="{{ route('laporan-penjualan.generate') }}" method="POST">
                         @csrf
+                        @method('POST')
                         <div class="row mt-3">
                             <div class="col-md-3">
                                 <div class="form-group">

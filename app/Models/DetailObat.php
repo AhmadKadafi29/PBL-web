@@ -16,7 +16,8 @@ class DetailObat extends Model
         'id_pembelian',
         'stok_obat',
         'tanggal_kadaluarsa',
-        'harga_jual'
+        'harga_jual',
+        'no_batch'
     ];
 
     public function pembelian()

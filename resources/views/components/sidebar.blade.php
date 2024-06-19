@@ -63,9 +63,19 @@
             </li> --}}
             @can('isKaryawan')
                 <li class="nav-item">
+                    <a href="" class="nav-link has-dropdown"><i class="fas fa-pills"></i><span>Penjualan</span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="nav-link" href="{{ route('penjualan.index') }}">
+                                <i class="fa-solid fa-cart-shopping"></i><span>Penjualan</span></a>
+                        </li>
 
-                    <a class="nav-link" href="{{ route('penjualan.index') }}">
-                        <i class="fa-solid fa-cart-shopping"></i><span>Penjualan</span></a>
+                        <li>
+                            <a class="nav-link" href="{{ route('penjualanresep.index') }}"><i class="fa-solid fa-cart-shopping"></i><span>Penjualan Resep</span></a>
+                        </li>
+
+                    </ul>
+
                 </li>
             @endcan
             <li class="nav-item dropdown ">

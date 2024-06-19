@@ -11,11 +11,12 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Penjualan</h1>
+                <h1>Penjualan Dengan Resep</h1>
 
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Penjualan</a></div>
+                    <div class="breadcrumb-item"><a href="#">Pejualan</a></div>
+
                 </div>
             </div>
             <div class="section-body">
@@ -29,12 +30,15 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Penjualan</h4>
+                                <h4>Penjualan Resep</h4>
+                                <div class="section-header-button">
+                                    <a href="{{ route('penjualanresep.create') }}" class="btn btn-primary">Tambah Resep</a>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="container">
                                     <div class="row">
-                                        <form action="{{ url('/penjualan/tambah-keranjang') }}" method="post"
+                                        <form action="{{ url('/penjualanresep/tambah-keranjang') }}" method="post"
                                             class="mb-3">
                                             @csrf
                                             <div class="form-row">
@@ -55,7 +59,7 @@
                                                 </div>
                                                 <div class="form-group col-md-2">
                                                     <label for="jumlah">Jumlah Beli</label>
-                                                    <input type="number" name="jumlah"
+                                                    <input type="number" name="jumlah" value="1"
                                                         class="form-control">
                                                 </div>
                                                 <div class="form-group col-md-2 mt-2">
@@ -63,7 +67,7 @@
                                                 </div>
                                             </div>
                                         </form>
-                                        <form action="{{ route('penjualan.hapus-keranjang') }}" method="post">
+                                        <form action="{{ route('penjualanresep.hapus-keranjang') }}" method="post">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-sm btn-danger btn-icon confirm-delete ml-2">
@@ -95,7 +99,7 @@
                                                     <td>
                                                         <div class="d-flex">
                                                             <form
-                                                                action="{{ route('penjualan.hapusItemKeranjang', $index) }}"
+                                                                action="{{ route('penjualanresep.hapusItemKeranjang', $index) }}"
                                                                 method="post">
                                                                 @csrf
                                                                 @method('DELETE')
@@ -115,7 +119,7 @@
                                             </tr>
                                         </table>
                                     </div>
-                                    <form action="{{ route('penjualan.checkout') }}" method="post">
+                                    <form action="{{ route('penjualanresep.checkout') }}" method="post">
                                         @csrf
                                         @method('POST')
                                         <div class="row mt-2">

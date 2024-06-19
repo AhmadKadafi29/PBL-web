@@ -23,20 +23,34 @@ class LaporanPembelianController extends Controller
 
         $bulan = $request->bulan;
         $tahun = $request->tahun;
+        $totalharga=0;
 
-        $laporanPembelian = DB::table('pembelian')
-            ->join('obat', 'pembelian.id_obat', '=', 'obat.id')
-            ->select('pembelian.*', 'obat.nama_obat')
-            ->whereMonth('pembelian.tanggal_pembelian', $bulan)
-            ->whereYear('pembelian.tanggal_pembelian', $tahun)
-            ->get();
-        $total = DB::table('pembelian')
-            ->whereMonth('tanggal_pembelian', $bulan)
-            ->whereYear('tanggal_pembelian', $tahun)
-            ->sum('total_harga');
+
+
+        $laporanPembelian = DB::table('detail_pembelian')
+        ->join('obat', 'detail_pembelian.id_obat', '=', 'obat.id_obat')
+        ->join('pembelian', 'detail_pembelian.id_pembelian', '=', 'pembelian.id_pembelian')
+        ->select(
+            'detail_pembelian.*',
+            'obat.merek_obat',
+            'pembelian.tanggal_pembelian',
+            'pembelian.id_supplier'
+        )
+        ->whereMonth('pembelian.tanggal_pembelian', $bulan)
+        ->whereYear('pembelian.tanggal_pembelian', $tahun)
+        ->get();
+        $total = DB::table('detail_pembelian')
+        ->join('pembelian', 'detail_pembelian.id_pembelian', '=', 'pembelian.id_pembelian')
+        ->whereMonth('pembelian.tanggal_pembelian', $bulan)
+        ->whereYear('pembelian.tanggal_pembelian', $tahun)
+        ->get();
+        foreach($total as $jumlah){
+            $totalharga +=$jumlah->harga_beli_satuan *$jumlah->quantity;
+        }
         return view('pages.laporan_pembelian.index', [
             'laporanPembelian' => $laporanPembelian,
-            'total' => $total,
+            'total' => $totalharga,
+            'data'=>$total,
             'bulan' => $bulan,
             'tahun' => $tahun,
         ]);

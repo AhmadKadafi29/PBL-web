@@ -37,9 +37,11 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama Supplier</th>
+                                                <th>No Batch</th>
                                                 <th>Stok Obat</th>
                                                 <th>Harga Jual Obat Satuan</th>
                                                 <th>Tanggal Kadaluarsa</th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -50,6 +52,7 @@
                                                 <tr>
                                                     <td>{{ $no++ }}</td>
                                                     <td>{{ $item-> pembelian->supplier->nama_supplier}}</td>
+                                                    <td>{{ $item->no_batch }}</td>
                                                     <td>{{ $item->stok_obat }}</td>
                                                     <td>{{ $item->harga_jual }}</td>
                                                     <td>{{ $item->tanggal_kadaluarsa }}</td>
