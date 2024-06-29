@@ -74,7 +74,7 @@
                         <i class="fa-solid fa-cart-shopping"></i><span>Penjualan</span></a>
                 </li>
             @endcan
-            {{-- <li class="nav-item dropdown ">
+            <li class="nav-item dropdown ">
                 <a href="" class="nav-link has-dropdown"><i class="fa fa-clipboard"
                         aria-hidden="true"></i><span>Laporan</span></a>
                 <ul class="dropdown-menu">
@@ -88,7 +88,7 @@
                         <a class="nav-link" href="{{ route('labarugi.index') }}">Laporan Laba & Rugi</a>
                     </li>
                 </ul>
-            </li> --}}
+            </li>
 
 
         </ul>
