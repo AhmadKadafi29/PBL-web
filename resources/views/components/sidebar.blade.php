@@ -49,6 +49,12 @@
 
                 <li class="nav-item">
 
+                    <a class="nav-link" href="{{ route('penjualan.index') }}">
+                        <i class="fa-solid fa-cart-shopping"></i><span>Penjualan</span></a>
+                </li>
+
+                <li class="nav-item">
+
                     <a class="nav-link" href="{{ route('Stok_opname.index') }}">
                         <i class="fa-solid fa-tablets"></i><span>Stok Opname</span></a>
                 </li>

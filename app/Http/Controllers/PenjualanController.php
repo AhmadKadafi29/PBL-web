@@ -201,7 +201,7 @@ class PenjualanController extends Controller
             $namaObat = $item['nama_obat'];
 
            // DB::table('obat')->where('nama_obat', $item['nama_obat'])->update(['stok_obat' => $stokObat]);
-           $obat = DetailObat::whereHas('obat', function ($query) use ($namaObat) {
+        $obat = DetailObat::whereHas('obat', function ($query) use ($namaObat) {
             $query->where('merek_obat', $namaObat);
         })
         ->where('tanggal_kadaluarsa', $item['tanggal_kadaluarsa'])

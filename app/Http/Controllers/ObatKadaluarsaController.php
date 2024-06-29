@@ -12,7 +12,6 @@ class ObatKadaluarsaController extends Controller
     public function index()
     {
         $obatkadaluarsa = DetailObat::whereDate('detail_obat.tanggal_kadaluarsa', '<', now()->toDateString())
-
         ->get();
 
         return view('pages.obat_kadaluarsa.index', compact('obatkadaluarsa'));

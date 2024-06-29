@@ -37,7 +37,6 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('home', [DashboardController::class, 'index'])->name('home');
-    Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::resource('Obat', ObatController::class);
     Route::resource('Kategori', KategoriobatController::class);
     Route::resource('Supplier', SupplierController::class);
@@ -56,7 +55,23 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/laporan-labarugi', [LabaRugiController::class, 'index'])->name('labarugi.index');
     Route::post('/laporan-labarugi/generate', [LabaRugiController::class, 'generateLabaRugi'])->name('labarugi.generate');
     Route::get('/laporan-labarugi/cetaklaporan', [LabaRugiController::class, 'printLabaRugi'])->name('labarugi.cetak');
+    Route::get('/penjualan/index', [PenjualanController::class, 'index'])->name('penjualan.index');
+    Route::post('/penjualan/cari-obat', [PenjualanController::class, 'cariObat']);
+    Route::post('/penjualan/checkout', [PenjualanController::class, 'checkout']);
+    Route::post('/penjualan/tambah-keranjang', [PenjualanController::class, 'tambahKeKeranjang']);
+    Route::delete('/penjualan/hapus-keranjang', [PenjualanController::class, 'hapusKeranjang'])->name('penjualan.hapus-keranjang');
+    Route::delete('/penjualan/hapus-itemkeranjang/{index}', [PenjualanController::class, 'hapusItemKeranjang'])->name('penjualan.hapusItemKeranjang');
+    Route::get('/penjualan/cetaknota', [PenjualanController::class, 'cetakNota'])->name('penjualan.cetaknota');
 
+    // Route::middleware(['can:isKaryawan'])->group(function () {
+    //     // Rute-rute yang membutuhkan izin 'isKaryawan'
+    //     Route::get('penjualan/index', [PenjualanController::class, 'index'])->name('penjualan.index');
+    //     Route::post('/penjualan/cari-obat', [PenjualanController::class, 'cariObat']);
+    //     Route::post('/penjualan/checkout', [PenjualanController::class, 'checkout']);
+    //     Route::post('/penjualan/tambah-keranjang', [PenjualanController::class, 'tambahKeKeranjang']);
+    //     Route::delete('/penjualan/hapus-keranjang', [PenjualanController::class, 'hapusKeranjang'])->name('penjualan.hapus-keranjang');
+    //     Route::delete('/penjualan/hapus-itemkeranjang/{index}', [PenjualanController::class, 'hapusItemKeranjang'])->name('penjualan.hapusItemKeranjang');
+    //     Route::get('/penjualan/cetaknota', [PenjualanController::class, 'cetakNota'])->name('penjualan.cetaknota');
 
     Route::middleware(['can:isKaryawan'])->group(function () {
         // Rute-rute yang membutuhkan izin 'isKaryawan'
@@ -67,8 +82,8 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/penjualan/hapus-keranjang', [PenjualanController::class, 'hapusKeranjang'])->name('penjualan.hapus-keranjang');
         Route::delete('/penjualan/hapus-itemkeranjang/{index}', [PenjualanController::class, 'hapusItemKeranjang'])->name('penjualan.hapusItemKeranjang');
         Route::get('/penjualan/cetaknota', [PenjualanController::class, 'cetakNota'])->name('penjualan.cetaknota');
-        Route::get('/chart/weekly', [ChartController::class, 'weeklyChart']);
-        Route::get('/chart/monthly', [ChartController::class, 'monthlyChart']);
+        // Route::get('/chart/weekly', [ChartController::class, 'weeklyChart']);
+        // Route::get('/chart/monthly', [ChartController::class, 'monthlyChart']);
         Route::resource('penjualanresep',PenjualanResepController::class);
         Route::post('/penjualanresep/checkout', [PenjualanResepController::class, 'checkout'])->name('penjualanresep.checkout');
         Route::post('/penjualanresep/tambah-keranjang', [PenjualanResepController::class, 'tambahKeKeranjang']);
@@ -82,8 +97,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::resource('Supplier', SupplierController::class);
         Route::resource('user', UserController::class);
-        Route::get('/chart/weekly', [ChartController::class, 'weeklyChart']);
-        Route::get('/chart/monthly', [ChartController::class, 'monthlyChart']);
+
 
     });
 });
