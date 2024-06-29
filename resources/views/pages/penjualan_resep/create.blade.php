@@ -10,7 +10,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Tambah Nama Penebus Resep</h1>
+                <h1>Tambah Resep</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
                     {{-- <div class="breadcrumb-item"><a href="#">Sto</a></div>
@@ -27,6 +27,25 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
+                                <label for="nama_dokter">Nama Dokter</label>
+                                <input type="text" name="nama_dokter" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="nomor_sip">Nomor SIP</label>
+                                <input type="text" name="nomor_sip" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tanggal_penjualan">Tanggal Penjualan</label>
+                                <input type="date" name="tanggal_penjualan" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="tanggal_penjualan">Tanggal Penulisan Resep</label>
+                                <input type="date" name="tanggal_penulisan_resep" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
                                 <strong>Nama Pasien</strong>
                                <input type="text" name="nama_pasien" class="form-control">
                             </div>
@@ -41,20 +60,6 @@
                                     <option value="P">Perempuan</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label for="nama_dokter">Nama Dokter</label>
-                                <input type="text" name="nama_dokter" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="nomor_sip">Nomor SIP</label>
-                                <input type="text" name="nomor_sip" class="form-control">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="tanggal_penjualan">Tanggal Penjualan</label>
-                                <input type="date" name="tanggal_penjualan" class="form-control">
-                            </div>
-
                             <div class="card-footer text-right">
                                 <button class="btn btn-primary"
                                     style="width: 90px; height:40px; font-size:15px">Submit</button>

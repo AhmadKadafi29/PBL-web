@@ -40,11 +40,12 @@ class PenjualanResepController extends Controller
             'jenis_kelamin'=>'required',
             'nama_dokter'=>'required',
             'nomor_sip'=>'required',
-            'tanggal_penjualan'=>'required'
+            'tanggal_penjualan'=>'required',
+            'tanggal_penulisan_resep'=>'required'
         ]);
 
         PenjualanResep::create($request->all());
-        return redirect()->route('penjualanresep.index')->with('succes', 'berhasil tambah data penebus resep');
+        return redirect()->route('penjualanresep.index')->with('success', 'berhasil menambah resep');
     }
 
 
@@ -132,8 +133,13 @@ class PenjualanResepController extends Controller
         $keranjang = session('keranjang', []);
 
         $lastPenjualanResep = PenjualanResep::orderBy('created_at', 'desc')->first();
-        $idPenjualan = $lastPenjualanResep->id_penjualan_resep;
+        $idPenjualan = $lastPenjualanResep->id;
+        $statusresep = $lastPenjualanResep->status;
 
+        if ($statusresep) {
+            return redirect()->back()->with('error', 'Tidak ada resep yang baru diinput.');
+        }
+    
 
         foreach ($keranjang as $item) {
             $detailPembelian = DetailPembelian::where('id_obat', $item['id_obat'])->latest()->first();
@@ -146,14 +152,15 @@ class PenjualanResepController extends Controller
                 'harga_beli_satuan' => $detailPembelian->harga_beli_satuan,
             ]);
         }
+       $lastPenjualanResep->status='Digunakan';
+       $lastPenjualanResep->save();
         // $penjualan = Penjualan::all();
-        $totalBayar = 0;
+        // $totalBayar = 0;
+        // foreach ($keranjang as $item) {
+        //     $totalBayar += $item['harga_jual_obat'] * $item['jumlah'];
+        // }
 
-        foreach ($keranjang as $item) {
-            $totalBayar += $item['harga_jual_obat'] * $item['jumlah'];
-        }
-
-        $totalBayar;
+        // $totalBayar;
         // $pdf = PDF::loadView('pages.penjualan.nota', compact('keranjang', 'totalBayar', 'penjualan'));
         // $pdf->download('nota_penjualan.pdf');
 

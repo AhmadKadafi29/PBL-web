@@ -62,7 +62,6 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>ID Penjualan</th>
                                     <th>Nama Obat</th>
                                     <th>Jumlah Penjualan</th>
                                     <th>Total Harga</th>
@@ -71,19 +70,24 @@
                             </thead>
                             <tbody>
                                 @foreach ($laporanPenjualan as $penjualan)
-                                    <tr>
-                                        <td>{{ $penjualan->id }}</td>
-                                        <td>{{ $penjualan->nama_obat }}</td>
-                                        <td>{{ $penjualan->jumlah }}</td>
-                                        <td>Rp .{{ $penjualan->total_harga }}</td>
-                                        <td>{{ $penjualan->tanggal_penjualan }}</td>
-                                    </tr>
-                                @endforeach
                                 <tr>
-                                    <td colspan="3" align="right"><strong>Total :</strong></td>
-                                    <td>Rp. {{ $total }}</td>
-                                    <td></td>
+                                    <td>{{ $penjualan->obat->merek_obat }}</td>
+                                    <td>{{ $penjualan->jumlah_jual }}</td>
+                                    <td>Rp {{ $penjualan->harga_jual_satuan * $penjualan->jumlah_jual }}</td>
+                                    <td>
+                                        @if ($penjualan->penjualan_resep)
+                                            {{ $penjualan->penjualan_resep->tanggal_penjualan }}
+                                        @elseif ($penjualan->penjualan)
+                                            {{ $penjualan->penjualan->tanggal_penjualan }}
+                                        @endif
+                                    </td>
                                 </tr>
+                            @endforeach    
+                            <tr>
+                                <td colspan="3" align="right"><h5>Total :</h5></td>
+                                <td>Rp. {{ $total }}</td>
+                                <td></td>
+                            </tr>
                             </tbody>
                         </table>
 

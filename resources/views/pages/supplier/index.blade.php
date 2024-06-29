@@ -36,10 +36,21 @@
                             </div>
                             <div class="card-body">
                                 <div class="clearfix "></div>
+                                <div class="float-right">
+                                    <form method="GET" action="{{ route('Supplier.index') }}">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search" name="name">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
 
                                 <div class="table-responsive">
                                     <table class="table-striped table">
                                         <tr>
+                                            <th>No</th>
                                             <th>Nama Supplier</th>
                                             <th>No Telepon</th>
                                             <th>Alamat</th>
@@ -47,8 +58,9 @@
                                         </tr>
 
 
-                                        @foreach ($supplier as $sp)
+                                        @foreach ($supplier as $index => $sp)
                                             <tr>
+                                                <td>{{ $index + $supplier->firstItem() }}</td>
                                                 <td>{{ $sp->nama_supplier }} </td>
                                                 <td> {{ $sp->no_telpon }} </td>
                                                 <td> {{ $sp->alamat }} </td>
@@ -74,9 +86,9 @@
                                         @endforeach
                                     </table>
                                 </div>
-                                {{-- <div class="float-right">
-                                    {{ $users->withQueryString()->links() }}
-                                </div> --}}
+                                <div class="float-right">
+                                    {{ $supplier->withQueryString()->links() }}
+                                </div>
                             </div>
                         </div>
                     </div>

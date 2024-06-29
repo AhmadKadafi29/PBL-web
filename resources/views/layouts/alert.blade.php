@@ -7,7 +7,7 @@
             <p>{{ $message }}</p>
         </div>
     </div>
-@elseif ($message = Session::get('danger'))
+@elseif ($message = Session::get('error'))
     <div class="alert alert-danger alert-dismissible show fade">
         <div class="alert-body">
             <button class="close" data-dismiss="alert">
@@ -17,3 +17,4 @@
         </div>
     </div>
 @endif
+

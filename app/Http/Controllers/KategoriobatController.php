@@ -9,9 +9,13 @@ class KategoriobatController extends Controller
 {
     public function index(Request $request)
     {
-        $kategoriobat = Kategoriobat::all();
-
+        $kategoriobat = Kategoriobat::when($request->input('nama_kategori'), function($query, $nama_kategori){
+            return $query->where('nama_kategori', 'like', '%' . $nama_kategori . '%');
+        })
+        ->orderBy('id_kategori', 'asc')
+        ->paginate(10);
         return view('pages.kategori_obat.index', compact('kategoriobat'));
+
     }
     public function create()
     {

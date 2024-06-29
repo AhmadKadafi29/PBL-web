@@ -9,7 +9,9 @@ class supplierController extends Controller
 {
     public function index(Request $request)
     {
-        $supplier = Supplier::all();
+        $supplier = Supplier::when($request->input('name'), function($query, $name){
+            return $query->where('nama_supplier', 'like' ,'%'.$name.'%');
+        })->paginate(10);
         return view('pages.supplier.index', compact('supplier'));
     }
     public function create()

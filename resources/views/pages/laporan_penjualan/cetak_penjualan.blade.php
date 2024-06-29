@@ -1,41 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Penjualan - Cetak</title>
+    <title>Laporan Pembelian</title>
 </head>
-
 <body>
-    <h1>Laporan Penjualan</h1>
-
-    <h2>Laporan Penjualan Per Bulan</h2>
-    <p>Bulan: {{ $bulan }}</p>
-    <p>Tahun: {{ $tahun }}</p>
-
+    <h1>Laporan Pembelian Bulan {{ $bulan }} Tahun {{ $tahun }}</h1> 
     <table border="1">
         <thead>
             <tr>
-                <th>Tanggal</th>
-                <th>Nama Obat</th>
+                <th>Merek Obat</th>
                 <th>Jumlah Penjualan</th>
-                <!-- Tambahkan kolom lain sesuai kebutuhan -->
+                <th>Total Harga</th>
+                <th>Tanggal Penjualan</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($laporanPenjualan as $data)
+            @foreach($laporanPenjualan as $penjualan)
                 <tr>
-                    <td>{{ $data->tanggal_penjualan }}</td>
-                    <td>{{ $data->nama_obat }}</td>
-                    <td>{{ $data->jumlah }}</td>
-                    <!-- Tambahkan kolom lain sesuai kebutuhan -->
+                    <td>{{ $penjualan->obat->merek_obat }}</td>
+                    <td>{{ $penjualan->jumlah_jual }}</td>
+                    <td>{{ $penjualan->jumlah_jual * $penjualan->harga_jual_satuan }}</td>
+                    <td>
+                        @if ($penjualan->penjualan_resep)
+                            {{ $penjualan->penjualan_resep->tanggal_penjualan }}
+                        @elseif ($penjualan->penjualan)
+                            {{ $penjualan->penjualan->tanggal_penjualan }}
+                        @endif
+                    </td>      
                 </tr>
             @endforeach
         </tbody>
     </table>
-
-    <p>Total Penjualan: {{ $total }}</p>
+    <h2 style="text-align: right">Total Harga: {{ $total }}</h2>
 </body>
-
 </html>

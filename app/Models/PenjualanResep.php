@@ -9,7 +9,7 @@ class PenjualanResep extends Model
 {
     use HasFactory;
     protected $table = 'penjualan_resep';
-    protected $primarykey = 'id_penjualan_resep';
+    protected $primarykey = 'id';
 
     protected $fillable =[
         'nama_pasien',
@@ -17,10 +17,12 @@ class PenjualanResep extends Model
         'jenis_kelamin',
         'nama_dokter',
         'nomor_sip',
-        'tanggal_penjualan'
+        'tanggal_penjualan',
+        'tanggal_penulisan_resep'
     ];
 
-    public function detail_penjualan(){
+    public function detail_penjualan()
+    {
         return $this->hasMany(DetailPenjualan::class, 'id_penjualan_resep');
     }
 }

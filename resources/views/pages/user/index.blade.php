@@ -53,6 +53,7 @@
                                 <div class="table-responsive">
                                     <table class="table-striped table">
                                         <tr>
+                                            <th>No</th>
                                             <th>Nama</th>
                                             <th>Email</th>
                                             <th>Role</th>
@@ -61,8 +62,9 @@
                                             <th>Action</th>
                                         </tr>
 
-                                        @foreach ($users as $user)
+                                        @foreach ($users as $index => $user)
                                             <tr>
+                                                <td>{{$index + $users->firstItem()}}</td>
                                                 <td>
                                                     {{ $user->name }}
                                                 </td>
