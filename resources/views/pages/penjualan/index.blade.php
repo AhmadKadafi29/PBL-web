@@ -11,10 +11,12 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Penjualan</h1>
+                <h1>Penjualan Dengan Resep</h1>
+
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Penjualan</a></div>
+                    <div class="breadcrumb-item"><a href="#">Pejualan</a></div>
+
                 </div>
             </div>
             <div class="section-body">
@@ -38,8 +40,8 @@
                                             @csrf
                                             <div class="form-row">
                                                 <div class="form-group col-md-3">
-                                                    <label for="nama_obat">Nama Obat</label>
-                                                    <input type="text" name="nama_obat" id="nama_obat"
+                                                    <label for="merek_obat">Merek Obat</label>
+                                                    <input type="text" name="merek_obat" id="merek_obat"
                                                         class="form-control">
                                                 </div>
                                                 <div class="form-group col-md-1">
@@ -48,13 +50,13 @@
                                                         class="form-control" readonly>
                                                 </div>
                                                 <div class="form-group col-md-2">
-                                                    <label for="harga_jual">Harga</label>
-                                                    <input type="text" name="harga_jual" id="harga_jual"
+                                                    <label for="harga_obat">Harga</label>
+                                                    <input type="text" name="harga_obat" id="harga_obat"
                                                         class="form-control" readonly>
                                                 </div>
                                                 <div class="form-group col-md-2">
                                                     <label for="jumlah">Jumlah Beli</label>
-                                                    <input type="number" name="jumlah"
+                                                    <input type="number" name="jumlah" value="1"
                                                         class="form-control">
                                                 </div>
                                                 <div class="form-group col-md-2 mt-2">
@@ -70,6 +72,7 @@
                                             </button>
                                         </form>
                                     </div>
+
                                 </div>
                                 <div class="container">
                                     <div class="table-responsive">
@@ -82,13 +85,14 @@
                                                 <th>Total</th>
                                                 <th>Action</th>
                                             </tr>
+                                            {{-- @dd($keranjang) --}}
                                             @foreach ($keranjang as $index => $item)
                                                 <tr>
                                                     <td>{{ $item['kode_obat'] }}</td>
                                                     <td>{{ $item['nama_obat'] }}</td>
-                                                    <td>{{ $item['harga_obat'] }}</td>
+                                                    <td>{{ $item['harga_jual_obat'] }}</td>
                                                     <td>{{ $item['jumlah'] }}</td>
-                                                    <td>{{ $item['harga_obat'] * $item['jumlah'] }}</td>
+                                                    <td>{{ $item['total_harga'] }}</td>
                                                     <td>
                                                         <div class="d-flex">
                                                             <form
@@ -141,6 +145,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div class="row mt-2">
                                             <div class="col-md-12 text-right">
                                                 <button type="submit" class="btn btn-primary">Checkout</button>
@@ -153,6 +158,7 @@
                     </div>
                 </div>
             </div>
+
         </section>
     </div>
 @endsection
@@ -166,7 +172,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#nama_obat').on('input', function() {
+            $('#merek_obat').on('input', function() {
                 // Ambil nilai ID obat dari input
                 var nama = $(this).val();
                 $.ajax({
@@ -174,24 +180,30 @@
                     method: 'POST',
                     data: {
                         _token: "{{ csrf_token() }}",
-                        merek_obat: nama
+                        nama_obat: nama
                     },
                     success: function(response) {
-
-                        $('#merek_obat').val(response.merek_obat);
+                        $('#nama_obat').val(response.nama_obat);
                         $('#stok_obat').val(response.stok_obat);
-                        $('#harga_jual').val(response.harga_jual);
-
+                        $('#harga_obat').val(response.harga_obat);
                     },
-
+                    error: function(error) {
+                        console.log(error);
+                    }
                 });
             });
 
             $('#jumlah_dibayar').on('input', function() {
+                // Ambil nilai total bayar dan jumlah dibayar
                 var totalBayar = parseFloat('{{ $totalBayar }}');
                 var jumlahDibayar = parseFloat($(this).val());
+
+                // Hitung kembalian
                 var kembalian = jumlahDibayar - totalBayar;
-                $('#kembalian').val(kembalian.toFixed(2));
+
+                // Perbarui nilai input kembalian
+                $('#kembalian').val(kembalian
+                    .toFixed()); // Menampilkan kembalian dengan dua angka di belakang koma
             });
         });
     </script>
