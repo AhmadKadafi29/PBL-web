@@ -38,7 +38,7 @@ class Obat extends Model
 
     public function kategoriObat()
     {
-        return $this->belongsTo(Kategori_obat::class, 'kategori_obat_id');
+        return $this->belongsTo(Kategoriobat::class, 'kategori_obat_id');
     }
 
     public function stokopname()

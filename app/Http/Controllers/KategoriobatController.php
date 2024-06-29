@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kategori_obat;
+use App\Models\Kategoriobat;
 use Illuminate\Http\Request;
 
 class KategoriobatController extends Controller
 {
     public function index(Request $request)
     {
-        $kategoriobat = Kategori_obat::when($request->input('nama_kategori'), function($query, $nama_kategori){
+        $kategoriobat = Kategoriobat::when($request->input('nama_kategori'), function($query, $nama_kategori){
             return $query->where('nama_kategori', 'like', '%' . $nama_kategori . '%');
         })
         ->orderBy('id_kategori', 'asc')
@@ -27,14 +27,14 @@ class KategoriobatController extends Controller
             'nama_kategori' => 'required|max:100',
         ]);
 
-        Kategori_obat::create($request->all());
+        Kategoriobat::create($request->all());
         return redirect()->route('Kategori.index')
             ->with('success', 'Kategori Obat telah tersimpan.');
     }
 
     public function edit($id_kategori)
     {
-        $ko = Kategori_obat::find($id_kategori);
+        $ko = Kategoriobat::find($id_kategori);
         return view('pages.kategori_obat.edit', compact('ko'));
     }
 
@@ -44,7 +44,7 @@ class KategoriobatController extends Controller
             'nama_kategori' => 'required|max:100',
         ]);
 
-        $ko = Kategori_obat::find($id_kategori);
+        $ko = Kategoriobat::find($id_kategori);
         $ko->update($request->all());
 
         return redirect()->route('Kategori.index')
@@ -52,7 +52,7 @@ class KategoriobatController extends Controller
     }
     public function destroy(Request $request, $id_kategori)
     {
-        $ko = Kategori_obat::find($id_kategori);
+        $ko = Kategoriobat::find($id_kategori);
         $ko->delete();
         return redirect()->route('Kategori.index')
             ->with('success', 'Kategori obat telah dihapus');

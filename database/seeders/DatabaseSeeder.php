@@ -18,19 +18,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-       
-
-        Supplier::create([
-            'nama_supplier' => 'PT. Sehat',
-            'no_telpon' => '0897124145',
-            'alamat' => 'Banyuwangi'
-        ]);
 
         $this->call([
             UserSeeder::class,
             KategoriObatSeeder::class,
-            SupplierSeeder::class
-            
+            SupplierSeeder::class,
+            ObatSeeder::class,
+            PembelianSeeder::class,
+            DetailObatSeeder::class,
         ]);
     }
 }
