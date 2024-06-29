@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('penjualan', function (Blueprint $table) {
-            $table->bigIncrements('id_penjualan');
-            $table->date('tanggal_penjualan');
-            $table->timestamps();
-
-
+        Schema::table('penjualan_resep', function (Blueprint $table) {
+            $table->date('tanggal_penulisan_resep');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('table_penjualan');
+        Schema::table('penjualan_resep', function (Blueprint $table) {
+            //
+        });
     }
 };

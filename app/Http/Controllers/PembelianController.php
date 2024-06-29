@@ -68,7 +68,8 @@ class PembelianController extends Controller
             'id_obat' => $id_obat,
             'stok_obat' => $quantity,
             'tanggal_kadaluarsa' => $request->tanggal_kadaluarsa,
-            'harga_jual' =>$harga_jual_satuan
+            'harga_jual' =>$harga_jual_satuan,
+            'no_batch'=>$request->no_batch
         ]);
 
         return redirect()->route('Pembelian.index')->with('success', 'Pembelian berhasil ditambahkan');

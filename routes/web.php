@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ChartController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\cobaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HargaObatController;
 use App\Http\Controllers\KategoriobatController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\ObatHampirKadaluarsa;
 use App\Http\Controllers\ObatKadaluarsaController;
 use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\PenjualanResepController;
 use App\Http\Controllers\StokOpnameController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
@@ -71,7 +73,24 @@ Route::middleware(['auth'])->group(function () {
     //     Route::delete('/penjualan/hapus-itemkeranjang/{index}', [PenjualanController::class, 'hapusItemKeranjang'])->name('penjualan.hapusItemKeranjang');
     //     Route::get('/penjualan/cetaknota', [PenjualanController::class, 'cetakNota'])->name('penjualan.cetaknota');
 
-    // });
+    Route::middleware(['can:isKaryawan'])->group(function () {
+        // Rute-rute yang membutuhkan izin 'isKaryawan'
+        Route::get('penjualan/index', [PenjualanController::class, 'index'])->name('penjualan.index');
+        Route::post('/penjualan/cari-obat', [PenjualanController::class, 'cariObat'])->name('penjualan.cariObat');
+        Route::post('/penjualan/checkout', [PenjualanController::class, 'checkout'])->name('penjualan.checkout');
+        Route::post('/penjualan/tambah-keranjang', [PenjualanController::class, 'tambahKeKeranjang']);
+        Route::delete('/penjualan/hapus-keranjang', [PenjualanController::class, 'hapusKeranjang'])->name('penjualan.hapus-keranjang');
+        Route::delete('/penjualan/hapus-itemkeranjang/{index}', [PenjualanController::class, 'hapusItemKeranjang'])->name('penjualan.hapusItemKeranjang');
+        Route::get('/penjualan/cetaknota', [PenjualanController::class, 'cetakNota'])->name('penjualan.cetaknota');
+        // Route::get('/chart/weekly', [ChartController::class, 'weeklyChart']);
+        // Route::get('/chart/monthly', [ChartController::class, 'monthlyChart']);
+        Route::resource('penjualanresep',PenjualanResepController::class);
+        Route::post('/penjualanresep/checkout', [PenjualanResepController::class, 'checkout'])->name('penjualanresep.checkout');
+        Route::post('/penjualanresep/tambah-keranjang', [PenjualanResepController::class, 'tambahKeKeranjang']);
+        Route::delete('/penjualanresep/hapus-keranjang', [PenjualanResepController::class, 'hapusKeranjang'])->name('penjualanresep.hapus-keranjang');
+        Route::delete('/penjualanresep/hapus-itemkeranjang/{index}', [PenjualanController::class, 'hapusItemKeranjang'])->name('penjualanresep.hapusItemKeranjang');
+        Route::get('/coba', [cobaController::class, 'index']);
+    });
 
     Route::middleware(['can:isPemilik'])->group(function () {
         // Rute-rute yang membutuhkan izin 'isKaryawan'

@@ -65,7 +65,9 @@ class ObatController extends Controller
 
 
     public function edit($id)
+
     {
+        $kategori=Kategori_obat::all();
         $obat = Obat::findOrFail($id);
         $kategori = Kategori_obat::all();
         return view('pages.obat.edit', compact('obat', 'kategori'));

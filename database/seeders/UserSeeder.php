@@ -24,5 +24,13 @@ class UserSeeder extends Seeder
             'role' => 'pemilik',
             'alamat' => 'banyuwangi'
         ]);
+        User::create([
+            'name' => 'karyawan',
+            'email' => 'karyawan@gmail.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('12345678'),
+            'role' => 'karyawan',
+            'alamat' => 'banyuwangi'
+        ]);
     }
 }

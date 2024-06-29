@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('status')->default('belum kadaluarsa');
             $table->date('tanggal_opname');
             $table->timestamps();
-
             $table->foreign('id_obat')->references('id_obat')->on('obat');
             $table->foreign('id_user')->references('id')->on('users');
         });

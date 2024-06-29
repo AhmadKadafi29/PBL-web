@@ -64,6 +64,7 @@
                                     <th>ID Pembelian</th>
                                     <th>Nama Obat</th>
                                     <th>Jumlah</th>
+                                    <th>Harga Beli Satuan</th>
                                     <th>Total Harga</th>
                                     <th>Tanggal Pembelian</th>
                                 </tr>
@@ -71,15 +72,16 @@
                             <tbody>
                                 @foreach ($laporanPembelian as $pembelian)
                                     <tr>
-                                        <td>{{ $pembelian->id }}</td>
-                                        <td>{{ $pembelian->nama_obat }}</td>
+                                        <td>{{ $pembelian->id_pembelian }}</td>
+                                        <td>{{ $pembelian->merek_obat }}</td>
                                         <td>{{ $pembelian->quantity }}</td>
-                                        <td>Rp .{{ $pembelian->total_harga }}</td>
+                                        <td>Rp {{ $pembelian->harga_beli_satuan }}</td>
+                                        <td>Rp {{ $pembelian->harga_beli_satuan* $pembelian->quantity }}</td>
                                         <td>{{ $pembelian->tanggal_pembelian }}</td>
                                     </tr>
                                 @endforeach
                                 <tr>
-                                    <td colspan="3" align="right"><strong>Total :</strong></td>
+                                    <td colspan="4" align="right"><strong>Total :</strong></td>
                                     <td>Rp. {{ $total }}</td>
                                     <td></td>
                                 </tr>

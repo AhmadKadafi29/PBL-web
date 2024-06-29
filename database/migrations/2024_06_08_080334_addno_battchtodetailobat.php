@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('penjualan', function (Blueprint $table) {
-            $table->bigIncrements('id_penjualan');
-            $table->date('tanggal_penjualan');
-            $table->timestamps();
-
-
+        Schema::table('detail_obat', function (Blueprint $table) {
+            $table->string('no_batch');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('table_penjualan');
+        Schema::table('detail_obat', function (Blueprint $table) {
+            //
+        });
     }
 };

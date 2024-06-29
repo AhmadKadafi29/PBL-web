@@ -61,6 +61,10 @@
                                     <strong>Harga Beli satuan</strong>
                                     <input type="text" name="harga_beli_satuan" class="form-control" onchange="updateTotal()" onchange=" updateHargaJual()">
                                 </div>
+                                <div class="form-group">
+                                    <label for="no_batch">No Batch</label>
+                                    <input type="text" name="no_batch" class="form-control" >
+                                </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">

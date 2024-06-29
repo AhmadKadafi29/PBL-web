@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('penjualan', function (Blueprint $table) {
-            $table->bigIncrements('id_penjualan');
+        Schema::create('penjualan_resep', function (Blueprint $table) {
+            $table->bigIncrements('id_penjualan_resep');
+            $table->string('nama_pasien');
+            $table->string('alamat_pasien');
+            $table->enum('jenis_kelamin',['L', 'P']);
+            $table->string('nama_dokter');
+            $table->bigInteger('nomor_sip');
             $table->date('tanggal_penjualan');
             $table->timestamps();
-
-
         });
     }
 
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('table_penjualan');
+        Schema::dropIfExists('penjualan_resep');
     }
 };

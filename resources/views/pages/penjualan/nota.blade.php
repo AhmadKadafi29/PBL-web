@@ -39,13 +39,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($penjualan->items as $item)
+                                        @foreach ($keranjang as $items=> $item)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $item->obat->nama_obat }}</td>
-                                                <td>Rp {{ number_format($item->harga_obat, 0, ',', '.') }}</td>
-                                                <td>{{ $item->jumlah }}</td>
-                                                <td>Rp {{ number_format($item->total_harga, 0, ',', '.') }}</td>
+                                                <td>{{ $item['nama_obat'] }}</td>
+                                                <td>Rp {{ number_format($item['harga_jual_obat'],0, ',', '.') }}</td>
+                                                <td>{{ $item['jumlah'] }}</td>
+                                                <td>Rp {{ number_format($item['total_harga'], 0, ',', '.') }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -68,7 +68,7 @@
                         <div class="col-md-12">
                             <div class="text-md-right">
                                 <div class="invoice-detail-item">Tanggal Transaksi:
-                                    {{ $penjualan->ctanggal_penjualan->format('d F Y H:i:s') }}</div>
+                                    {{ $penjualan->tanggal_penjualan->format('d F Y H:i:s') }}</div>
                             </div>
                         </div>
                     </div>

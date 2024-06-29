@@ -53,13 +53,13 @@
                         <div class="form-group">
                             <label class="form-label">Roles</label>
                             <div class="selectgroup w-100">
-                                <label class="selectgroup-item">
+                                {{-- <label class="selectgroup-item">
                                     <input type="radio" name="role" value="pemilik" class="selectgroup-input"
                                     @if ($user->role == 'pemilik')
                                     checked
                                     @endif>
                                     <span class="selectgroup-button">Pemilik</span>
-                                </label>
+                                </label> --}}
                                 <label class="selectgroup-item">
                                     <input type="radio" name="role" value="karyawan" class="selectgroup-input"
                                     @if ($user->role == 'karyawan' )

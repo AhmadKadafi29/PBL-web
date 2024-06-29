@@ -46,6 +46,8 @@
                                             <th>Hasil Selisih Opname</th>
                                             <th>Status</th>
                                             <th>Tanggal opname</th>
+                                            <th> Action</th>
+
                                         </tr>
 
                                         @foreach ($opname as $op)
@@ -66,9 +68,8 @@
                                                 <td>{{ $op->tanggal_opname }}</td>
                                                 <td>
                                                     <div class="d-flex">
-                                                        {{-- Uncomment the following lines if you want to enable Edit and Delete actions --}}
-                                                        {{--
-                                                        <a href="{{ route('Stok_opname.edit', $op->id) }}" class="btn btn-sm btn-info">
+
+                                                        {{-- <a href="{{ route('Stok_opname.edit', $op->id) }}" class="btn btn-sm btn-info">
                                                             <i class="fas fa-edit"></i> Edit
                                                         </a>
                                                         <form action="{{ route('Stok_opname.destroy', $op->id_stok_opname) }}" class="ml-2" method="POST">
@@ -77,8 +78,8 @@
                                                             <button class="btn btn-sm btn-danger btn-icon confirm-delete">
                                                                 <i class="fas fa-times"></i> Delete
                                                             </button>
-                                                        </form>
-                                                        --}}
+                                                        </form> --}}
+
                                                     </div>
                                                 </td>
                                             </tr>
