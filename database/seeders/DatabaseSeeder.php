@@ -29,11 +29,6 @@ class DatabaseSeeder extends Seeder
         //     'password' => Hash::make('12345678')
         // ]);
 
-        Supplier::create([
-            'nama_supplier' => 'PT. Sehat',
-            'no_telpon' => '0897124145',
-            'alamat' => 'Banyuwangi'
-        ]);
 
         // Kategori_obat::create([
         //     'nama_kategori' => 'obat bebas'
@@ -50,6 +45,11 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             UserSeeder::class,
+            KategoriObatSeeder::class,
+            SupplierSeeder::class,
+            ObatSeeder::class,
+            PembelianSeeder::class,
+            DetailObatSeeder::class,
         ]);
     }
 }

@@ -85,9 +85,9 @@ class PenjualanController extends Controller
             'harga_jual_obat' => $obat->harga_jual,
             'jumlah' => $jumlah,
             'stok_obat' => $obat->stok_obat,
-           'total_harga' => $obat->harga_jual * $jumlah,
-           'tanggal_kadaluarsa'=>$obat->tanggal_kadaluarsa,
-           'id_obat'=>$obat->id_obat
+            'total_harga' => $obat->harga_jual * $jumlah,
+            'tanggal_kadaluarsa'=>$obat->tanggal_kadaluarsa,
+            'id_obat'=>$obat->id_obat
         ];
 
         $keranjang = session('keranjang', []);

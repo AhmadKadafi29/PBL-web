@@ -54,8 +54,7 @@
                                                 </div>
                                                 <div class="form-group col-md-2">
                                                     <label for="jumlah">Jumlah Beli</label>
-                                                    <input type="number" name="jumlah"
-                                                        class="form-control">
+                                                    <input type="number" name="jumlah" class="form-control">
                                                 </div>
                                                 <div class="form-group col-md-2 mt-2">
                                                     <button type="submit" class="btn btn-primary mt-4">Tambah</button>
@@ -86,7 +85,7 @@
                                                 <tr>
                                                     <td>{{ $item['kode_obat'] }}</td>
                                                     <td>{{ $item['nama_obat'] }}</td>
-                                                    <td>{{ $item['harga_obat'] }}</td>
+                                                    <td>{{ $item['harga_jual_obat'] }}</td>
                                                     <td>{{ $item['jumlah'] }}</td>
                                                     <td>{{ $item['harga_obat'] * $item['jumlah'] }}</td>
                                                     <td>
