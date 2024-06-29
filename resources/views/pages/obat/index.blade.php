@@ -34,22 +34,24 @@
                                     <a href="{{ route('Obat.create') }}" class="btn btn-primary">Obat baru</a>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <div class="float-right">
-                                    <form method="GET" action="{{ route('Obat.index') }}">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Search"
-                                                name="nama_obat">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                          
                                 <div class="clearfix"></div>
+                                <div class="card-body">
+                                    <div class="float-right">
+                                        <form method="GET" action="{{ route('Obat.index') }}">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" placeholder="Search"
+                                                    name="merek_obat">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                 <div class="table-responsive">
                                     <table class="table-striped table">
                                         <tr>
+                                            <th>Nomor</th>
                                             <th>Kode Obat</th>
                                             <th>Kategori Obat</th>
                                             <th>Merek Obat</th>
@@ -59,8 +61,9 @@
                                             <th>Kemasan</th>
                                             <th>Action</th>
                                         </tr>
-                                        @foreach ($obat as $ob)
+                                        @foreach ($obat as $index=> $ob)
                                             <tr>
+                                                <td>{{ $index + $obat->firstItem() }} </td>
                                                 <td>{{ $ob->kode_obat }} </td>
                                                 <td>{{ $ob->Kategoriobat->nama_kategori }}</td>
                                                 <td>{{ $ob->merek_obat }} </td>
@@ -88,6 +91,9 @@
                                             </tr>
                                         @endforeach
                                     </table>
+                                    <div class="float-right">
+                                        {{ $obat->withQueryString()->links() }}
+                                    </div>
                                 </div>
                             </div>
                         </div>

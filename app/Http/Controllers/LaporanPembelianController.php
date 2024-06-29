@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailPembelian;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -61,24 +62,31 @@ class LaporanPembelianController extends Controller
         $bulan = $request->bulan;
         $tahun = $request->tahun;
 
-        $laporanPembelian = DB::table('pembelian')
-            ->join('obat', 'pembelian.id_obat', '=', 'obat.id')
-            ->select('pembelian.*', 'obat.nama_obat')
-            ->whereMonth('pembelian.tanggal_pembelian', $bulan)
-            ->whereYear('pembelian.tanggal_pembelian', $tahun)
-            ->get();
-        $total = DB::table('pembelian')
-            ->whereMonth('tanggal_pembelian', $bulan)
-            ->whereYear('tanggal_pembelian', $tahun)
-            ->sum('total_harga');
+        $totalharga=0;
+
+        $laporanPembelian = DetailPembelian::with(['obat', 'pembelian'])
+        ->whereHas('pembelian', function ($query) use ($bulan, $tahun) {
+        $query->whereMonth('tanggal_pembelian', $bulan)
+              ->whereYear('tanggal_pembelian', $tahun);
+            })
+         ->get();
+        $total = DB::table('detail_pembelian')
+        ->join('pembelian', 'detail_pembelian.id_pembelian', '=', 'pembelian.id_pembelian')
+        ->whereMonth('pembelian.tanggal_pembelian', $bulan)
+        ->whereYear('pembelian.tanggal_pembelian', $tahun)
+        ->get();
+        foreach($total as $jumlah){
+            $totalharga +=$jumlah->harga_beli_satuan *$jumlah->quantity;
+        }
 
         $pdf = PDF::loadView('pages.laporan_pembelian.cetak_pembelian', [
             'laporanPembelian' => $laporanPembelian,
-            'total' => $total,
+            'total' => $totalharga,
             'bulan' => $bulan,
             'tahun' => $tahun,
         ]);
 
         return $pdf->stream('laporan_pembelian_' . $bulan . '_' . $tahun . '.pdf');
-    }
+
+         }
 }

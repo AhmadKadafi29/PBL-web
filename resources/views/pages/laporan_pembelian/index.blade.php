@@ -87,6 +87,12 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <form action="{{ route('laporan-pembelian.cetak') }}" method="get">
+                            @csrf
+                            <input type="hidden" name="bulan" value="{{ $bulan }}">
+                            <input type="hidden" name="tahun" value="{{ $tahun }}">
+                            <button type="submit" align="right" class="btn btn-success">Cetak Laporan</button>
+                        </form>
                     @endif
                 </div>
 

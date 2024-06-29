@@ -18,16 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'User',
-        //     'email' => 'test@example.com',
-        //     'role' => 'admin',
-        //     'alamat' => 'banyuwangi',
-        //     'no_telp' => '628141294238',
-        //     'password' => Hash::make('12345678')
-        // ]);
+       
 
         Supplier::create([
             'nama_supplier' => 'PT. Sehat',
@@ -35,21 +26,11 @@ class DatabaseSeeder extends Seeder
             'alamat' => 'Banyuwangi'
         ]);
 
-        // Kategori_obat::create([
-        //     'nama_kategori' => 'obat bebas'
-        // ]);
-
-        // Obat::create([
-        //     'kategori_obat_id' => 1,
-        //     'kode_obat' => 'OB001',
-        //     'nama_brand_obat' => 'komix',
-        //     'jenis_obat' => 'sirup',
-        //     'satuan_obat' => 'sachet',
-        //     'status' => 'belum kadaluarsa'
-        // ]);
-
         $this->call([
             UserSeeder::class,
+            KategoriObatSeeder::class,
+            SupplierSeeder::class
+            
         ]);
     }
 }

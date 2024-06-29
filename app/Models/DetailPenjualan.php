@@ -29,7 +29,8 @@ class DetailPenjualan extends Model
         return $this->belongsTo(Obat::class, 'id_obat');
     }
 
-    public function penjualan_resep(){
-        return $this->belongsTo(PenjualanResep::class, 'id_penjualan_resep');
+    public function penjualan_resep()
+    {
+        return $this->belongsTo(PenjualanResep::class,'id_penjualan_resep');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailPenjualan;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 use Illuminate\Http\Request;
@@ -22,20 +23,22 @@ class LaporanPenjualanController extends Controller
             'bulan' => 'required|numeric|min:1|max:12',
             'tahun' => 'required|numeric|min:2000',
         ]);
-
         $bulan = $request->bulan;
         $tahun = $request->tahun;
+        $laporanPenjualan = DetailPenjualan::with(['penjualan', 'obat', 'penjualan_resep'])
+        ->whereHas('penjualan_resep', function($query) use($bulan, $tahun) {
+            $query->whereMonth('tanggal_penjualan', $bulan)
+                ->whereYear('tanggal_penjualan', $tahun);
+        })
+        ->orwhereHas('penjualan', function($query) use($bulan, $tahun) {
+            $query->whereMonth('tanggal_penjualan', $bulan)
+                ->whereYear('tanggal_penjualan', $tahun);
+        })->get();
 
-        $laporanPenjualan = DB::table('penjualan')
-            ->join('obat', 'penjualan.id_obat', '=', 'id_obat')
-            ->select('penjualan.*', 'obat.merek_obat')
-            ->whereMonth('penjualan.tanggal_penjualan', $bulan)
-            ->whereYear('penjualan.tanggal_penjualan', $tahun)
-            ->get();
-        $total = DB::table('penjualan')
-            ->whereMonth('tanggal_penjualan', $bulan)
-            ->whereYear('tanggal_penjualan', $tahun)
-            ->sum('total_harga');
+        $total =0;
+        foreach($laporanPenjualan as$data){
+            $total += $data->harga_jual_satuan * $data->jumlah_jual;
+        }  
         return view('pages.laporan_penjualan.index', [
             'laporanPenjualan' => $laporanPenjualan,
             'total' => $total,
@@ -49,17 +52,20 @@ class LaporanPenjualanController extends Controller
         $bulan = $request->bulan;
         $tahun = $request->tahun;
 
-        $laporanPenjualan = DB::table('penjualan')
-            ->join('obat', 'penjualan.id_obat', '=', 'obat.id')
-            ->select('penjualan.*', 'obat.nama_obat')
-            ->whereMonth('penjualan.tanggal_penjualan', $bulan)
-            ->whereYear('penjualan.tanggal_penjualan', $tahun)
-            ->get();
-        $total = DB::table('penjualan')
-            ->whereMonth('tanggal_penjualan', $bulan)
-            ->whereYear('tanggal_penjualan', $tahun)
-            ->sum('total_harga');
+        $laporanPenjualan = DetailPenjualan::with(['penjualan', 'obat', 'penjualan_resep'])
+        ->whereHas('penjualan_resep', function($query) use($bulan, $tahun) {
+            $query->whereMonth('tanggal_penjualan', $bulan)
+                ->whereYear('tanggal_penjualan', $tahun);
+        })
+        ->orwhereHas('penjualan', function($query) use($bulan, $tahun) {
+            $query->whereMonth('tanggal_penjualan', $bulan)
+                ->whereYear('tanggal_penjualan', $tahun);
+        })->get();
 
+        $total =0;
+        foreach($laporanPenjualan as$data){
+            $total += $data->harga_jual_satuan * $data->jumlah_jual;
+        }
         $pdf = PDF::loadView('pages.laporan_penjualan.cetak_penjualan', [
             'laporanPenjualan' => $laporanPenjualan,
             'total' => $total,
