@@ -6,13 +6,51 @@
             <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i
                         class="fas fa-search"></i></a></li>
         </ul>
-        <div class="search-element">
-            <input class="form-control" type="search" placeholder="Search" aria-label="Search" data-width="250">
-            <button class="btn" type="submit"><i class="fas fa-search"></i></button>
-            <div class="search-backdrop"></div>
-        </div>
+
     </form>
     <ul class="navbar-nav navbar-right">
+        <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
+                class="nav-link notification-toggle nav-link-lg beep"><i class="far fa-bell"></i></a>
+            <div class="dropdown-menu dropdown-list dropdown-menu-right">
+                <div class="dropdown-header">Notifikasi
+                    <div class="float-right">
+                        <a href="#">Tandai Semua Telah Dibaca</a>
+                    </div>
+                </div>
+                <div class="dropdown-list-content dropdown-list-icons">
+                    @if (isset($notifications['lowStock']) && $notifications['lowStock']->count() > 0)
+                        @foreach ($notifications['lowStock'] as $obat)
+                            <a href="#" class="dropdown-item dropdown-item-unread">
+                                <div class="dropdown-item-icon bg-danger text-white">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="dropdown-item-desc">
+                                    Stok obat {{ $obat->obat->merek_obat }} hampir habis.
+                                    <div class="time text-danger">Stok tersisa {{ $obat->stok_obat }}</div>
+                                </div>
+                            </a>
+                        @endforeach
+                    @endif
+                    @if (isset($notifications['expiredSoon']) && $notifications['expiredSoon']->count() > 0)
+                        @foreach ($notifications['expiredSoon'] as $obat)
+                            <a href="#" class="dropdown-item dropdown-item-unread">
+                                <div class="dropdown-item-icon bg-warning text-white">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="dropdown-item-desc">
+                                    Obat {{ $obat->obat->merek_obat }} akan segera kadaluarsa.
+                                    <div class="time text-warning">Kadaluarsa
+                                        {{ $obat->tanggal_kadaluarsa->format('d-m-Y') }}</div>
+                                </div>
+                            </a>
+                        @endforeach
+                    @endif
+                </div>
+                <div class="dropdown-footer text-center">
+                    <a href="#">Lihat Semua <i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+        </li>
         <li class="dropdown"><a href="#" data-toggle="dropdown"
                 class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                 <img alt="image" src="{{ asset('img/avatar/avatar-1.png') }}" class="rounded-circle mr-1">
@@ -36,3 +74,52 @@
         </li>
     </ul>
 </nav>
+<div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notificationModalLabel">Notifikasi Penting</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if (isset($notifications['lowStock']) && $notifications['lowStock']->count() > 0)
+                    <h6>Stok Obat Hampir Habis</h6>
+                    <ul>
+                        @foreach ($notifications['lowStock'] as $obat)
+                            <li>Stok obat {{ $obat->obat->merek_obat }} hampir habis. Stok tersisa:
+                                {{ $obat->stok_obat }}</li>
+                        @endforeach
+                    </ul>
+                @endif
+                @if (isset($notifications['expiredSoon']) && $notifications['expiredSoon']->count() > 0)
+                    <h6>Obat Hampir Kadaluarsa</h6>
+                    <ul>
+                        @foreach ($notifications['expiredSoon'] as $obat)
+                            <li>Obat {{ $obat->obat->merek_obat }} akan segera kadaluarsa pada
+                                {{ $obat->tanggal_kadaluarsa->format('d-m-Y') }}.</li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        @if (
+            (isset($notifications['lowStock']) && $notifications['lowStock']->count() > 0) ||
+                (isset($notifications['expiredSoon']) && $notifications['expiredSoon']->count() > 0))
+            $('#notificationModal').modal('show');
+        @endif
+    });
+</script>

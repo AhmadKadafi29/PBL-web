@@ -56,8 +56,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/laporan-labarugi/generate', [LabaRugiController::class, 'generateLabaRugi'])->name('labarugi.generate');
     Route::get('/laporan-labarugi/cetaklaporan', [LabaRugiController::class, 'printLabaRugi'])->name('labarugi.cetak');
     Route::get('/penjualan/index', [PenjualanController::class, 'index'])->name('penjualan.index');
-    Route::post('/penjualan/cari-obat', [PenjualanController::class, 'cariObat'])->name('penjualan.cariObat');;
-    Route::post('/penjualan/checkout', [PenjualanController::class, 'checkout'])->name('penjualan.checkout');;
+    Route::post('/penjualan/cari-obat', [PenjualanController::class, 'cariObat']);
+    Route::post('/penjualan/checkout', [PenjualanController::class, 'checkout'])->name('penjualan.checkout');
     Route::post('/penjualan/tambah-keranjang', [PenjualanController::class, 'tambahKeKeranjang']);
     Route::delete('/penjualan/hapus-keranjang', [PenjualanController::class, 'hapusKeranjang'])->name('penjualan.hapus-keranjang');
     Route::delete('/penjualan/hapus-itemkeranjang/{index}', [PenjualanController::class, 'hapusItemKeranjang'])->name('penjualan.hapusItemKeranjang');

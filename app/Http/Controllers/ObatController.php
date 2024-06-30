@@ -57,7 +57,6 @@ class ObatController extends Controller
     public function edit($id)
 
     {
-        $kategori = Kategoriobat::all();
         $obat = Obat::findOrFail($id);
         $kategori = Kategoriobat::all();
         return view('pages.obat.edit', compact('obat', 'kategori'));
@@ -74,7 +73,7 @@ class ObatController extends Controller
             'efek_samping' => 'required',
 
         ]);
-        $obat = Obat::find($id);
+        $obat = Obat::findOrFail($id);
         $obat->update($request->all());
 
         return redirect()->route('Obat.index')->with('success', 'Obat berhasil diubah');
