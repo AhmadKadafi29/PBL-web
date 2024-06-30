@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ObatResource;
 use App\Models\DetailObat;
-use App\Models\Kategori_obat;
+use App\Models\Kategoriobat;
 use App\Models\Obat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
@@ -25,18 +25,13 @@ class ObatController extends Controller
     public function create()
 
     {
-        $lastObat = Obat::orderBy('id_obat', 'desc')->first();
-        $nextCodeNumber = $lastObat ? (int)substr($lastObat->kode_obat, 2) + 1 : 1;
-        $formattedCodeNumber = str_pad($nextCodeNumber, 3, '0', STR_PAD_LEFT);
-        $kodeobat = 'OB' . $formattedCodeNumber;
-        $kategori = Kategori_obat::all();
-        return view('pages.Obat.create', compact('kategori', 'kodeobat'));
+        $kategori = Kategoriobat::all();
+        return view('pages.Obat.create', compact('kategori'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'kode_obat'=>'required',
             'kategori_obat_id' => 'integer',
             'merek_obat' => 'required',
             'dosis' => 'required',
@@ -45,11 +40,6 @@ class ObatController extends Controller
             'efek_samping' => 'required',
 
         ]);
-        $lastObat = DB::table('obat')->orderBy('id_obat', 'desc')->first();
-        $nextCodeNumber = $lastObat ? substr($lastObat->kode_obat, 2) + 1 : 1;
-        $formattedCodeNumber = str_pad($nextCodeNumber, 3, '0', STR_PAD_LEFT);
-        $newObatCode = 'OB' . $formattedCodeNumber;
-        $request->merge(['kode_obat' => $newObatCode]);
 
         Obat::create($request->all());
         return redirect()->route('Obat.index')->with('success', 'Obat Baru berhasil ditambah');
@@ -67,16 +57,15 @@ class ObatController extends Controller
     public function edit($id)
 
     {
-        $kategori=Kategori_obat::all();
+        $kategori = Kategoriobat::all();
         $obat = Obat::findOrFail($id);
-        $kategori = Kategori_obat::all();
+        $kategori = Kategoriobat::all();
         return view('pages.obat.edit', compact('obat', 'kategori'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'kode_obat'=>'required',
             'kategori_obat_id' => 'integer',
             'merek_obat' => 'required',
             'dosis' => 'required',
