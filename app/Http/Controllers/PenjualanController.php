@@ -87,6 +87,7 @@ class PenjualanController extends Controller
             'stok_obat' => $obat->stok_obat,
             'total_harga' => $obat->harga_jual * $jumlah,
             'tanggal_kadaluarsa'=>$obat->tanggal_kadaluarsa,
+            'Satuan'=>$obat->obat->kemasan,
             'id_obat'=>$obat->id_obat
         ];
 
@@ -132,11 +133,9 @@ class PenjualanController extends Controller
         foreach ($keranjang as $item) {
             $totalBayar += $item['harga_jual_obat'] * $item['jumlah'];
         }
-
         $totalBayar;
         // $pdf = PDF::loadView('pages.penjualan.nota', compact('keranjang', 'totalBayar', 'penjualan'));
         // $pdf->download('nota_penjualan.pdf');
-
         session()->forget('keranjang');
         return redirect()->back()->with('success', 'Transaksi berhasil.');
     }
@@ -145,13 +144,10 @@ class PenjualanController extends Controller
     {
         $keranjang = session('keranjang', []);
         $totalBayar = 0;
-
         foreach ($keranjang as $item) {
             $totalBayar += $item['harga_obat'] * $item['jumlah'];
         }
-
         return $totalBayar;
-
         $pdf = PDF::loadView('penjualan.nota', compact('keranjang', 'totalBayar'));
         return $pdf->download('nota_penjualan.pdf');
     }
@@ -200,8 +196,6 @@ class PenjualanController extends Controller
         foreach ($keranjang as $item) {
             $stokObat = $item['stok_obat'] + $item['jumlah'];
             $namaObat = $item['nama_obat'];
-
-           // DB::table('obat')->where('nama_obat', $item['nama_obat'])->update(['stok_obat' => $stokObat]);
         $obat = DetailObat::whereHas('obat', function ($query) use ($namaObat) {
             $query->where('merek_obat', $namaObat);
         })
@@ -209,8 +203,6 @@ class PenjualanController extends Controller
         ->first()
         ->update(['stok_obat'=>$stokObat]);
         }
-
-        // Hapus seluruh keranjang
         session()->forget('keranjang');
 
         return redirect()->back()->with('success', 'Seluruh keranjang berhasil dihapus.');

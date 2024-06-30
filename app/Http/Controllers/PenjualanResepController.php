@@ -111,7 +111,8 @@ class PenjualanResepController extends Controller
             'stok_obat' => $obat->stok_obat,
            'total_harga' => $obat->harga_jual * $jumlah,
            'tanggal_kadaluarsa'=>$obat->tanggal_kadaluarsa,
-           'id_obat'=>$obat->id_obat
+           'id_obat'=>$obat->id_obat,
+           'Satuan'=>$obat->obat->kemasan,
         ];
 
         $keranjang = session('keranjangresep', []);
@@ -164,7 +165,7 @@ class PenjualanResepController extends Controller
         // $pdf = PDF::loadView('pages.penjualan.nota', compact('keranjang', 'totalBayar', 'penjualan'));
         // $pdf->download('nota_penjualan.pdf');
 
-        session()->forget('keranjang');
+        session()->forget('keranjangresep');
         return redirect()->back()->with('success', 'Transaksi berhasil.');
     }
 
@@ -189,7 +190,6 @@ class PenjualanResepController extends Controller
 
         if (isset($keranjang[$index])) {
             $item = $keranjang[$index];
-            // Mulai transaksi database
             DB::beginTransaction();
             $namaObat=$item['nama_obat'];
 
@@ -219,7 +219,7 @@ class PenjualanResepController extends Controller
         return redirect()->back()->with('error', 'Item keranjang tidak ditemukan.');
     }
 
-    public function hapusKeranjang()
+    public function destroy()
     {
 
         $keranjang = session('keranjangresep', []);
@@ -227,8 +227,6 @@ class PenjualanResepController extends Controller
         foreach ($keranjang as $item) {
             $stokObat = $item['stok_obat'] + $item['jumlah'];
             $namaObat = $item['nama_obat'];
-
-           // DB::table('obat')->where('nama_obat', $item['nama_obat'])->update(['stok_obat' => $stokObat]);
            $obat = DetailObat::whereHas('obat', function ($query) use ($namaObat) {
             $query->where('merek_obat', $namaObat);
         })

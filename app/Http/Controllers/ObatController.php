@@ -25,8 +25,12 @@ class ObatController extends Controller
     public function create()
 
     {
+        $lastObat = Obat::orderBy('id_obat', 'desc')->first();
+        $nextCodeNumber = $lastObat ? (int)substr($lastObat->kode_obat, 2) + 1 : 1;
+        $formattedCodeNumber = str_pad($nextCodeNumber, 3, '0', STR_PAD_LEFT);
+        $kodeobat = 'OB' . $formattedCodeNumber;
         $kategori = Kategoriobat::all();
-        return view('pages.Obat.create', compact('kategori'));
+        return view('pages.Obat.create', compact('kategori', 'kodeobat'));
     }
 
     public function store(Request $request)

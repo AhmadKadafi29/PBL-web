@@ -64,6 +64,7 @@
                                 <tr>
                                     <th>Nama Obat</th>
                                     <th>Jumlah Penjualan</th>
+                                    <th>Satuan</th>
                                     <th>Total Harga</th>
                                     <th>Tanggal Penjualan</th>
                                 </tr>
@@ -73,6 +74,7 @@
                                 <tr>
                                     <td>{{ $penjualan->obat->merek_obat }}</td>
                                     <td>{{ $penjualan->jumlah_jual }}</td>
+                                    <td>{{ $penjualan->obat->kemasan }}</td>
                                     <td>Rp {{ $penjualan->harga_jual_satuan * $penjualan->jumlah_jual }}</td>
                                     <td>
                                         @if ($penjualan->penjualan_resep)
