@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="dropdown-item-desc">
                                     Obat {{ $obat->obat->merek_obat }} akan segera kadaluarsa.
-                                    <div class="time text-warning">Kadaluarsa
+                                    <div class="time text-warning">Kadaluarsa:
                                         {{ $obat->tanggal_kadaluarsa->format('d-m-Y') }}</div>
                                 </div>
                             </a>
@@ -74,52 +74,3 @@
         </li>
     </ul>
 </nav>
-<div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="notificationModalLabel">Notifikasi Penting</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                @if (isset($notifications['lowStock']) && $notifications['lowStock']->count() > 0)
-                    <h6>Stok Obat Hampir Habis</h6>
-                    <ul>
-                        @foreach ($notifications['lowStock'] as $obat)
-                            <li>Stok obat {{ $obat->obat->merek_obat }} hampir habis. Stok tersisa:
-                                {{ $obat->stok_obat }}</li>
-                        @endforeach
-                    </ul>
-                @endif
-                @if (isset($notifications['expiredSoon']) && $notifications['expiredSoon']->count() > 0)
-                    <h6>Obat Hampir Kadaluarsa</h6>
-                    <ul>
-                        @foreach ($notifications['expiredSoon'] as $obat)
-                            <li>Obat {{ $obat->obat->merek_obat }} akan segera kadaluarsa pada
-                                {{ $obat->tanggal_kadaluarsa->format('d-m-Y') }}.</li>
-                        @endforeach
-                    </ul>
-                @endif
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Include jQuery and Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        @if (
-            (isset($notifications['lowStock']) && $notifications['lowStock']->count() > 0) ||
-                (isset($notifications['expiredSoon']) && $notifications['expiredSoon']->count() > 0))
-            $('#notificationModal').modal('show');
-        @endif
-    });
-</script>
