@@ -125,6 +125,7 @@ class PenjualanController extends Controller
                 'harga_beli_satuan' => $detailPembelian->harga_beli_satuan,
             ]);
         }
+        
         // $penjualan = Penjualan::all();
         $totalBayar = 0;
 

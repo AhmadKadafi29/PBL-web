@@ -6,13 +6,51 @@
             <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i
                         class="fas fa-search"></i></a></li>
         </ul>
-        <div class="search-element">
-            <input class="form-control" type="search" placeholder="Search" aria-label="Search" data-width="250">
-            <button class="btn" type="submit"><i class="fas fa-search"></i></button>
-            <div class="search-backdrop"></div>
-        </div>
+
     </form>
     <ul class="navbar-nav navbar-right">
+        <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
+                class="nav-link notification-toggle nav-link-lg beep"><i class="far fa-bell"></i></a>
+            <div class="dropdown-menu dropdown-list dropdown-menu-right">
+                <div class="dropdown-header">Notifikasi
+                    <div class="float-right">
+                        <a href="#">Tandai Semua Telah Dibaca</a>
+                    </div>
+                </div>
+                <div class="dropdown-list-content dropdown-list-icons">
+                    @if (isset($notifications['lowStock']) && $notifications['lowStock']->count() > 0)
+                        @foreach ($notifications['lowStock'] as $obat)
+                            <a href="#" class="dropdown-item dropdown-item-unread">
+                                <div class="dropdown-item-icon bg-danger text-white">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="dropdown-item-desc">
+                                    Stok obat {{ $obat->obat->merek_obat }} hampir habis.
+                                    <div class="time text-danger">Stok tersisa {{ $obat->stok_obat }}</div>
+                                </div>
+                            </a>
+                        @endforeach
+                    @endif
+                    @if (isset($notifications['expiredSoon']) && $notifications['expiredSoon']->count() > 0)
+                        @foreach ($notifications['expiredSoon'] as $obat)
+                            <a href="#" class="dropdown-item dropdown-item-unread">
+                                <div class="dropdown-item-icon bg-warning text-white">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="dropdown-item-desc">
+                                    Obat {{ $obat->obat->merek_obat }} akan segera kadaluarsa.
+                                    <div class="time text-warning">Kadaluarsa:
+                                        {{ $obat->tanggal_kadaluarsa->format('d-m-Y') }}</div>
+                                </div>
+                            </a>
+                        @endforeach
+                    @endif
+                </div>
+                <div class="dropdown-footer text-center">
+                    <a href="#">Lihat Semua <i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+        </li>
         <li class="dropdown"><a href="#" data-toggle="dropdown"
                 class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                 <img alt="image" src="{{ asset('img/avatar/avatar-1.png') }}" class="rounded-circle mr-1">

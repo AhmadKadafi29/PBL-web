@@ -73,7 +73,7 @@ class ObatController extends Controller
             'efek_samping' => 'required',
 
         ]);
-        $obat = Obat::find($id);
+        $obat = Obat::findOrFail($id);
         $obat->update($request->all());
 
         return redirect()->route('Obat.index')->with('success', 'Obat berhasil diubah');
