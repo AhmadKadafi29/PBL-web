@@ -40,6 +40,11 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <strong>Nama Obat</strong>
+                                        <input type="text" name="merek_obat" class="form-control">
+                                    </div>
+                                    
+                                    <div class="form-group">
                                         <strong for="dosis">Dosis</strong>
                                         <input type="text" class="form-control @error('dosis') is-invalid @enderror"
                                             id="dosis" name="dosis" value="{{ old('dosis') }}">
@@ -85,7 +90,7 @@
                                             <select class="form-control @error('kategori_obat_id') is-invalid @enderror"
                                                 id="kategori_obat_id" name="kategori_obat_id">
                                                 @foreach ($kategori as $k)
-                                                    <option value="{{ $k->id }}">{{ $k->nama_kategori }}</option>
+                                                    <option value="{{ $k->id_kategori}}">{{ $k->nama_kategori }}</option>
                                                 @endforeach
                                             </select>
                                             @error('kategori_obat_id')

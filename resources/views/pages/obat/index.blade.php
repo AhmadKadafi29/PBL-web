@@ -35,19 +35,19 @@
                                 </div>
                             </div>
 
-                            <div class="clearfix"></div>
-                            <div class="card-body">
-                                <div class="float-right">
-                                    <form method="GET" action="{{ route('Obat.index') }}">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Search"
-                                                name="merek_obat">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                                <div class="clearfix"></div>
+                                <div class="card-body">
+                                    <div class="float-right">
+                                        <form method="GET" action="{{ route('Obat.index') }}">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" placeholder="Search"
+                                                    name="merek_obat">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </form>
-                                </div>
+                                        </form>
+                                    </div>
                                 <div class="table-responsive">
                                     <table class="table-striped table">
                                         <tr>
@@ -63,7 +63,8 @@
                                         <?php $no = 1; ?>
                                         @foreach ($obat as $index => $ob)
                                             <tr>
-                                                <td>{{ $no++ }} </td>
+                                                <td>{{ $index + $obat->firstItem() }} </td>
+                                                <td>{{ $ob->kode_obat }} </td>
                                                 <td>{{ $ob->Kategoriobat->nama_kategori }}</td>
                                                 <td>{{ $ob->merek_obat }} </td>
                                                 <td>{{ $ob->dosis }} </td>

@@ -48,7 +48,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Obat Kadaluarsa</h4>
+                                <h4>Obat Hampir Kadaluarsa</h4>
                                 {{-- <form method="post" action="{{ route('Obatkadaluarsa.storekadaluarsa') }}">
                                     @csrf
                                     <button type="submit" class="btn btn-warning">Pindahkan Obat Kadaluarsa</button>
@@ -60,15 +60,16 @@
                                 <div class="table-responsive">
                                     <table class="table-striped table">
                                         <tr>
+                                            <th>Nomor</th>
                                             <th>Merek Obat</th>
                                             <th>Nama Supplier</th>
                                             <th>Stok Obat</th>
                                             <th>Tanggal Kadaluarsa</th>
 
                                         </tr>
-                                        @foreach ($obat as $kadaluarsa)
+                                        @foreach ($obat as $index=> $kadaluarsa)
                                             <tr>
-
+                                                <td>{{ $index + $obat->firstItem() }}</td>
                                                 <td>{{ $kadaluarsa->obat->merek_obat }}</td>
                                                 <td>{{ $kadaluarsa->pembelian->supplier->nama_supplier}}</td>
                                                 <td>{{ $kadaluarsa->stok_obat }}</td>

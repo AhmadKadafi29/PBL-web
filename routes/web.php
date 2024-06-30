@@ -42,7 +42,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('Supplier', SupplierController::class);
     Route::resource('Pembelian', PembelianController::class);
     Route::get('obatkadaluarsa', [ObatKadaluarsaController::class, 'index'])->name('Obatkadaluarsa.index');
-    Route::get('obathampirkadaluarsa', [ObatHampirKadaluarsa::class,'index'])->name('Obathampirkadaluarsa.index');
+    Route::get('obathampirkadaluarsa', [ObatHampirKadaluarsa::class, 'index'])->name('Obathampirkadaluarsa.index');
     Route::post('obatkadaluarsa/kadaluarsa', [ObatKadaluarsaController::class, 'storekadaluarsa'])->name('Obatkadaluarsa.storekadaluarsa');
     Route::delete('obatkadaluarsa/{id}', [ObatKadaluarsaController::class, 'destroy'])->name('Obatkadaluarsa.destroy');
     Route::resource('Stok_opname', StokOpnameController::class);
@@ -88,7 +88,7 @@ Route::middleware(['auth'])->group(function () {
     //     Route::post('/penjualanresep/checkout', [PenjualanResepController::class, 'checkout'])->name('penjualanresep.checkout');
     //     Route::post('/penjualanresep/tambah-keranjang', [PenjualanResepController::class, 'tambahKeKeranjang']);
     //     Route::delete('/penjualanresep/hapus-keranjang', [PenjualanResepController::class, 'hapusKeranjang'])->name('penjualanresep.hapus-keranjang');
-    //     Route::delete('/penjualanresep/hapus-itemkeranjang/{index}', [PenjualanController::class, 'hapusItemKeranjang'])->name('penjualanresep.hapusItemKeranjang');
+    //     Route::delete('/penjualanresep/hapus-itemkeranjang/{index}', [PenjualanResepController::class, 'hapusItemKeranjang'])->name('penjualanresep.hapusItemKeranjang');
     //     Route::get('/coba', [cobaController::class, 'index']);
     // });
 
@@ -97,7 +97,5 @@ Route::middleware(['auth'])->group(function () {
 
         Route::resource('Supplier', SupplierController::class);
         Route::resource('user', UserController::class);
-
-
     });
 });

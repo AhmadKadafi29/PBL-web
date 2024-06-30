@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surat Laporan Laba Rugi</title>
+    <title>Laporan Laba Rugi</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -35,6 +35,7 @@
 
         .toko-info {
             margin-top: 20px;
+            margin-bottom: 20px
         }
 
         .toko-info p {
@@ -60,7 +61,7 @@
             <p class="alamat"><strong>Alamat:</strong> Jl. JajangSurat</p>
         </div>
 
-        <h2 class="mb-4">Surat Laporan Laba Rugi</h2>
+        <h2 class="mb-4">Laporan Laba Rugi</h2>
 
         <div class="info">
             <p><strong>Bulan:</strong> {{ date('F', mktime(0, 0, 0, $bulan, 1)) }}</p>
