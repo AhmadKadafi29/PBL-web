@@ -48,7 +48,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Obat Kadaluarsa</h4>
+                                <h4>Obat Hampir Kadaluarsa</h4>
                                 {{-- <form method="post" action="{{ route('Obatkadaluarsa.storekadaluarsa') }}">
                                     @csrf
                                     <button type="submit" class="btn btn-warning">Pindahkan Obat Kadaluarsa</button>

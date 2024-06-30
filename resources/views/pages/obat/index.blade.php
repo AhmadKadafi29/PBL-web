@@ -34,7 +34,7 @@
                                     <a href="{{ route('Obat.create') }}" class="btn btn-primary">Obat baru</a>
                                 </div>
                             </div>
-                          
+
                                 <div class="clearfix"></div>
                                 <div class="card-body">
                                     <div class="float-right">
@@ -52,7 +52,6 @@
                                     <table class="table-striped table">
                                         <tr>
                                             <th>Nomor</th>
-                                            <th>Kode Obat</th>
                                             <th>Kategori Obat</th>
                                             <th>Merek Obat</th>
                                             <th>Dosis Obat</th>
@@ -61,7 +60,8 @@
                                             <th>Kemasan</th>
                                             <th>Action</th>
                                         </tr>
-                                        @foreach ($obat as $index=> $ob)
+                                        <?php $no = 1; ?>
+                                        @foreach ($obat as $index => $ob)
                                             <tr>
                                                 <td>{{ $index + $obat->firstItem() }} </td>
                                                 <td>{{ $ob->kode_obat }} </td>

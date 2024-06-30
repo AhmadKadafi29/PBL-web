@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
     <link rel="stylesheet" href="{{ asset('library/bootstrap-tagsinput/dist/bootstrap-tagsinput.css') }}">
-    
 @endpush
 
 @section('main')
@@ -30,17 +29,19 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-6">
+
                                     <div class="form-group">
-                                        <strong>Kode Obat</strong>
-                                        <input type="text" name="kode_obat" class="form-control"
-                                            value="{{ $kodeobat }}" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <strong>Merek Obat</strong>
-                                        <input type="text" name="merek_obat" class="form-control @error('merek_obat') is-invalid @enderror" value="{{ old('merek_obat') }}">
+                                        <strong for="merek_obat">Merek Obat</strong>
+                                        <input type="text" class="form-control @error('merek_obat') is-invalid @enderror"
+                                            id="merek_obat" name="merek_obat" value="{{ old('merek_obat') }}">
                                         @error('merek_obat')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
+                                    </div>
+
+                                    <div class="form-group">
+                                        <strong>Nama Obat</strong>
+                                        <input type="text" name="merek_obat" class="form-control">
                                     </div>
                                     
                                     <div class="form-group">

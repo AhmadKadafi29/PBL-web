@@ -140,7 +140,7 @@ class PenjualanResepController extends Controller
         if ($statusresep) {
             return redirect()->back()->with('error', 'Tidak ada resep yang baru diinput.');
         }
-    
+
 
         foreach ($keranjang as $item) {
             $detailPembelian = DetailPembelian::where('id_obat', $item['id_obat'])->latest()->first();
@@ -169,6 +169,20 @@ class PenjualanResepController extends Controller
         return redirect()->back()->with('success', 'Transaksi berhasil.');
     }
 
+    public function cetakNota(Request $request, $keranjang)
+    {
+        $keranjang = session('keranjangresep', []);
+        $totalBayar = 0;
+
+        foreach ($keranjang as $item) {
+            $totalBayar += $item['harga_obat'] * $item['jumlah'];
+        }
+
+        return $totalBayar;
+
+        $pdf = PDF::loadView('penjualan.nota', compact('keranjang', 'totalBayar'));
+        return $pdf->download('nota_penjualan.pdf');
+    }
 
     public function hapusItemKeranjang(Request $request, $index)
     {
