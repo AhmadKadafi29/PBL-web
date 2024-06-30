@@ -60,15 +60,16 @@
                                 <div class="table-responsive">
                                     <table class="table-striped table">
                                         <tr>
+                                            <th>Nomor</th>
                                             <th>Merek Obat</th>
                                             <th>Nama Supplier</th>
                                             <th>Stok Obat</th>
                                             <th>Tanggal Kadaluarsa</th>
 
                                         </tr>
-                                        @foreach ($obat as $kadaluarsa)
+                                        @foreach ($obat as $index=> $kadaluarsa)
                                             <tr>
-
+                                                <td>{{ $index + $obat->firstItem() }}</td>
                                                 <td>{{ $kadaluarsa->obat->merek_obat }}</td>
                                                 <td>{{ $kadaluarsa->pembelian->supplier->nama_supplier}}</td>
                                                 <td>{{ $kadaluarsa->stok_obat }}</td>

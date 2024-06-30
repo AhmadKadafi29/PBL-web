@@ -17,7 +17,7 @@ class PenjualanResepController extends Controller
 {
     public function index()
     {
-        $keranjang = session('keranjang', []);
+        $keranjang = session('keranjangresep', []);
         $totalBayar = 0;
         $pasien=PenjualanResep::get();
 
@@ -111,12 +111,13 @@ class PenjualanResepController extends Controller
             'stok_obat' => $obat->stok_obat,
            'total_harga' => $obat->harga_jual * $jumlah,
            'tanggal_kadaluarsa'=>$obat->tanggal_kadaluarsa,
-           'id_obat'=>$obat->id_obat
+           'id_obat'=>$obat->id_obat,
+           'Satuan'=>$obat->obat->kemasan,
         ];
 
-        $keranjang = session('keranjang', []);
+        $keranjang = session('keranjangresep', []);
         $keranjang[] = $obatData;
-        session(['keranjang' => $keranjang]);
+        session(['keranjangresep' => $keranjang]);
 
         return redirect()->back()->with('success', 'Obat berhasil ditambahkan ke keranjang.');
     }
@@ -130,7 +131,7 @@ class PenjualanResepController extends Controller
             'jumlah_dibayar' => 'required|numeric|min:0',
         ]);
 
-        $keranjang = session('keranjang', []);
+        $keranjang = session('keranjangresep', []);
 
         $lastPenjualanResep = PenjualanResep::orderBy('created_at', 'desc')->first();
         $idPenjualan = $lastPenjualanResep->id;
@@ -164,32 +165,17 @@ class PenjualanResepController extends Controller
         // $pdf = PDF::loadView('pages.penjualan.nota', compact('keranjang', 'totalBayar', 'penjualan'));
         // $pdf->download('nota_penjualan.pdf');
 
-        session()->forget('keranjang');
+        session()->forget('keranjangresep');
         return redirect()->back()->with('success', 'Transaksi berhasil.');
     }
 
-    public function cetakNota(Request $request, $keranjang)
-    {
-        $keranjang = session('keranjang', []);
-        $totalBayar = 0;
-
-        foreach ($keranjang as $item) {
-            $totalBayar += $item['harga_obat'] * $item['jumlah'];
-        }
-
-        return $totalBayar;
-
-        $pdf = PDF::loadView('penjualan.nota', compact('keranjang', 'totalBayar'));
-        return $pdf->download('nota_penjualan.pdf');
-    }
 
     public function hapusItemKeranjang(Request $request, $index)
     {
-        $keranjang = session('keranjang', []);
+        $keranjang = session('keranjangresep', []);
 
         if (isset($keranjang[$index])) {
             $item = $keranjang[$index];
-            // Mulai transaksi database
             DB::beginTransaction();
             $namaObat=$item['nama_obat'];
 
@@ -203,7 +189,7 @@ class PenjualanResepController extends Controller
                 $obat->save();
 
                 unset($keranjang[$index]);
-                session()->put('keranjang', $keranjang);
+                session()->put('keranjangresep', $keranjang);
 
                 // Commit transaksi
                 DB::commit();
@@ -219,16 +205,14 @@ class PenjualanResepController extends Controller
         return redirect()->back()->with('error', 'Item keranjang tidak ditemukan.');
     }
 
-    public function hapusKeranjang()
+    public function destroy()
     {
 
-        $keranjang = session('keranjang', []);
+        $keranjang = session('keranjangresep', []);
 
         foreach ($keranjang as $item) {
             $stokObat = $item['stok_obat'] + $item['jumlah'];
             $namaObat = $item['nama_obat'];
-
-           // DB::table('obat')->where('nama_obat', $item['nama_obat'])->update(['stok_obat' => $stokObat]);
            $obat = DetailObat::whereHas('obat', function ($query) use ($namaObat) {
             $query->where('merek_obat', $namaObat);
         })
@@ -238,7 +222,7 @@ class PenjualanResepController extends Controller
         }
 
         // Hapus seluruh keranjang
-        session()->forget('keranjang');
+        session()->forget('keranjangresep');
 
         return redirect()->back()->with('success', 'Seluruh keranjang berhasil dihapus.');
     }

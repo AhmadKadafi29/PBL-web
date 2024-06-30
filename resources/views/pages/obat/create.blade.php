@@ -36,16 +36,29 @@
                                             value="{{ $kodeobat }}" readonly>
                                     </div>
                                     <div class="form-group">
-                                        <strong>Nama Obat</strong>
-                                        <input type="text" name="merek_obat" class="form-control">
+                                        <strong>Merek Obat</strong>
+                                        <input type="text" name="merek_obat" class="form-control @error('merek_obat') is-invalid @enderror" value="{{ old('merek_obat') }}">
+                                        @error('merek_obat')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
+                                    
                                     <div class="form-group">
-                                        <strong>Dosis Obat</strong>
-                                        <input type="text" name="dosis" class="form-control">
+                                        <strong for="dosis">Dosis</strong>
+                                        <input type="text" class="form-control @error('dosis') is-invalid @enderror"
+                                            id="dosis" name="dosis" value="{{ old('dosis') }}">
+                                        @error('dosis')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
+
                                     <div class="form-group">
-                                        <strong>Kemasan Obat</strong>
-                                        <input type="text" name="kemasan" class="form-control">
+                                        <strong for="kemasan">Kemasan</strong>
+                                        <input type="text" class="form-control @error('kemasan') is-invalid @enderror"
+                                            id="kemasan" name="kemasan" value="{{ old('kemasan') }}">
+                                        @error('kemasan')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
 
@@ -53,24 +66,38 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <div class="form-group">
-                                            <strong>Kegunaan Obat</strong>
-                                            <input type="text" name="kegunaan" class="form-control">
+                                            <Strong for="kegunaan">Kegunaan</Strong>
+                                            <input type="text"
+                                                class="form-control @error('kegunaan') is-invalid @enderror" id="kegunaan"
+                                                name="kegunaan" >
+                                            @error('kegunaan')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group">
+                                            <Strong for="efek_samping">Efek Samping</Strong>
+                                            <input type="text"
+                                                class="form-control @error('efek_samping') is-invalid @enderror"
+                                                id="efek_samping" name="efek_samping" value="{{ old('efek_samping') }}">
+                                            @error('efek_samping')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
-                                            <strong>Efek Samping</strong>
-                                            <input type="text" name="efek_samping" class="form-control">
+                                            <Strong for="kategori_obat_id">Kategori Obat</Strong>
+                                            <select class="form-control @error('kategori_obat_id') is-invalid @enderror"
+                                                id="kategori_obat_id" name="kategori_obat_id">
+                                                @foreach ($kategori as $k)
+                                                    <option value="{{ $k->id_kategori}}">{{ $k->nama_kategori }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('kategori_obat_id')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
-                                        <strong>Kategori Obat</strong>
-                                        <select class="form-control" id="position-option" name="kategori_obat_id">
-                                            @foreach ($kategori as $kg)
-                                                <option value="{{ $kg->id_kategori }}">{{ $kg->nama_kategori }}</option>
-                                            @endforeach
-                                        </select>
                                     </div>
-                                    {{-- <div class="form-group">
-                                        <strong>Harga Jual Obat</strong>
-                                        <input type="text" name="harga_jual_obat" class="form-control">
-                                    </div> --}}
+
                                     <div class="card-footer text-right">
                                         <button type="submit" class="btn btn-primary"
                                             style="width: 90px; height:40px; font-size:15px">Submit</button>

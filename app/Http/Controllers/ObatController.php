@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ObatResource;
 use App\Models\DetailObat;
 use App\Models\Kategori_obat;
+use App\Models\Kategoriobat;
 use App\Models\Obat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
@@ -29,7 +30,7 @@ class ObatController extends Controller
         $nextCodeNumber = $lastObat ? (int)substr($lastObat->kode_obat, 2) + 1 : 1;
         $formattedCodeNumber = str_pad($nextCodeNumber, 3, '0', STR_PAD_LEFT);
         $kodeobat = 'OB' . $formattedCodeNumber;
-        $kategori = Kategori_obat::all();
+        $kategori = Kategoriobat::all();
         return view('pages.Obat.create', compact('kategori', 'kodeobat'));
     }
 

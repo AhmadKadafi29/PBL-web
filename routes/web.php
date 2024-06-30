@@ -87,8 +87,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('penjualanresep',PenjualanResepController::class);
         Route::post('/penjualanresep/checkout', [PenjualanResepController::class, 'checkout'])->name('penjualanresep.checkout');
         Route::post('/penjualanresep/tambah-keranjang', [PenjualanResepController::class, 'tambahKeKeranjang']);
-        Route::delete('/penjualanresep/hapus-keranjang', [PenjualanResepController::class, 'hapusKeranjang'])->name('penjualanresep.hapus-keranjang');
-        Route::delete('/penjualanresep/hapus-itemkeranjang/{index}', [PenjualanController::class, 'hapusItemKeranjang'])->name('penjualanresep.hapusItemKeranjang');
+        Route::delete('/penjualanresep/hapus-keranjang', [PenjualanResepController::class, 'destroy'])->name('penjualanresep.hapus-keranjang');
+        Route::delete('/penjualanresep/hapus-itemkeranjang/{index}', [PenjualanResepController::class, 'hapusItemKeranjang'])->name('penjualanresep.hapusItemKeranjang');
         Route::get('/coba', [cobaController::class, 'index']);
     });
 
