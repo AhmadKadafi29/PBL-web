@@ -37,13 +37,6 @@
                                     <label for="stok_fisik">Stok Fisik</label>
                                     <input type="text" name="stok_fisik" class="form-control">
                                 </div>
-                                <div class="form-group">
-                                    <label for="status">status</label>
-                                    <select class="form-control" name="status">
-                                        <option value="belum kadaluarsa">Belum Kadaluarsa</option>
-                                        <option value="kadaluarsa">Kadaluarsa</option>
-                                    </select>
-                                </div>
 
                                 <div class="form-group">
                                     <label for="tanggal_opname">Tanggal opname</label>

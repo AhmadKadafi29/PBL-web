@@ -22,10 +22,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             KategoriObatSeeder::class,
-            SupplierSeeder::class,
-            ObatSeeder::class,
-            PembelianSeeder::class,
-            DetailObatSeeder::class,
+             SupplierSeeder::class,
+            // ObatSeeder::class,
+            // PembelianSeeder::class,
+            // DetailObatSeeder::class,
         ]);
     }
 }

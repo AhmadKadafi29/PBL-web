@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('home', [DashboardController::class, 'index'])->name('home');
     Route::resource('Obat', ObatController::class);
     Route::resource('Kategori', KategoriobatController::class);
+    Route::resource('user', UserController::class);
     Route::resource('Supplier', SupplierController::class);
     Route::resource('Pembelian', PembelianController::class);
     Route::get('obatkadaluarsa', [ObatKadaluarsaController::class, 'index'])->name('Obatkadaluarsa.index');
@@ -92,10 +93,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/coba', [cobaController::class, 'index']);
     });
 
-    Route::middleware(['can:isPemilik'])->group(function () {
-        // Rute-rute yang membutuhkan izin 'isKaryawan'
-
-        Route::resource('Supplier', SupplierController::class);
-        Route::resource('user', UserController::class);
-    });
-});
+    // Route::middleware(['can:isPemilik'])->group(function () {
+    //     Route::resource('Supplier', SupplierController::class);
+    //     Route::resource('user', UserController::class);
+    // });
+}); });

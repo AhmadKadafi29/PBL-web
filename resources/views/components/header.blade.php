@@ -37,11 +37,11 @@
                                 <div class="dropdown-item-icon bg-warning text-white">
                                     <i class="fas fa-exclamation-triangle"></i>
                                 </div>
-                                <div class="dropdown-item-desc">
+                                {{-- <div class="dropdown-item-desc">
                                     Obat {{ $obat->obat->merek_obat }} akan segera kadaluarsa.
                                     <div class="time text-warning">Kadaluarsa:
                                         {{ $obat->tanggal_kadaluarsa->format('d-m-Y') }}</div>
-                                </div>
+                                </div> --}}
                             </a>
                         @endforeach
                     @endif

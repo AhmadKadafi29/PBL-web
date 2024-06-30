@@ -16,7 +16,6 @@ return new class extends Migration
             $table->bigInteger('id_obat')->unsigned();
             $table->bigInteger('id_user')->unsigned();
             $table->bigInteger('stok_fisik');
-            $table->string('status')->default('belum kadaluarsa');
             $table->date('tanggal_opname');
             $table->timestamps();
             $table->foreign('id_obat')->references('id_obat')->on('obat');
