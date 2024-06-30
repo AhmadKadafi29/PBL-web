@@ -44,9 +44,8 @@
                                             <th>Stok Sistem</th>
                                             <th>Stok Fisik</th>
                                             <th>Hasil Selisih Opname</th>
-                                            <th>Status</th>
                                             <th>Tanggal opname</th>
-                                            <th> Action</th>
+                                            {{-- <th> Action</th> --}}
 
                                         </tr>
 
@@ -55,33 +54,19 @@
                                                 <td>{{ $op->obat->merek_obat }}</td>
                                                 <td>{{ $op->user->name }} </td>
                                                 <td>
-                                                    @php
-                                                        $totalStok = $op->obat->detailObat->sum('stok_obat');
-                                                    @endphp
-                                                    {{ $totalStok }}
+                                                    {{ $op->stok_sistem }}
                                                 </td>
                                                 <td>{{ $op->stok_fisik }}</td>
-                                                <td>{{ $op->harga_jual_satuan }}</td>
-                                                <td>
-                                                    <span class="badge badge-success">{{ $op->status }}</span>
-                                                </td>
+                                                <td>{{ $op->harga_jual_satuan }}</td>     
                                                 <td>{{ $op->tanggal_opname }}</td>
-                                                <td>
+                                                {{-- <td>
                                                     <div class="d-flex">
-
-                                                        {{-- <a href="{{ route('Stok_opname.edit', $op->id) }}" class="btn btn-sm btn-info">
+                                                        <a href="{{ route('Stok_opname.edit', $op->id_stok_opname) }}" class="btn btn-sm btn-info">
                                                             <i class="fas fa-edit"></i> Edit
                                                         </a>
-                                                        <form action="{{ route('Stok_opname.destroy', $op->id_stok_opname) }}" class="ml-2" method="POST">
-                                                            <input type="hidden" name="_method" value="DELETE">
-                                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                            <button class="btn btn-sm btn-danger btn-icon confirm-delete">
-                                                                <i class="fas fa-times"></i> Delete
-                                                            </button>
-                                                        </form> --}}
 
                                                     </div>
-                                                </td>
+                                                </td> --}}
                                             </tr>
                                         @endforeach
                                     </table>

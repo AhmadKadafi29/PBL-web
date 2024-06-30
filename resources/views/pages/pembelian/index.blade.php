@@ -79,7 +79,11 @@
                                                 </td>
                                                 <td>
                                                     <div class="d-flex ">
-
+                                                        <a href="{{ route('Pembelian.show', $beli->id_pembelian) }}"
+                                                            class="btn btn-sm btn-warning btn-icon">
+                                                            <i class="fas fa-eye"></i>
+                                                            Detail
+                                                        </a>
                                                         <button class="btn btn-sm btn-danger btn-icon confirm-delete ml-2"
                                                             data-id="{{ $beli->id_pembelian }}" data-toggle="modal"
                                                             data-target="#deleteConfirmationModal">
@@ -93,9 +97,9 @@
                                         @endforeach
                                     </table>
                                 </div>
-                                {{-- <div class="float-right">
-                                    {{ $users->withQueryString()->links() }}
-                                </div> --}}
+                                <div class="float-right">
+                                    {{ $pembelian->withQueryString()->links() }}
+                                </div>
                             </div>
                         </div>
                     </div>

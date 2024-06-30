@@ -19,7 +19,6 @@ return new class extends Migration
             $table->date('tanggal_kadaluarsa');
             $table->bigInteger('harga_jual');
             $table->timestamps();
-
             $table->foreign('id_obat')->references('id_obat')->on('obat')->onDelete('cascade');
             $table->foreign('id_pembelian')->references('id_pembelian')->on('pembelian')->onDelete('cascade');
         });

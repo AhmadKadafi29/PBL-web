@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\DetailPenjualan;
 use App\Models\DetailPembelian;
 use Illuminate\Http\Request;
@@ -20,31 +21,31 @@ class LabaRugiController extends Controller
         $tahun = $request->tahun;
 
         $pendapatan = DetailPenjualan::with(['penjualan', 'obat', 'penjualan_resep'])
-        ->whereHas('penjualan_resep', function($query) use($bulan, $tahun) {
-            $query->whereMonth('tanggal_penjualan', $bulan)
-                ->whereYear('tanggal_penjualan', $tahun);
-        })
-        ->orwhereHas('penjualan', function($query) use($bulan, $tahun) {
-            $query->whereMonth('tanggal_penjualan', $bulan)
-                ->whereYear('tanggal_penjualan', $tahun);
-        })->get();
+            ->whereHas('penjualan_resep', function ($query) use ($bulan, $tahun) {
+                $query->whereMonth('tanggal_penjualan', $bulan)
+                    ->whereYear('tanggal_penjualan', $tahun);
+            })
+            ->orwhereHas('penjualan', function ($query) use ($bulan, $tahun) {
+                $query->whereMonth('tanggal_penjualan', $bulan)
+                    ->whereYear('tanggal_penjualan', $tahun);
+            })->get();
 
-        $totalpendapatan =0;
-        foreach($pendapatan as$data){
+        $totalpendapatan = 0;
+        foreach ($pendapatan as $data) {
             $totalpendapatan += $data->harga_jual_satuan * $data->jumlah_jual;
         }
 
-        $totalpengeluaran=0;
+        $totalpengeluaran = 0;
         $pengeluaran = DB::table('detail_pembelian')
-        ->join('pembelian', 'detail_pembelian.id_pembelian', '=', 'pembelian.id_pembelian')
-        ->whereMonth('pembelian.tanggal_pembelian', $bulan)
-        ->whereYear('pembelian.tanggal_pembelian', $tahun)
-        ->get();
-        foreach($pengeluaran as $jumlah){
-            $totalpengeluaran +=$jumlah->harga_beli_satuan *$jumlah->quantity;
+            ->join('pembelian', 'detail_pembelian.id_pembelian', '=', 'pembelian.id_pembelian')
+            ->whereMonth('pembelian.tanggal_pembelian', $bulan)
+            ->whereYear('pembelian.tanggal_pembelian', $tahun)
+            ->get();
+        foreach ($pengeluaran as $jumlah) {
+            $totalpengeluaran += $jumlah->harga_beli_satuan * $jumlah->quantity;
         }
 
-        $labaRugi =$totalpengeluaran - $totalpendapatan;
+        $labaRugi = $totalpengeluaran - $totalpendapatan;
 
         return view('pages.laporan_labarugi.index', [
             'bulan' => $bulan,
@@ -61,33 +62,33 @@ class LabaRugiController extends Controller
         $tahun = $request->tahun;
 
         $pendapatan = DetailPenjualan::with(['penjualan', 'obat', 'penjualan_resep'])
-        ->whereHas('penjualan_resep', function($query) use($bulan, $tahun) {
-            $query->whereMonth('tanggal_penjualan', $bulan)
-                ->whereYear('tanggal_penjualan', $tahun);
-        })
-        ->orwhereHas('penjualan', function($query) use($bulan, $tahun) {
-            $query->whereMonth('tanggal_penjualan', $bulan)
-                ->whereYear('tanggal_penjualan', $tahun);
-        })->get();
+            ->whereHas('penjualan_resep', function ($query) use ($bulan, $tahun) {
+                $query->whereMonth('tanggal_penjualan', $bulan)
+                    ->whereYear('tanggal_penjualan', $tahun);
+            })
+            ->orwhereHas('penjualan', function ($query) use ($bulan, $tahun) {
+                $query->whereMonth('tanggal_penjualan', $bulan)
+                    ->whereYear('tanggal_penjualan', $tahun);
+            })->get();
 
-        $totalpendapatan =0;
-        foreach($pendapatan as$data){
+        $totalpendapatan = 0;
+        foreach ($pendapatan as $data) {
             $totalpendapatan += $data->harga_jual_satuan * $data->jumlah_jual;
         }
 
-        $totalpengeluaran=0;
+        $totalpengeluaran = 0;
         $pengeluaran = DB::table('detail_pembelian')
-        ->join('pembelian', 'detail_pembelian.id_pembelian', '=', 'pembelian.id_pembelian')
-        ->whereMonth('pembelian.tanggal_pembelian', $bulan)
-        ->whereYear('pembelian.tanggal_pembelian', $tahun)
-        ->get();
-        foreach($pengeluaran as $jumlah){
-            $totalpengeluaran +=$jumlah->harga_beli_satuan *$jumlah->quantity;
+            ->join('pembelian', 'detail_pembelian.id_pembelian', '=', 'pembelian.id_pembelian')
+            ->whereMonth('pembelian.tanggal_pembelian', $bulan)
+            ->whereYear('pembelian.tanggal_pembelian', $tahun)
+            ->get();
+        foreach ($pengeluaran as $jumlah) {
+            $totalpengeluaran += $jumlah->harga_beli_satuan * $jumlah->quantity;
         }
 
-        $labaRugi =$totalpengeluaran - $totalpendapatan;
+        $labaRugi = $totalpengeluaran - $totalpendapatan;
 
-        $pdf = PDF::loadView('pages.laporan_labarugi.print', [
+        $pdf = PDF::loadView('pages.laporan_labarugi.cetak_labarugi', [
             'bulan' => $bulan,
             'tahun' => $tahun,
             'totalPendapatan' => $totalpendapatan,

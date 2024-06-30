@@ -18,9 +18,9 @@ class PembelianController extends Controller
      */
     public function index(Request $request)
     {
-        $pembelian = Pembelian::all();
-        $supplier = Supplier::all();
-        return view('pages.pembelian.index', compact('pembelian','supplier'));
+        $pembelian = Pembelian::paginate(10);
+        $supplier = Supplier::paginate(10);
+        return view('pages.pembelian.index', compact('pembelian', 'supplier'));
     }
 
     /**
@@ -57,6 +57,7 @@ class PembelianController extends Controller
         $detailPembelian = [
             'id_pembelian' => $pembelian->id_pembelian,
             'id_obat' => $id_obat,
+            'no_batch' => $request->input('no_batch'),
             'harga_beli_satuan' => $harga_beli_satuan,
             'quantity' => $quantity,
         ];
@@ -68,8 +69,8 @@ class PembelianController extends Controller
             'id_obat' => $id_obat,
             'stok_obat' => $quantity,
             'tanggal_kadaluarsa' => $request->tanggal_kadaluarsa,
-            'harga_jual' =>$harga_jual_satuan,
-            'no_batch'=>$request->no_batch
+            'harga_jual' => $harga_jual_satuan,
+            'no_batch' => $request->no_batch
         ]);
 
         return redirect()->route('Pembelian.index')->with('success', 'Pembelian berhasil ditambahkan');
@@ -79,12 +80,13 @@ class PembelianController extends Controller
      * Show the form for editing the specified resource.
      */
 
-    public function show($id)
+    public function show($id_pembelian)
     {
-        $pembelian = Pembelian::findOrFail($id);
+        $pembelian = Pembelian::findOrFail($id_pembelian);
         $supplier = Supplier::all();
         $obat = Obat::all();
-        return view('pages.pembelian.show', compact('pembelian', 'supplier', 'obat'));
+        $detailpembelian = DetailPembelian::where('id_pembelian', $id_pembelian)->get();
+        return view('pages.pembelian.show', compact('pembelian', 'supplier', 'obat', 'detailpembelian'));
     }
 
     /**

@@ -31,62 +31,40 @@
                                 <h4>Detail Pembelian</h4>
                             </div>
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <strong>Nama Obat</strong>
-                                            <select class="form-control" id="position-option" name="id_obat" readonly>
-                                                @foreach ($obat as $ob)
-                                                    <option value="{{ $ob->id }}"
-                                                        {{ $ob->id == $pembelian->id_obat ? 'selected' : '' }}>
-                                                        {{ $ob->nama_obat }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                <div class="clearfix "></div>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Obat</th>
+                                                <th>No Batch</th>
+                                                <th>Harga Beli Obat Satuan</th>
+                                                <th>Quantity</th>
 
-                                        <div class="form-group">
-                                            <strong>Nama Supplier</strong>
-                                            <select class="form-control" id="position-option" name="id_supplier" readonly>
-                                                @foreach ($supplier as $sp)
-                                                    <option value="{{ $sp->id }}"
-                                                        {{ $sp->id == $pembelian->id_supplier ? 'selected' : '' }}>
-                                                        {{ $sp->nama_supplier }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="tanggal_pembelian">Tanggal Pembelian</label>
-                                            <input type="date" class="form-control datepicker" id="tanggal_pembelian"
-                                                name="tanggal_pembelian" value="{{ $pembelian->tanggal_pembelian }}"
-                                                readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="status_pembayaran">Status Pembayaran</label>
-                                            <input type="text" name="status_pembayaran" class="form-control"
-                                                value="{{ $pembelian->status_pembayaran }}" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <strong>Harga satuan</strong>
-                                            <input type="text" name="harga_satuan" class="form-control"
-                                                value="{{ $pembelian->harga_satuan }}" readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Quantity</label>
-                                            <input type="text" class="form-control " name="quantity"
-                                                value="{{ $pembelian->quantity }}" readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="total_harga">Total Harga</label>
-                                            <input type="number" name="total_harga" class="form-control"
-                                                value="{{ $pembelian->total_harga }}" readonly>
-                                        </div>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $no = 1;
+                                            ?>
+                                            @foreach ($detailpembelian as $item)
+                                                <tr>
+                                                    <td>{{ $no++ }}</td>
+                                                    <td>{{ $item->obat->merek_obat }}</td>
+                                                    <td>{{ $item->no_batch }}</td>
+                                                    <td>{{ $item->harga_beli_satuan }}</td>
+                                                    <td>{{ $item->quantity }}</td>
+                                                </tr>
+                                            @endforeach
 
-                                    </div>
+                                        </tbody>
+                                    </table>
+                                    <a href="{{ route('Pembelian.index') }}" class="btn btn-primary">Kembali</a>
                                 </div>
+                                {{-- <div class="float-right">
+                            {{ $users->withQueryString()->links() }}
+                        </div> --}}
                             </div>
                         </div>
                     </div>

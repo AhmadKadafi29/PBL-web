@@ -25,8 +25,12 @@ class ObatController extends Controller
     public function create()
 
     {
+        $lastObat = Obat::orderBy('id_obat', 'desc')->first();
+        $nextCodeNumber = $lastObat ? (int)substr($lastObat->kode_obat, 2) + 1 : 1;
+        $formattedCodeNumber = str_pad($nextCodeNumber, 3, '0', STR_PAD_LEFT);
+        $kodeobat = 'OB' . $formattedCodeNumber;
         $kategori = Kategoriobat::all();
-        return view('pages.Obat.create', compact('kategori'));
+        return view('pages.Obat.create', compact('kategori', 'kodeobat'));
     }
 
     public function store(Request $request)
@@ -53,16 +57,15 @@ class ObatController extends Controller
     }
 
 
-    public function edit($id)
+    public function edit($id_obat)
 
     {
-        $kategori=Kategoriobat::all();
-        $obat = Obat::findOrFail($id);
+        $obat = Obat::findOrFail($id_obat);
         $kategori = Kategoriobat::all();
         return view('pages.obat.edit', compact('obat', 'kategori'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id_obat)
     {
         $request->validate([
             'kategori_obat_id' => 'integer',
@@ -73,19 +76,10 @@ class ObatController extends Controller
             'efek_samping' => 'required',
 
         ]);
-        $obat = Obat::findOrFail($id);
+        $obat = Obat::findOrFail($id_obat);
         $obat->update($request->all());
 
         return redirect()->route('Obat.index')->with('success', 'Obat berhasil diubah');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        $obat = Obat::find($id);
-        $obat->delete();
-        return redirect()->route('Obat.index')->with('success', 'Obat berhasil dihapus');
-    }
 }

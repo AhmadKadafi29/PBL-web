@@ -20,7 +20,7 @@
 
             <div class="section-body">
                 <div class="card">
-                    <form action="{{ route('Stok_opname.update', $op) }}" method="POST">
+                    <form action="{{ route('Stok_opname.update', $dataopname->id_stok_opname) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="row">
@@ -30,27 +30,20 @@
                                     <strong>Nama Obat</strong>
                                     <select class="form-control" name="id_obat">
                                         @foreach ($obat as $ob)
-                                            <option value="{{ $ob->id }}">{{ $ob->nama_obat }}</option>
+                                            <option value="{{ $ob->id }}">{{ $ob->merek_obat }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="stok_fisik">Stok Fisik</label>
                                     <input type="text" name="stok_fisik" class="form-control"
-                                        value="{{ $op->stok_fisik }}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="status">status</label>
-                                    <select class="form-control" name="status">
-                                        <option value="belum kadaluarsa">Belum Kadaluarsa</option>
-                                        <option value="kadaluarsa">Kadaluarsa</option>
-                                    </select>
+                                        value="{{ $dataopname->stok_fisik }}">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="tanggal_opname">Tanggal opname</label>
                                     <input type="date" name="tanggal_opname" class="form-control"
-                                        value="{{ $op->tanggal_opname }}">
+                                        value="{{ $dataopname->tanggal_opname }}">
                                 </div>
 
                                 <div class="card-footer text-right">

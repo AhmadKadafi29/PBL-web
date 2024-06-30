@@ -82,6 +82,7 @@
                                                 <th>Merek Obat</th>
                                                 <th>Harga</th>
                                                 <th>Jumlah</th>
+                                                <th>Satuan</th>
                                                 <th>Total</th>
                                                 <th>Action</th>
                                             </tr>
@@ -92,6 +93,7 @@
                                                     <td>{{ $item['nama_obat'] }}</td>
                                                     <td>{{ $item['harga_jual_obat'] }}</td>
                                                     <td>{{ $item['jumlah'] }}</td>
+                                                    <td>{{ $item['Satuan'] }}</td>
                                                     <td>{{ $item['total_harga'] }}</td>
                                                     <td>
                                                         <div class="d-flex">
