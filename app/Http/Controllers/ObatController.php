@@ -40,7 +40,6 @@ class ObatController extends Controller
             'efek_samping' => 'required',
 
         ]);
-
         Obat::create($request->all());
         return redirect()->route('Obat.index')->with('success', 'Obat Baru berhasil ditambah');
     }

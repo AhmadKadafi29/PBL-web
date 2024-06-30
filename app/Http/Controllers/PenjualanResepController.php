@@ -17,7 +17,7 @@ class PenjualanResepController extends Controller
 {
     public function index()
     {
-        $keranjang = session('keranjang', []);
+        $keranjang = session('keranjangresep', []);
         $totalBayar = 0;
         $pasien=PenjualanResep::get();
 
@@ -114,9 +114,9 @@ class PenjualanResepController extends Controller
            'id_obat'=>$obat->id_obat
         ];
 
-        $keranjang = session('keranjang', []);
+        $keranjang = session('keranjangresep', []);
         $keranjang[] = $obatData;
-        session(['keranjang' => $keranjang]);
+        session(['keranjangresep' => $keranjang]);
 
         return redirect()->back()->with('success', 'Obat berhasil ditambahkan ke keranjang.');
     }
@@ -130,7 +130,7 @@ class PenjualanResepController extends Controller
             'jumlah_dibayar' => 'required|numeric|min:0',
         ]);
 
-        $keranjang = session('keranjang', []);
+        $keranjang = session('keranjangresep', []);
 
         $lastPenjualanResep = PenjualanResep::orderBy('created_at', 'desc')->first();
         $idPenjualan = $lastPenjualanResep->id;
@@ -139,7 +139,7 @@ class PenjualanResepController extends Controller
         if ($statusresep) {
             return redirect()->back()->with('error', 'Tidak ada resep yang baru diinput.');
         }
-    
+
 
         foreach ($keranjang as $item) {
             $detailPembelian = DetailPembelian::where('id_obat', $item['id_obat'])->latest()->first();
@@ -170,7 +170,7 @@ class PenjualanResepController extends Controller
 
     public function cetakNota(Request $request, $keranjang)
     {
-        $keranjang = session('keranjang', []);
+        $keranjang = session('keranjangresep', []);
         $totalBayar = 0;
 
         foreach ($keranjang as $item) {
@@ -185,7 +185,7 @@ class PenjualanResepController extends Controller
 
     public function hapusItemKeranjang(Request $request, $index)
     {
-        $keranjang = session('keranjang', []);
+        $keranjang = session('keranjangresep', []);
 
         if (isset($keranjang[$index])) {
             $item = $keranjang[$index];
@@ -203,7 +203,7 @@ class PenjualanResepController extends Controller
                 $obat->save();
 
                 unset($keranjang[$index]);
-                session()->put('keranjang', $keranjang);
+                session()->put('keranjangresep', $keranjang);
 
                 // Commit transaksi
                 DB::commit();
@@ -222,7 +222,7 @@ class PenjualanResepController extends Controller
     public function hapusKeranjang()
     {
 
-        $keranjang = session('keranjang', []);
+        $keranjang = session('keranjangresep', []);
 
         foreach ($keranjang as $item) {
             $stokObat = $item['stok_obat'] + $item['jumlah'];
@@ -238,7 +238,7 @@ class PenjualanResepController extends Controller
         }
 
         // Hapus seluruh keranjang
-        session()->forget('keranjang');
+        session()->forget('keranjangresep');
 
         return redirect()->back()->with('success', 'Seluruh keranjang berhasil dihapus.');
     }
