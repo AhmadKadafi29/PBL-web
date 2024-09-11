@@ -76,10 +76,10 @@
                                 <i class="fa-solid fa-cart-shopping"></i><span>Penjualan</span></a>
                         </li>
 
-                        <li>
+                        {{-- <li>
                             <a class="nav-link" href="{{ route('penjualanresep.index') }}"><i
                                     class="fa-solid fa-cart-shopping"></i><span>Penjualan Resep</span></a>
-                        </li>
+                        </li> --}}
 
                     </ul>
 

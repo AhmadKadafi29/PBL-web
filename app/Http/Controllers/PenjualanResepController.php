@@ -19,7 +19,7 @@ class PenjualanResepController extends Controller
     {
         $keranjang = session('keranjangresep', []);
         $totalBayar = 0;
-        $pasien=PenjualanResep::get();
+        $pasien = PenjualanResep::get();
 
         foreach ($keranjang as $item) {
             $totalBayar += $item['harga_jual_obat'] * $item['jumlah'];
@@ -28,20 +28,21 @@ class PenjualanResepController extends Controller
     }
 
 
-    public function create(){
+    public function create()
+    {
         return view('pages.penjualan_resep.create');
-
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
-            'nama_pasien'=>'required',
-            'alamat_pasien'=>'required',
-            'jenis_kelamin'=>'required',
-            'nama_dokter'=>'required',
-            'nomor_sip'=>'required',
-            'tanggal_penjualan'=>'required',
-            'tanggal_penulisan_resep'=>'required'
+            'nama_pasien' => 'required',
+            'alamat_pasien' => 'required',
+            'jenis_kelamin' => 'required',
+            'nama_dokter' => 'required',
+            'nomor_sip' => 'required',
+            'tanggal_penjualan' => 'required',
+            'tanggal_penulisan_resep' => 'required'
         ]);
 
         PenjualanResep::create($request->all());
@@ -109,10 +110,10 @@ class PenjualanResepController extends Controller
             'harga_jual_obat' => $obat->harga_jual,
             'jumlah' => $jumlah,
             'stok_obat' => $obat->stok_obat,
-           'total_harga' => $obat->harga_jual * $jumlah,
-           'tanggal_kadaluarsa'=>$obat->tanggal_kadaluarsa,
-           'id_obat'=>$obat->id_obat,
-           'Satuan'=>$obat->obat->kemasan,
+            'total_harga' => $obat->harga_jual * $jumlah,
+            'tanggal_kadaluarsa' => $obat->tanggal_kadaluarsa,
+            'id_obat' => $obat->id_obat,
+            'Satuan' => $obat->obat->kemasan,
         ];
 
         $keranjang = session('keranjangresep', []);
@@ -153,8 +154,8 @@ class PenjualanResepController extends Controller
                 'harga_beli_satuan' => $detailPembelian->harga_beli_satuan,
             ]);
         }
-       $lastPenjualanResep->status='Digunakan';
-       $lastPenjualanResep->save();
+        $lastPenjualanResep->status = 'Digunakan';
+        $lastPenjualanResep->save();
         // $penjualan = Penjualan::all();
         // $totalBayar = 0;
         // foreach ($keranjang as $item) {
@@ -191,14 +192,14 @@ class PenjualanResepController extends Controller
         if (isset($keranjang[$index])) {
             $item = $keranjang[$index];
             DB::beginTransaction();
-            $namaObat=$item['nama_obat'];
+            $namaObat = $item['nama_obat'];
 
             try {
                 $obat = DetailObat::whereHas('obat', function ($query) use ($namaObat) {
                     $query->where('merek_obat', $namaObat);
                 })
-                ->where('tanggal_kadaluarsa', $item['tanggal_kadaluarsa'])
-                ->first();
+                    ->where('tanggal_kadaluarsa', $item['tanggal_kadaluarsa'])
+                    ->first();
                 $obat->stok_obat += $item['jumlah'];
                 $obat->save();
 
@@ -227,12 +228,12 @@ class PenjualanResepController extends Controller
         foreach ($keranjang as $item) {
             $stokObat = $item['stok_obat'] + $item['jumlah'];
             $namaObat = $item['nama_obat'];
-           $obat = DetailObat::whereHas('obat', function ($query) use ($namaObat) {
-            $query->where('merek_obat', $namaObat);
-        })
-        ->where('tanggal_kadaluarsa', $item['tanggal_kadaluarsa'])
-        ->first()
-        ->update(['stok_obat'=>$stokObat]);
+            $obat = DetailObat::whereHas('obat', function ($query) use ($namaObat) {
+                $query->where('merek_obat', $namaObat);
+            })
+                ->where('tanggal_kadaluarsa', $item['tanggal_kadaluarsa'])
+                ->first()
+                ->update(['stok_obat' => $stokObat]);
         }
 
         // Hapus seluruh keranjang

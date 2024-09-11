@@ -19,7 +19,8 @@ class CheckNotifications
         $notificationController = new NotificationController();
         $notifications = $notificationController->getNotifications();
 
-        view()->share('notifications', $notifications);
+        view()->share('notifications', $notifications['notifications']);
+        view()->share('unreadCount', $notifications['unreadCount']);
         return $next($request);
     }
 }

@@ -64,7 +64,6 @@
                                         @foreach ($obat as $index => $ob)
                                             <tr>
                                                 <td>{{ $index + $obat->firstItem() }} </td>
-                                                <td>{{ $ob->kode_obat }} </td>
                                                 <td>{{ $ob->Kategoriobat->nama_kategori }}</td>
                                                 <td>{{ $ob->merek_obat }} </td>
                                                 <td>{{ $ob->dosis }} </td>

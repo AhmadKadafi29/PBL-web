@@ -85,7 +85,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/penjualan/cetaknota', [PenjualanController::class, 'cetakNota'])->name('penjualan.cetaknota');
         // Route::get('/chart/weekly', [ChartController::class, 'weeklyChart']);
         // Route::get('/chart/monthly', [ChartController::class, 'monthlyChart']);
-        Route::resource('penjualanresep',PenjualanResepController::class);
+        Route::resource('penjualanresep', PenjualanResepController::class);
         Route::post('/penjualanresep/checkout', [PenjualanResepController::class, 'checkout'])->name('penjualanresep.checkout');
         Route::post('/penjualanresep/tambah-keranjang', [PenjualanResepController::class, 'tambahKeKeranjang']);
         Route::delete('/penjualanresep/hapus-keranjang', [PenjualanResepController::class, 'hapusKeranjang'])->name('penjualanresep.hapus-keranjang');
@@ -97,4 +97,4 @@ Route::middleware(['auth'])->group(function () {
     //     Route::resource('Supplier', SupplierController::class);
     //     Route::resource('user', UserController::class);
     // });
-}); 
+});

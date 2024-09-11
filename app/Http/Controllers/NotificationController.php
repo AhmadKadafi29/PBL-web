@@ -10,12 +10,18 @@ class NotificationController extends Controller
 {
     public function getNotifications()
     {
-        $lowStockObat = DetailObat::where('stok_obat', '<', 10)->get();
-        $expiredSoonObat = DetailObat::where('tanggal_kadaluarsa', '<', Carbon::now()->addDays(7))->get();
+        $notificationsFile = storage_path('app/public/notifications.json');
+        if (file_exists($notificationsFile)) {
+            $notifications = json_decode(file_get_contents($notificationsFile), true);
+            $unreadCount = count($notifications['lowStock']) + count($notifications['expiredSoon']);
+        } else {
+            $notifications = ['lowStock' => [], 'expiredSoon' => []];
+            $unreadCount = 0;
+        }
 
         return [
-            'lowStock' => $lowStockObat,
-            'expiredSoon' => $expiredSoonObat,
+            'notifications' => $notifications,
+            'unreadCount' => $unreadCount,
         ];
     }
 }
