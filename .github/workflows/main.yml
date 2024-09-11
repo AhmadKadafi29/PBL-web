@@ -35,6 +35,6 @@ jobs:
             php artisan route:clear
             php artisan cache:clear
             php artisan optimize:clear
-            php artisan migrate --force --seed
+            php artisan migrate:fresh --force --seed
             php artisan up
             echo "Deployment finished!"
