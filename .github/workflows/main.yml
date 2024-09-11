@@ -1,0 +1,40 @@
+name: Deploy To Server
+
+# Trigger the workflow on push and
+on:
+  push:
+    branches:
+      - main
+
+# Authenticate to the the server via ssh
+# and run our deployment script
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Execute commands via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          key: ${{ secrets.VPS_DEPLOY_KEY }}
+          script: |
+            echo "Deployment started ..."
+            cd /var/www/html/apotek_sarkara
+            (php artisan down) || true
+            git reset --hard
+            git pull origin main
+            COMPOSER_ALLOW_SUPERUSER=1
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+            php artisan clear-compiled
+            php artisan config:clear
+            php artisan route:clear
+            php artisan cache:clear
+            php artisan optimize:clear
+            php artisan migrate --force --seed
+            php artisan up
+            echo "Deployment finished!"
