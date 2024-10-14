@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class PenjualanResepController extends Controller
+class   PenjualanResepController extends Controller
 {
     public function index()
     {
@@ -137,7 +137,7 @@ class PenjualanResepController extends Controller
         $idPenjualan = $lastPenjualanResep->id;
         $statusresep = $lastPenjualanResep->status;
 
-        if ($statusresep) {
+        if (!$statusresep) {
             return redirect()->back()->with('error', 'Tidak ada resep yang baru diinput.');
         }
 

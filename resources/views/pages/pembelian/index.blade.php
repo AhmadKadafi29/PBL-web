@@ -60,23 +60,24 @@
                                 <div class="table-responsive">
                                     <table class="table-striped table">
                                         <tr>
+                                            <th>No</th>
                                             <th>Nama Supplier</th>
                                             <th>No Faktur</th>
                                             <th>Total Harga</th>
                                             <th>Tanggal beli</th>
-                                            <th>Status bayar</th>
                                             <th>Action</th>
                                         </tr>
 
-                                        @foreach ($pembelian as $beli)
+                                        @foreach ($pembelian as $index=> $beli)
                                             <tr>
+                                                <td>{{ $index+1 }}</td>
                                                 <td>{{ $beli->supplier->nama_supplier }} </td>
                                                 <td> {{ $beli->no_faktur }} </td>
                                                 <td>Rp. {{ number_format($beli->total_harga, 2) }} </td>
                                                 <td>{{ $beli->tanggal_pembelian }}</td>
-                                                <td>
+                                                {{-- <td>
                                                     <span class="badge badge-success">{{ $beli->status_pembayaran }}</span>
-                                                </td>
+                                                </td> --}}
                                                 <td>
                                                     <div class="d-flex ">
                                                         <a href="{{ route('Pembelian.show', $beli->id_pembelian) }}"
