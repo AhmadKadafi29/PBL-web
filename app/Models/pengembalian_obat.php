@@ -15,7 +15,7 @@ class pengembalian_obat extends Model
     protected $fillable =[
         "id_pembelian",
         "tanggal_pengembalian",
-        "Total"
+        "total_pengembalian"
     ];
 
     public function pembelian():BelongsTo

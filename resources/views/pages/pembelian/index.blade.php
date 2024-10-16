@@ -76,7 +76,7 @@
                                                 <td>Rp. {{ number_format($beli->total_harga, 2) }} </td>
                                                 <td>{{ $beli->tanggal_pembelian }}</td>
                                                 {{-- <td>
-                                                    <span class="badge badge-success">{{ $beli->status_pembayaran }}</span>
+                                                <span class="badge badge-success">{{ $beli->status_pembayaran }}</span>
                                                 </td> --}}
                                                 <td>
                                                     <div class="d-flex ">

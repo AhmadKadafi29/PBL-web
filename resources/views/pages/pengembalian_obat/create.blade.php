@@ -11,7 +11,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Tambah Pembelian</h1>
+                <h1>Tambah Data Pengembalian Obat</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
                     <div class="breadcrumb-item"><a href="#">Pembelian</a></div>
@@ -20,8 +20,14 @@
             </div>
 
             <div class="section-body">
+                <div class="row">
+                    <div class="col-12">
+                        @include('layouts.alert')
+                    </div>
+                </div>
                 <div class="card">
-                    <form  method="POST">
+                    <form method="POST" action="{{ route('pengembalian-obat.store') }}">
+
                         @csrf
                         <div class="container-fluid">
                             <div class="row">
@@ -29,7 +35,7 @@
                                     <div class="form-group">
                                         <label for="no_faktur">No Faktur</label>
                                         <div class="input-group">
-                                            <input type="text" name="no_faktur" id="no_faktur" class="form-control" placeholder="Masukkan No Faktur">
+                                            <input type="text" name="no_faktur" id="no_faktur" class="form-control" placeholder="Masukkan No Faktur" >
                                             <div class="input-group-append">
                                                 <div class="input-group-append">
                                                     <button class="btn btn-primary" type="button" onclick="fetchDataFaktur()"><i class="fas fa-search"></i></button>
@@ -39,7 +45,7 @@
                                     </div>
                                     
                                     <div class="form-group">
-                                        <label for="tanggal_pembelian">Tanggal Pengembalian</label>
+                                        <label for="tanggal_pembelian">Tanggal Pembelian</label>
                                         <input type="date" class="form-control datepicker" id="tanggal_pembelian"
                                             name="tanggal_pembelian" onchange="updateNoFaktur()">
                                     </div>
@@ -47,23 +53,29 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="no_faktur">Supplier</label>
-                                        <input type="text" name="no_faktur" id="no_faktur" class="form-control" >
+                                        <label for="supplier">Supplier</label>
+                                        <input type="text" name="supplier" id="supplier" class="form-control" >
                                     </div>
                                     <div class="form-group">
-                                        <label for="total_harga">Total Pengembalian</label>
-                                        <input type="text" name="total_harga" id="total_harga" class="form-control" readonly>
+                                        <label for="tanggal_pengembalian">Tanggal Pengembalian</label>
+                                        <input type="date" class="form-control datepicker" id="tanggal_pengembalian"
+                                            name="tanggal_pengembalian" onchange="updateNoFaktur()">
                                     </div>
+                                    
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-12 text-left">
-                                    <!-- Button untuk membuka modal daftar obat -->
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#obatModal" style="margin-right: 10px;">
-                                        + Obat
-                                    </button>
+                                <div class="col-lg-6 text-left">
                                     <button type="reset" class="btn btn-secondary" style="margin-right: 10px;" data-toggle="modal" data-target="#deleteConfirmationModal" >Reset</button>
                                     <button type="submit" class="btn btn-success" style="margin-right: 10px;">Simpan</button>
+                                    
+                                </div>
+                                <div class="col-lg-6 ">
+                                    <div class="form-group">                                    
+                                        <input type="number" name="total" id="totalpengembalian" class="form-control " readonly>
+                                    </div>
+
+                                    
                                 </div>
 
                                 <!-- Modal -->
@@ -77,16 +89,16 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>No Faktur</th>
-                                            <th>Nama Supplier</th>
+                                        
+                                            <th>Aksi</th>
                                             <th>Nama Obat</th>
                                             <th>No Batch</th>
-                                            <th>Tanggal Pembelian</th>
                                             <th>Tanggal Kadaluarsa</th>
                                             <th>Kuantitas Obat</th>
+                                            <th>Harga Satuan</th> 
                                             <th>Jumlah Dikembalikan</th>
                                             <th>Subtotal</th>
-                                            <th>Potongan</th>
+                                           
                                         </tr>
                                     </thead>
                                     <tbody id="tableDataFaktur">
@@ -131,39 +143,100 @@
     @section('js')
         <script>   
               async function fetchDataFaktur() {
-    const searchQuery = document.getElementById('no_faktur').value;
-    const url = `{{ route('search-faktur') }}`;
+                        const searchQuery = document.getElementById('no_faktur').value;
+                        const supplier = document.getElementById('supplier');
+                        const tanggal_pembelian = document.getElementById('tanggal_pembelian');
+                        const url = `{{ route('search-faktur') }}`;
     
-    try {
-        const response = await fetch(`${url}?no_faktur=${encodeURIComponent(searchQuery)}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
+                        try {
+                            const response = await fetch(`${url}?no_faktur=${encodeURIComponent(searchQuery)}`, {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                }
+                            });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok ' + response.statusText);
+                            }
 
-        const data = await response.json();
-        console.log(data)
-        const tableDataFaktur = document.getElementById('tableDataFaktur');
+                            const data = await response.json();
+                            console.log(data)
+                            const tableDataFaktur = document.getElementById('tableDataFaktur');
 
-        if (tableDataFaktur) {
-            tableDataFaktur.innerHTML = "";
-            data.forEach(function(faktur) {
-                const row = ``;
-                tableDataFaktur.insertAdjacentHTML('beforeend', row);
-            });
-        } else {
-            console.error('tableDataFaktur element not found');
-        }
+                            if (tableDataFaktur) {
 
-    } catch (error) {
-        console.error('Error fetching faktur data:', error);
-    }
-}
+                                tableDataFaktur.innerHTML = "";
+
+                                data.forEach(function(faktur) {
+
+                                    supplier.value=`${faktur.nama_supplier}`;
+                                    tanggal_pembelian.value= `${faktur.tanggal_pembelian}`;
+                                    stok=faktur.stok;    
+                                                            
+                                    faktur.detail_pembelian.forEach((detail, index) => {
+                                        const newRow = document.createElement('tr');
+                                        newRow.setAttribute('id', `obat.${detail.no_batch}`)
+                                         newRow.innerHTML = `
+                                         <tr>
+                                                <td><button onclick ="hapusItemPembelianObat(this)" class="btn btn-link"><i class="fa-solid fa-trash""></i></button></td>
+                                                <td><input type="text" name="merek_obat[]" class="total" value="${detail.merek_obat}" readonly></td>
+                                                <td><input type="text" name="no_batch[]" class="total" value="${detail.no_batch}"readonly></td>
+                                                <td><input type="date" name="tanggal_kadaluarsa[]" class="total" value="${stok[index].tanggal_kadaluarsa}"readonly></td>
+                                                <td><input type="number" name="stok_tersedia[]" class="stok_tersedia" value="${stok[index].stok_tersedia}"readonly ></td>
+                                                <td>${detail.harga_satuan}<input type="hidden" class="harga_satuan" value="${detail.harga_satuan}"></td>
+                                                <td><input type="number" name="jumlah_retur[]" class="jumlah-retur" onchange="updatesubtotal(this)" ></td>
+                                                <td><input type="number" name="subtotal[]" class="subtotal"></td>
+                                                
+                                        </tr>
+                                    `;
+                                    tableDataFaktur.appendChild(newRow);
+                                    
+                                    })
+                                   
+                                });
+                            } else {
+                                console.error('tableDataFaktur element not found');
+                            }
+
+                        } catch (error) {
+                            console.error('Error fetching faktur data:', error);
+                        }
+                    }
+
+
+                    function hapusItemPembelianObat(element)
+                    {
+                        const item = element.closest('tr');
+                        item.remove()
+                    }
+
+                    function updatesubtotal(element)
+                    {
+                        const row = element.closest('tr');
+                        const jumlahretur = row.querySelector('.jumlah-retur').value;
+                        const harga_satuan = row.querySelector('.harga_satuan').value;
+                        const subtotal = row.querySelector('.subtotal');
+                        const kuantitas = row.querySelector('.stok_tersedia').value; 
+                            subtotal.value=jumlahretur* harga_satuan;   
+                            TotalPengembalian()
+                        
+                    }
+
+                    function TotalPengembalian() {
+                        const elementTotal = document.getElementById('totalpengembalian');
+                        const subtotals = document.querySelectorAll('.subtotal');
+                        let totalHarga = 0;
+
+                        // Loop melalui semua elemen subtotal dan tambahkan nilainya ke totalHarga
+                        subtotals.forEach((subtotal) => {
+                            totalHarga += parseFloat(subtotal.value || 0); // Pastikan nilainya diubah menjadi float
+                        });
+
+                        // Tampilkan hasil total pada input totalpengembalian
+                        elementTotal.value = totalHarga;
+                    }
+
 
 
         </script>
