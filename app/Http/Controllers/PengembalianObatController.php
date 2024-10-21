@@ -16,7 +16,7 @@ class PengembalianObatController extends Controller
     }
     public function create()
     {
-        return view('pages.pengembalian_obat.create');
+        return view(view: 'pages.pengembalian_obat.create');
     }
 
     public function searchFaktur(Request $request)
@@ -101,37 +101,34 @@ class PengembalianObatController extends Controller
 
         if ($detail_obat) {
             $id_detail_obat = $detail_obat->id_detail_obat;
-            $quantity =$detail_obat->stok_obat;
+            $stokAwal =$detail_obat->stok_obat;
             $jumlah_retur = $jumlah_returs[$i];
 
          
-            if ($quantity < $jumlah_retur) {
+            if ($stokAwal < $jumlah_retur) {
               
                 return redirect()->back()->with(['error' => 'Jumlah retur tidak boleh lebih dari stok tersedia untuk obat ' . $merek_obats[$i]]);
             }
 
 
-        detail_pengembalian_obat::create([
-            'id_pengembalian_obat'=>$id_pengembalian,
-            'Quantity'=>$jumlah_returs[$i],
-            'id_detail_obat'=>$id_detail_obat
-        ]);
-
-        $sisa_obat = $quantity-$jumlah_returs[$i];
-        if($sisa_obat==0){
-            $detail_obat->delete();
-
-        }else{
-            $detail_obat->update([
-                'stok_obat' => $sisa_obat
+            detail_pengembalian_obat::create([
+                'id_pengembalian_obat'=>$id_pengembalian,
+                'Quantity'=>$jumlah_returs[$i],
+                'id_detail_obat'=>$id_detail_obat,
+                'stok_awal' => $stokAwal
             ]);
-        }
-        
 
+            $sisa_obat = $stokAwal-$jumlah_returs[$i];
+            if($sisa_obat==0){
+                $detail_obat->delete();
 
+            }else{
+                $detail_obat->update([
+                    'stok_obat' => $sisa_obat
+                ]);
+            }
         } else {
-            return redirect()->back()->with('error', 'Detail obat tidak ditemukan untuk no_batch: ' . $no_batches[$i]);
-             
+            return redirect()->back()->with('error', 'Detail obat tidak ditemukan untuk no_batch: ' . $no_batches[$i]);            
         }
 
         
@@ -153,6 +150,28 @@ class PengembalianObatController extends Controller
         //dd($datadetailpengembalian);
 
     }
+    public function undo($id)
+    {
+        $detailPengembalian = detail_pengembalian_obat::findOrFail($id);
+        $detailObat = DetailObat::findOrFail($detailPengembalian->id_detail_obat);
+
+        $id_pengembalian = $detailPengembalian->id_pengembalian_obat;
+
+        $detailObat->update([
+            'stok_obat' => $detailPengembalian->stok_awal
+        ]);
+
+        $detailPengembalian->delete();
+
+        $remainingDetails = detail_pengembalian_obat::where('id_pengembalian_obat', $id_pengembalian)->count();
+
+        if ($remainingDetails === 0) {
+            pengembalian_obat::findOrFail($id_pengembalian)->delete();
+        }
+
+        return redirect()->route('pengembalian-obat.index')->with('success', 'Pengembalian berhasil dibatalkan');
+    }
+
 
     
 }

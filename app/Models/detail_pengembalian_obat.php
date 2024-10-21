@@ -13,7 +13,8 @@ class detail_pengembalian_obat extends Model
     protected $fillable=[
         'id_detail_obat',
         'id_pengembalian_obat',
-        'Quantity'
+        'Quantity',
+        'stok_awal'
     ];
 
     public function pembelian():BelongsTo

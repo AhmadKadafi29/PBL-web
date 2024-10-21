@@ -68,6 +68,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/search-obat', [PembelianController::class, 'search'])->name('search-obat');
     Route::resource('/pengembalian-obat',PengembalianObatController::class);
     Route::get('/search-faktur', [PengembalianObatController::class, 'searchFaktur'])->name('search-faktur');
+    Route::post('/pengembalian-obat/undo/{id}', [PengembalianObatController::class, 'undo'])->name('pengembalian-obat.undo');
 
 
 

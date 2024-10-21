@@ -231,7 +231,7 @@
                         <td><input type="number" name="ongkir[]" class="ongkir" onchange="updateHarga(this)"></td>
                         <td><input type="number" name="no_batch[]"  class="no_batch"></td>
                         <td><input type="number" name="harga_jual[]" readonly class="harga-jual"></td>
-                        <td><input type="number" name="total[]" class="total" ></td>
+                        <td><input type="number" name="total[]" readonly class="total" ></td>
                     `;
                     obatList.appendChild(newRow);
                 });
