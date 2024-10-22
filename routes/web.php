@@ -65,7 +65,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/penjualan/cetaknota', [PenjualanController::class, 'cetakNota'])->name('penjualan.cetaknota');
 
     // Route::middleware(['can:isKaryawan'])->group(function () {
-    //     // Rute-rute yang membutuhkan izin 'isKaryawan'
+    //     // Rute-rute yang membutuhkan izin 'isKaryawan' 
     //     Route::get('penjualan/index', [PenjualanController::class, 'index'])->name('penjualan.index');
     //     Route::post('/penjualan/cari-obat', [PenjualanController::class, 'cariObat']);
     //     Route::post('/penjualan/checkout', [PenjualanController::class, 'checkout']);

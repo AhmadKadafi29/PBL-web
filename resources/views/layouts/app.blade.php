@@ -30,6 +30,30 @@
 
         gtag('config', 'UA-94034622-3');
     </script>
+    <script>
+        // Pastikan Laravel Echo sudah diimport dan tersedia
+        Echo.channel('medicines')
+            .listen('.medicine.stock.event', (e) => {
+                // Menampilkan notifikasi di lonceng
+                let notificationContent = `
+                    <a href="#" class="dropdown-item dropdown-item-unread">
+                        <div class="dropdown-item-icon bg-danger text-white">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <div class="dropdown-item-desc">
+                            ${e.message}
+                            <div class="time text-primary">Baru saja</div>
+                        </div>
+                    </a>
+                `;
+                // Tambahkan notifikasi ke dalam dropdown
+                $('.dropdown-list-content').prepend(notificationContent);
+
+                // Optional: Tambahkan beep atau penanda notifikasi baru
+                $('.notification-toggle').addClass('beep');
+            });
+    </script>
+
     <!-- END GA -->
 </head>
 </head>

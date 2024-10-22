@@ -17,15 +17,19 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->call(function () {
-            $lowStock = Obat::where('stok_obat', '<=', 10)->get();
-            $expiringSoon = Obat::where('tanggal_kadaluarsa', '<=', now()->addDays(7))->get();
+            $medicines = \App\Models\Obat::all();
 
-            $notifications = [
-                'lowStock' => $lowStock,
-                'expiredSoon' => $expiringSoon,
-            ];
+            foreach ($medicines as $medicine) {
+                // Cek stok habis
+                if ($medicine->stock <= 0) {
+                    event(new \App\Events\MedicineStockEvent('Obat ' . $medicine->name . ' habis.'));
+                }
 
-            file_put_contents(storage_path('app/public/notifications.json'), json_encode($notifications));
+                // Cek obat hampir kadaluarsa (misalnya dalam 30 hari)
+                if ($medicine->expiration_date <= now()->addDays(10)) {
+                    event(new \App\Events\MedicineStockEvent('Obat ' . $medicine->name . ' hampir kadaluarsa.'));
+                }
+            }
         })->everyMinute();
     }
 

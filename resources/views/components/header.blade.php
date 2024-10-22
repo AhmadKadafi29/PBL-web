@@ -9,24 +9,6 @@
                 </button>
             </div>
             <div class="modal-body">
-                @if (!empty($notifications['lowStock']) && count($notifications['lowStock']) > 0)
-                    <h6>Stok Obat Hampir Habis:</h6>
-                    <ul>
-                        @foreach ($notifications['lowStock'] as $obat)
-                            <li>Stok obat {{ $obat['merek_obat'] }} hampir habis. Stok tersisa: {{ $obat['stok_obat'] }}
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
-                @if (!empty($notifications['expiredSoon']) && count($notifications['expiredSoon']) > 0)
-                    <h6>Obat Hampir Kadaluarsa:</h6>
-                    <ul>
-                        @foreach ($notifications['expiredSoon'] as $obat)
-                            <li>Obat {{ $obat['merek_obat'] }} akan segera kadaluarsa pada
-                                {{ \Carbon\Carbon::parse($obat['tanggal_kadaluarsa'])->format('d-m-Y') }}.</li>
-                        @endforeach
-                    </ul>
-                @endif
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -50,9 +32,6 @@
         <li class="dropdown dropdown-list-toggle">
             <a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg beep">
                 <i class="far fa-bell"></i>
-                @if ($unreadCount > 0)
-                    <span class="badge badge-danger">{{ $unreadCount }}</span>
-                @endif
             </a>
             <div class="dropdown-menu dropdown-list dropdown-menu-right">
                 <div class="dropdown-header">Notifikasi
@@ -61,33 +40,7 @@
                     </div>
                 </div>
                 <div class="dropdown-list-content dropdown-list-icons">
-                    @if (!empty($notifications['lowStock']) && count($notifications['lowStock']) > 0)
-                        @foreach ($notifications['lowStock'] as $obat)
-                            <a href="#" class="dropdown-item dropdown-item-unread">
-                                <div class="dropdown-item-icon bg-danger text-white">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                </div>
-                                <div class="dropdown-item-desc">
-                                    Stok obat {{ $obat['merek_obat'] }} hampir habis.
-                                    <div class="time text-danger">Stok tersisa {{ $obat['stok_obat'] }}</div>
-                                </div>
-                            </a>
-                        @endforeach
-                    @endif
-                    @if (!empty($notifications['expiredSoon']) && count($notifications['expiredSoon']) > 0)
-                        @foreach ($notifications['expiredSoon'] as $obat)
-                            <a href="#" class="dropdown-item dropdown-item-unread">
-                                <div class="dropdown-item-icon bg-warning text-white">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                </div>
-                                <div class="dropdown-item-desc">
-                                    Obat {{ $obat['merek_obat'] }} akan segera kadaluarsa.
-                                    <div class="time text-warning">Kadaluarsa:
-                                        {{ \Carbon\Carbon::parse($obat['tanggal_kadaluarsa'])->format('d-m-Y') }}</div>
-                                </div>
-                            </a>
-                        @endforeach
-                    @endif
+                    <!-- Notifikasi akan muncul di sini -->
                 </div>
                 <div class="dropdown-footer text-center">
                     <a href="#">Lihat Semua <i class="fas fa-chevron-right"></i></a>
@@ -117,12 +70,3 @@
         </li>
     </ul>
 </nav>
-<script type="text/javascript">
-    $(document).ready(function() {
-        @if (
-            (!empty($notifications['lowStock']) && count($notifications['lowStock']) > 0) ||
-                (!empty($notifications['expiredSoon']) && count($notifications['expiredSoon']) > 0))
-            $('#notificationModal').modal('show');
-        @endif
-    });
-</script>

@@ -39,17 +39,35 @@ class PembelianController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = $request->validate([
+            'id_supplier' => 'required',
+            'id_obat' => 'required',
+            'no_batch' => 'required',
+            'quantity' => 'required',
+            'harga_beli_satuan' => 'required',
+            'harga_jual_satuan' => 'required',
+            'tanggal_kadaluarsa' => 'required',
+            'status_pembayaran' => 'required',
+            'tanggal_pembelian' => 'required',
+            'margin' => 'required',
+        ]);
+
+        if ($validator) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $noFaktur = "{$request->id_obat}{$request->id_supplier}" . date('Ymd', strtotime($request->tanggal_pembelian));
-        $harga_beli_satuan = $request->input('harga_beli_satuan');
-        $harga_jual_satuan = $request->input('harga_jual_satuan');
-        $quantity = $request->input('quantity');
+        $harga_beli_satuan = $request->harga_beli_satuan;
+        $harga_jual_satuan = $request->harga_jual_satuan;
+        $quantity = $request->quantity;
 
         $pembelian = new Pembelian;
-        $pembelian->id_supplier = $request->input('id_supplier');
+        $pembelian->id_supplier = $request->id_supplier;
         $pembelian->no_faktur = $noFaktur;
         $pembelian->total_harga = $harga_beli_satuan * $quantity;
-        $pembelian->tanggal_pembelian = $request->input('tanggal_pembelian');
-        $pembelian->status_pembayaran = $request->input('status_pembayaran');
+        $pembelian->tanggal_pembelian = $request->tanggal_pembelian;
+        $pembelian->tanggal_kadaluarsa = $request->tanggal_kadaluarsa;
+        $pembelian->status_pembayaran = $request->status_pembayaran;
         $pembelian->save();
 
         $id_obat = $request->id_obat;
@@ -57,7 +75,7 @@ class PembelianController extends Controller
         $detailPembelian = [
             'id_pembelian' => $pembelian->id_pembelian,
             'id_obat' => $id_obat,
-            'no_batch' => $request->input('no_batch'),
+            'no_batch' => $request->no_batch,
             'harga_beli_satuan' => $harga_beli_satuan,
             'quantity' => $quantity,
         ];
