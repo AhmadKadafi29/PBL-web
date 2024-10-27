@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class DetailObat extends Model
 {
@@ -28,5 +29,10 @@ class DetailObat extends Model
     public function obat()
     {
         return $this->belongsTo(Obat::class, 'id_obat');
+    }
+
+    public function detail_pengembalian():HasMany
+    {
+        return $this->hasMany(detail_pengembalian_obat::class,'id_detail_obat');
     }
 }

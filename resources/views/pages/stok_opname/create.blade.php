@@ -22,33 +22,36 @@
                 <div class="card">
                     <form action="{{ route('Stok_opname.store') }}" method="POST">
                         @csrf
-                        <div class="row">
-                            <div class="col-lg-6">
-
-                                <div class="form-group">
-                                    <strong>Nama Obat</strong>
-                                    <select class="form-control" name="id_obat">
-                                        @foreach ($obat as $ob)
-                                            <option value="{{ $ob->id_obat }}">{{ $ob->merek_obat }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="stok_fisik">Stok Fisik</label>
-                                    <input type="text" name="stok_fisik" class="form-control">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="tanggal_opname">Tanggal opname</label>
-                                    <input type="date" name="tanggal_opname" class="form-control">
-                                </div>
-
-                                <div class="card-footer text-right">
-                                    <button class="btn btn-primary"
-                                        style="width: 90px; height:40px; font-size:15px">Submit</button>
+                        <div class="container-fluid">
+                            <div class="row mt-3">
+                                <div class="col-lg-6">
+    
+                                    <div class="form-group">
+                                        <strong>Nama Obat</strong>
+                                        <select class="form-control" name="id_obat">
+                                            @foreach ($obat as $ob)
+                                                <option value="{{ $ob->id_obat }}">{{ $ob->merek_obat }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="stok_fisik">Stok Fisik</label>
+                                        <input type="text" name="stok_fisik" class="form-control">
+                                    </div>
+    
+                                    <div class="form-group">
+                                        <label for="tanggal_opname">Tanggal opname</label>
+                                        <input type="date" name="tanggal_opname" class="form-control">
+                                    </div>
+    
+                                    <div class="card-footer text-right">
+                                        <button class="btn btn-primary"
+                                            style="width: 90px; height:40px; font-size:15px">Submit</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        
                     </form>
                 </div>
             </div>

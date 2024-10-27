@@ -22,25 +22,28 @@
                 <div class="card">
                     <form action="{{ route('Supplier.store') }}" method="POST">
                         @csrf
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <strong>Nama Supplier</strong>
-                                    <input type="text" name="nama_supplier" class="form-control">
+                        <div class="container-fluid">
+                            <div class="row mt-3">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <strong>Nama Supplier</strong>
+                                        <input type="text" name="nama_supplier" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <strong>No Telepon</strong>
+                                        <input type="text" name="no_telpon" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <strong>Alamat</strong>
+                                        <input type="text" name="alamat" class="form-control">
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <strong>No Telepon</strong>
-                                    <input type="text" name="no_telpon" class="form-control">
+                                <div class="col-xs-12 col-sm-12 col-md-12 text-left">
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
                                 </div>
-                                <div class="form-group">
-                                    <strong>Alamat</strong>
-                                    <input type="text" name="alamat" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 text-left">
-                                <button type="submit" class="btn btn-primary">Simpan</button>
                             </div>
                         </div>
+                        
                     </form>
                 </div>
             </div>

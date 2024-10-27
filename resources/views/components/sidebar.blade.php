@@ -52,6 +52,10 @@
                     <a class="nav-link" href="{{ route('penjualan.index') }}">
                         <i class="fa-solid fa-cart-shopping"></i><span>Penjualan</span></a>
                 </li> --}}
+                <li>
+                    <a class="nav-link" href="{{ route('pengembalian-obat.index') }}"><i
+                            class="fa-solid fa-cart-shopping"></i><span>Pengembalian Obat </span></a>
+                </li>
 
                 <li class="nav-item">
 

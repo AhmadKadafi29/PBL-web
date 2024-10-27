@@ -29,66 +29,59 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Obat</h4>
+                                <h4>Daftar Obat</h4>
                                 <div class="section-header-button">
-                                    <a href="{{ route('Obat.create') }}" class="btn btn-primary">Obat baru</a>
+                                    <a href="{{ route('Obat.create') }}" class="btn btn-primary">Obat Baru</a>
                                 </div>
                             </div>
-
-                                <div class="clearfix"></div>
-                                <div class="card-body">
-                                    <div class="float-right">
-                                        <form method="GET" action="{{ route('Obat.index') }}">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="Search"
-                                                    name="merek_obat">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-primary"><i class="fas fa-search"></i></button>
-                                                </div>
+                            <div class="card-body">
+                                <div class="float-right">
+                                    <form method="GET" action="{{ route('Obat.index') }}">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search" name="merek_obat">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
                                             </div>
-                                        </form>
-                                    </div>
+                                        </div>
+                                    </form>
+                                </div>
                                 <div class="table-responsive">
-                                    <table class="table-striped table">
-                                        <tr>
-                                            <th>Nomor</th>
-                                            <th>Kategori Obat</th>
-                                            <th>Merek Obat</th>
-                                            <th>Dosis Obat</th>
-                                            <th>Kegunaan</th>
-                                            <th>Efek Samping</th>
-                                            <th>Kemasan</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        <?php $no = 1; ?>
-                                        @foreach ($obat as $index => $ob)
+                                    <table class="table table-striped">
+                                        <thead>
                                             <tr>
-                                                <td>{{ $index + $obat->firstItem() }} </td>
-                                                <td>{{ $ob->Kategoriobat->nama_kategori }}</td>
-                                                <td>{{ $ob->merek_obat }} </td>
-                                                <td>{{ $ob->dosis }} </td>
-                                                <td>{{ $ob->kegunaan }} </td>
-                                                <td>{{ $ob->efek_samping }}</td>
-                                                <td>{{ $ob->kemasan }}</td>
-
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <a href="{{ route('Obat.show', $ob->id_obat) }}"
-                                                            class="btn btn-sm btn-warning btn-icon">
-                                                            <i class="fas fa-eye"></i>
-                                                            Detail
-                                                        </a>
-                                                        <a href="{{ route('Obat.edit', $ob->id_obat) }}"
-                                                            class="btn btn-sm btn-info btn-icon ml-2">
-                                                            <i class="fas fa-edit"></i>
-                                                            Edit
-                                                        </a>
-
-                                                    </div>
-                                                </td>
-
+                                                <th>No.</th>
+                                                <th>Kategori Obat</th>
+                                                <th>Merek Obat</th>
+                                                <th>Dosis Obat</th>
+                                                <th>Kegunaan</th>
+                                                <th>Efek Samping</th>
+                                                <th>Kemasan</th>
+                                                <th>Action</th>
                                             </tr>
-                                        @endforeach
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($obat as $index => $ob)
+                                                <tr>
+                                                    <td>{{ $index + $obat->firstItem() }}</td>
+                                                    <td>{{ $ob->kategoriObat->nama_kategori }}</td>
+                                                    <td>{{ $ob->merek_obat }}</td>
+                                                    <td>{{ $ob->dosis }}</td>
+                                                    <td>{{ $ob->kegunaan }}</td>
+                                                    <td>{{ $ob->efek_samping }}</td>
+                                                    <td>{{ $ob->kemasan }}</td>
+                                                    <td>
+                                                        <div class="d-flex">
+                                                            <a href="{{ route('Obat.show', $ob->id_obat) }}" class="btn btn-sm btn-warning btn-icon">
+                                                                <i class="fas fa-eye"></i> Detail
+                                                            </a>
+                                                            <a href="{{ route('Obat.edit', $ob->id_obat) }}" class="btn btn-sm btn-info btn-icon ml-2">
+                                                                <i class="fas fa-edit"></i> Edit
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
                                     </table>
                                     <div class="float-right">
                                         {{ $obat->withQueryString()->links() }}
@@ -101,8 +94,9 @@
             </div>
         </section>
     </div>
-    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog"
-        aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+
+    <!-- Modal Konfirmasi Hapus -->
+    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -112,7 +106,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Apakah anda yakin ingin menghapus obat <span id="deleteObjectName"></span>?</p>
+                    <p>Apakah Anda yakin ingin menghapus obat <span id="deleteObjectName"></span>?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>

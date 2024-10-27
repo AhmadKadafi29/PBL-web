@@ -53,9 +53,7 @@
                                             <tr>
                                                 <td>{{ $op->obat->merek_obat }}</td>
                                                 <td>{{ $op->user->name }} </td>
-                                                <td>
-                                                    {{ $op->stok_sistem }}
-                                                </td>
+                                                <td> {{ $op->stok_sistem }}</td>
                                                 <td>{{ $op->stok_fisik }}</td>
                                                 <td>{{ $op->harga_jual_satuan }}</td>     
                                                 <td>{{ $op->tanggal_opname }}</td>
@@ -70,6 +68,9 @@
                                             </tr>
                                         @endforeach
                                     </table>
+                                    <div class="float-right">
+                                        {{ $opname->withQueryString()->links() }}
+                                    </div>
                                 </div>
                                 {{-- Uncomment the following line if you want to enable pagination --}}
                                 {{-- <div class="float-right">{{ $users->withQueryString()->links() }}</div> --}}

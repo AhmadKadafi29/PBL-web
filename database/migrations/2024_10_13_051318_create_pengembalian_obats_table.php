@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('detail_obat', function (Blueprint $table) {
-            $table->string('no_batch')->after('id_pembelian');
+        Schema::create('pengembalian_obats', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('id_pembelian');
+            $table->date('tanggal_pengembalian');
+            $table->double('total_pengembalian');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('detail_obat', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('pengembalian_obats');
     }
 };

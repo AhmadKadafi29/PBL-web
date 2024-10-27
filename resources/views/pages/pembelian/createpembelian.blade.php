@@ -1,0 +1,1 @@
+@dump($data->input('merek_obat'))

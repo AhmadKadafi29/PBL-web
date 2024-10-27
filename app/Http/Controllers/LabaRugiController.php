@@ -18,7 +18,7 @@ class LabaRugiController extends Controller
     public function generateLabaRugi(Request $request)
     {
         $bulan = $request->bulan;
-        $tahun = $request->tahun;
+        $tahun = $request->tahun;  
 
         $pendapatan = DetailPenjualan::with(['penjualan', 'obat', 'penjualan_resep'])
             ->whereHas('penjualan_resep', function ($query) use ($bulan, $tahun) {

@@ -81,7 +81,7 @@
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
                                             <tr>
-                                                <th>Kode Obat</th>
+                                             
                                                 <th>Merek Obat</th>
                                                 <th>Harga</th>
                                                 <th>Jumlah</th>
@@ -92,7 +92,7 @@
                                             {{-- @dd($keranjang) --}}
                                             @foreach ($keranjang as $index => $item)
                                                 <tr>
-                                                    <td>{{ $item['kode_obat'] }}</td>
+                                                   
                                                     <td>{{ $item['nama_obat'] }}</td>
                                                     <td>{{ $item['harga_jual_obat'] }}</td>
                                                     <td>{{ $item['jumlah'] }}</td>

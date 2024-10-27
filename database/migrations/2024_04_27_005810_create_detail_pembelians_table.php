@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id_detail_pembelian');
             $table->unsignedBigInteger('id_pembelian');
             $table->unsignedBigInteger('id_obat');
+            $table->string('no_batch');
             $table->bigInteger('harga_beli_satuan');
             $table->integer('quantity');
             $table->timestamps();
