@@ -12,6 +12,7 @@
         integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+
     @stack('style')
 
     <!-- Template CSS -->
@@ -20,6 +21,7 @@
 
     <!-- Start GA -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
+
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -30,32 +32,11 @@
 
         gtag('config', 'UA-94034622-3');
     </script>
-    <script>
-        // Pastikan Laravel Echo sudah diimport dan tersedia
-        Echo.channel('medicines')
-            .listen('.medicine.stock.event', (e) => {
-                // Menampilkan notifikasi di lonceng
-                let notificationContent = `
-                    <a href="#" class="dropdown-item dropdown-item-unread">
-                        <div class="dropdown-item-icon bg-danger text-white">
-                            <i class="fas fa-exclamation-circle"></i>
-                        </div>
-                        <div class="dropdown-item-desc">
-                            ${e.message}
-                            <div class="time text-primary">Baru saja</div>
-                        </div>
-                    </a>
-                `;
-                // Tambahkan notifikasi ke dalam dropdown
-                $('.dropdown-list-content').prepend(notificationContent);
 
-                // Optional: Tambahkan beep atau penanda notifikasi baru
-                $('.notification-toggle').addClass('beep');
-            });
-    </script>
 
     <!-- END GA -->
-</head>
+    @vite('resources/css/app.css')
+
 </head>
 
 <body>
@@ -75,6 +56,9 @@
         </div>
     </div>
 
+    @vite('resources/js/app.js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- General JS Scripts -->
     <script src="{{ asset('library/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('library/popper.js/dist/umd/popper.js') }}"></script>
@@ -89,6 +73,44 @@
     <!-- Template JS File -->
     <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script>
+        Pusher.logToConsole = true;
+        var pusher = new Pusher('7d4f854a5399fcdfdf29', {
+            cluster: 'ap1',
+            encrypted: true
+        });
+
+        // var channel = pusher.subscribe('medicines');
+        // channel.bind('medicine.stock.event', function(data) {
+        //     Swal.fire({
+        //         title: 'Stok habis',
+        //         icon: 'success',
+        //         confirmButtonText: 'OK'
+        //     });
+        // });
+        var channel = pusher.subscribe('medicines');
+        channel.bind('medicine.stock.event', function(data) {
+            // Tambahkan notifikasi baru ke dalam elemen dropdown-list-content
+            var notificationHtml = `
+                <a href="#" class="dropdown-item">
+                    <div class="dropdown-item-icon bg-danger text-white">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="dropdown-item-desc">
+                        ${data.message}
+                        <div class="time text-primary">${new Date().toLocaleTimeString()}</div>
+                    </div>
+                </a>
+            `;
+
+            // Masukkan notifikasi baru ke dalam bagian lonceng notifikasi
+            $('.dropdown-list-content').prepend(notificationHtml);
+
+            // Jika ingin menambah efek beep pada lonceng
+            $('.notification-toggle').addClass('beep');
+        });
+    </script>
 </body>
 
 </html>

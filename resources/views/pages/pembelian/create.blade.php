@@ -4,7 +4,8 @@
 
 @push('style')
     <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 @endpush
 
 @section('main')
@@ -23,81 +24,52 @@
                 <div class="card">
                     <form action="{{ route('Pembelian.store') }}" method="POST">
                         @csrf
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <strong>Nama Obat</strong>
-                                    <select class="form-control" name="id_obat" onchange="updateNoFaktur()">
-                                        @foreach ($obat as $ob)
-                                            <option value="{{ $ob->id_obat }}">{{ $ob->merek_obat }}</option>
-                                        @endforeach
-                                    </select>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="nama_supplier">Nama Supplier</label>
+                                        <select class="form-control" name="id_supplier" onchange="updateNoFaktur()"
+                                            id="nama_supplier">
+                                            @foreach ($supplier as $sp)
+                                                <option value="{{ $sp->id_supplier }}">{{ $sp->nama_supplier }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="no_faktur">No Faktur</label>
+                                        <input type="text" name="no_faktur" id="no_faktur" class="form-control" readonly>
+                                    </div>
                                 </div>
-
-                                <div class="form-group">
-                                    <strong>Nama Supplier</strong>
-                                    <select class="form-control" name="id_supplier" onchange="updateNoFaktur()">
-                                        @foreach ($supplier as $sp)
-                                            <option value="{{ $sp->id_supplier }}">{{ $sp->nama_supplier }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="tanggal_pembelian">Tanggal Pembelian</label>
-                                    <input type="date" class="form-control datepicker" id="tanggal_pembelian"
-                                        name="tanggal_pembelian" onchange="updateNoFaktur()">
-                                </div>
-                                <div class="form-group">
-                                    <label for="no_faktur">No Faktur</label>
-                                    <input type="text" name="no_faktur" id="no_faktur" class="form-control" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label for="status_pembayaran">Status Pembayaran</label>
-                                    <select class="form-control" id="status_pembayaran" name="status_pembayaran">
-                                        <option value="Lunas">Lunas</option>
-                                        <option value="Belum_lunas">Belum lunas</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <strong>Harga Beli satuan</strong>
-                                    <input type="text" name="harga_beli_satuan" class="form-control" onchange="updateTotal()" onchange=" updateHargaJual()">
-                                </div>
-                                <div class="form-group">
-                                    <label for="no_batch">No Batch</label>
-                                    <input type="text" name="no_batch" class="form-control" >
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="tanggal_pembelian">Tanggal Pembelian</label>
+                                        <input type="date" class="form-control datepicker" id="tanggal_pembelian"
+                                            name="tanggal_pembelian" onchange="updateNoFaktur()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="total_harga">Total Harga</label>
+                                        <input type="text" name="total_harga" id="total_harga" class="form-control"
+                                            readonly>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>Quantity</label>
-                                    <input type="text" class="form-control " name="quantity" onchange="updateTotal()">
-                                </div>
-                                <div class="form-group">
-                                    <label for="total_harga">Total Harga</label>
-                                    <input type="number" name="total_harga" class="form-control" readonly>
+                            <div class="row">
+                                <div class="col-lg-12 text-left">
+                                    <!-- Button untuk membuka modal daftar obat -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#obatModal" style="margin-right: 10px;">
+                                        + Obat
+                                    </button>
+                                    <button type="reset" class="btn btn-secondary" style="margin-right: 10px;"
+                                        data-toggle="modal" data-target="#deleteConfirmationModal">Reset</button>
+                                    <button type="submit" class="btn btn-success"
+                                        style="margin-right: 10px;">Simpan</button>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="tanggal_kadaluarsa">Tanggal Kadaluarsa</label>
-                                    <input type="date" class="form-control datepicker" id="tanggal_kadaluarsa"
-                                        name="tanggal_kadaluarsa" >
-                                </div>
-                                <div class="form-group">
-                                    <label for="total_harga">Margin</label>
-                                    <input type="number" name="margin" class="form-control" onchange="updateHargaJual()">
-                                </div>
-                                <div class="form-group">
-                                    <label for="total_harga">Ongkir Pembelian</label>
-                                    <input type="number" name="ongkir" class="form-control" onchange="updateHargaJual()">
-                                </div>
-                                <div class="form-group">
-                                    <strong>Harga Jual satuan</strong>
-                                    <input type="text" name="harga_jual_satuan" class="form-control" readonly>
-                                </div>
-                                <div class="card-footer text-right">
-                                    <button class="btn btn-primary"
-                                        style="width: 90px; height:40px; font-size:15px">Submit</button>
-                                </div>
+                                <!-- Modal -->
+
+                            </div>
 
                             <hr style="margin-top: 20px; margin-bottom: 20px;">
 
@@ -132,26 +104,27 @@
         </section>
     </div>
     <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog"
-            aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteConfirmationModalLabel">Konfirmasi Hapus</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Apakah anda yakin ingin menghapus seluruh data obat<span id="deleteObjectName"></span>?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-danger" data-dismiss="modal" onclick="resetDataObat()">Hapus</button>
-                        </form>
-                    </div>
+        aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmationModalLabel">Konfirmasi Hapus</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Apakah anda yakin ingin menghapus seluruh data obat<span id="deleteObjectName"></span>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger" data-dismiss="modal"
+                        onclick="resetDataObat()">Hapus</button>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
 
     <!-- Modal Dialog Daftar Obat -->
     <div class="modal fade" id="obatModal" tabindex="-1" aria-labelledby="obatModalLabel" aria-hidden="true">
@@ -166,43 +139,48 @@
                 <div class="modal-body">
                     <form id="obatForm">
                         <!-- Tabel Daftar Obat -->
-                       <div >
-                        <table class="table table-bordered table-striped">
-                            <!-- Tabel Daftar Obat -->
-                            <div class="float-right">
-                                <form id="searchForm" method="GET">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Search" id="searchObat" name="name">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button" onclick="fetchDataObat()"><i class="fas fa-search"></i></button>
+                        <div>
+                            <table class="table table-bordered table-striped">
+                                <!-- Tabel Daftar Obat -->
+                                <div class="float-right">
+                                    <form id="searchForm" method="GET">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search"
+                                                id="searchObat" name="name">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="button"
+                                                    onclick="fetchDataObat()"><i class="fas fa-search"></i></button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <thead>
-                                <tr>
-                                    <th>Pilih</th>
-                                    <th>Merek Obat</th>
-                                    <th>Dosis</th>
-                                    <th>Satuan</th>
-                                    <th>Kegunaan</th>
-                                    <th>Efek Samping</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tableDataObat">
-                                @foreach ($obat as $ob)
+                                    </form>
+                                </div>
+                                <thead>
                                     <tr>
-                                        <td><input type="checkbox" class="obat-checkbox" data-idobat ="{{ $ob->id_obat }}" data-nama="{{ $ob->merek_obat}}" data-kategori="{{  $ob->kategoriObat->nama_kategori }}" data-satuan="{{ $ob->kemasan }}"></td>
-                                        <td>{{ $ob->merek_obat }}</td>
-                                        <td>{{ $ob->dosis }}</td>
-                                        <td>{{ $ob->kemasan }}</td>
-                                        <td>{{ $ob->kegunaan }}</td>
-                                        <td>{{ $ob->efek_samping }}</td>
+                                        <th>Pilih</th>
+                                        <th>Merek Obat</th>
+                                        <th>Dosis</th>
+                                        <th>Satuan</th>
+                                        <th>Kegunaan</th>
+                                        <th>Efek Samping</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                       </div>
+                                </thead>
+                                <tbody id="tableDataObat">
+                                    @foreach ($obat as $ob)
+                                        <tr>
+                                            <td><input type="checkbox" class="obat-checkbox"
+                                                    data-idobat ="{{ $ob->id_obat }}" data-nama="{{ $ob->merek_obat }}"
+                                                    data-kategori="{{ $ob->kategoriObat->nama_kategori }}"
+                                                    data-satuan="{{ $ob->kemasan }}"></td>
+                                            <td>{{ $ob->merek_obat }}</td>
+                                            <td>{{ $ob->dosis }}</td>
+                                            <td>{{ $ob->kemasan }}</td>
+                                            <td>{{ $ob->kegunaan }}</td>
+                                            <td>{{ $ob->efek_samping }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                         {{-- <div class="d-flex justify-content-center">
 
                                 {{ $obat->withQueryString()->links() }}
@@ -213,7 +191,8 @@
                 <div class="modal-footer">
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="tambahkanObat()">Ok</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal"
+                            onclick="tambahkanObat()">Ok</button>
                     </div>
                 </div>
             </div>
@@ -223,11 +202,12 @@
 
 @push('scripts')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @section('js')
         <script>
-
             function updateNoFaktur() {
                 var idSupplier = document.getElementsByName('id_supplier')[0].value;
                 var tanggalPembelian = document.getElementsByName('tanggal_pembelian')[0].value;
@@ -239,15 +219,142 @@
                 }
             }
 
-            function updateHargaJual(){
-                    var hargaSatuan = Number(document.getElementsByName('harga_beli_satuan')[0].value);
-                    var quantity = Number(document.getElementsByName('quantity')[0].value);
-                    var margin = Number(document.getElementsByName('margin')[0].value);
-                    var ongkir = Number(document.getElementsByName('ongkir')[0].value)
-                    const ongkirsatuan= ongkir/quantity;
-                    var hargajual = hargaSatuan +  margin+ ongkirsatuan;
-                    document.getElementsByName('harga_jual_satuan')[0].value = hargajual;
+            function updateHargaJual() {
+                var hargaSatuan = Number(document.getElementsByName('harga_beli_satuan')[0].value);
+                var quantity = Number(document.getElementsByName('quantity')[0].value);
+                var margin = Number(document.getElementsByName('margin')[0].value);
+                var ongkir = Number(document.getElementsByName('ongkir')[0].value)
+                const ongkirsatuan = ongkir / quantity;
+                var hargajual = hargaSatuan + margin + ongkirsatuan;
+                document.getElementsByName('harga_jual_satuan')[0].value = hargajual;
+            }
+
+            function tambahkanObat() {
+                // Ambil data dari checkbox yang dicentang di modal
+                const selectedObat = document.querySelectorAll('.obat-checkbox:checked');
+                const obatList = document.getElementById('obat-list');
+                let rowCount = obatList.rows.length;
+
+                selectedObat.forEach((checkbox, index) => {
+                    const namaObat = checkbox.getAttribute('data-nama');
+                    const idobat = checkbox.getAttribute('data-idobat');
+                    const hargaBeli = checkbox.getAttribute('data-harga');
+                    const satuan = checkbox.getAttribute('data-satuan');
+
+                    const newRow = document.createElement('tr');
+                    newRow.setAttribute('id', `obat.${rowCount + index + 1}`)
+                    newRow.innerHTML = `
+                        <td>${rowCount + index + 1}</td>
+                        <td><button onclick="hapusItemObat(this)"  class="btn btn-link"><i class="fa-solid fa-trash""></i></button></td>
+                        <td>${namaObat} <input type="hidden" name="merek_obat[]" value="${idobat}"></td>
+                        <td>${satuan} <input type="hidden" name="satuan[]" value="${satuan}"></td>
+                        <td><input type="number" name="jumlah_obat[]" class="jumlah-obat" onchange="updateHarga(this)"></td>
+                        <td><input type="number" name="harga_beli[]" class="harga-beli" value="${hargaBeli}" onchange="updateHarga(this)"></td>
+                        <td><input type="date"   name="tanggal_kadaluarsa[]" class="tanggal-kadaluarsa"></td>
+                        <td><input type="number" name="margin[]" class="margin" onchange="updateHarga(this)"></td>
+                        <td><input type="number" name="ongkir[]" class="ongkir" onchange="updateHarga(this)"></td>
+                        <td><input type="number" name="no_batch[]"  class="no_batch"></td>
+                        <td><input type="number" name="harga_jual[]" readonly class="harga-jual"></td>
+                        <td><input type="number" name="total[]" readonly class="total" ></td>
+                    `;
+                    obatList.appendChild(newRow);
+                });
+                const allCheckboxes = document.querySelectorAll('.obat-checkbox');
+                allCheckboxes.forEach((checkbox) => {
+                    checkbox.checked = false;
+
+                });
+
+                $('#obatModal').modal('hide'); // Menutup modal
+                $('.modal-backdrop').remove(); // Hapus overlay modal yang masih tertinggal
+
+            }
+
+            function hapusItemObat(element) {
+                const row = element.closest('tr');
+                row.remove();
+
+
+            }
+
+            function updateHarga(element) {
+                const row = element.closest('tr');
+                const jumlahObat = parseFloat(row.querySelector('.jumlah-obat').value) || 0;
+                const hargaBeli = parseFloat(row.querySelector('.harga-beli').value) || 0;
+                const margin = parseFloat(row.querySelector('.margin').value) || 0;
+                const ongkir = parseFloat(row.querySelector('.ongkir').value) || 0;
+                const hargaJual = hargaBeli + (ongkir / jumlahObat) + margin;
+                const total = hargaBeli * jumlahObat;
+                row.querySelector('.harga-jual').value = hargaJual.toFixed(2);
+                row.querySelector('.total').value = total.toFixed(2);
+
+                totalHarga()
+            }
+
+
+            function totalHarga()
+
+            {
+                const totalElements = document.querySelectorAll('#obat-list .total');
+                const totalHargaInput = document.getElementById('total_harga');
+
+                let grandTotal = 0;
+                totalElements.forEach((totalInput) => {
+                    const totalValue = parseFloat(totalInput.value) || 0;
+                    grandTotal += totalValue;
+                });
+                totalHargaInput.value = grandTotal.toFixed(2);
+            }
+
+            function resetDataObat() {
+                const obatList = document.getElementById('obat-list');
+                obatList.innerHTML = "";
+                $('#deleteConfirmationModal').modal('hide')
+                $('.modal-backdrop').remove();
+
+            }
+
+            async function fetchDataObat()
+
+            {
+                const searchQuery = document.getElementById('searchObat').value;
+                const url = "{{ route('search-obat') }}";
+
+                try {
+
+                    const response = await fetch(`${url}?name=${encodeURIComponent(searchQuery)}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+
+                    }
+
+                    const data = await response.json();
+                    const tableDataObat = document.getElementById('tableDataObat');
+                    tableDataObat.innerHTML = "";
+                    data.forEach(function(obat, index) {
+                        const row = `<tr>
+                                    <td><input type="checkbox" class="obat-checkbox" data-idobat="${obat.id_obat}" data-nama="${obat.merek_obat}" data-satuan="${obat.kemasan}"></td>
+                                    <td>${obat.merek_obat}</td>
+                                    <td>${obat.dosis}</td>
+                                    <td>${obat.kemasan}</td>
+                                    <td>${obat.kegunaan}</td>
+                                    <td>${obat.efek_samping}</td>
+                                </tr>`;
+                        tableDataObat.insertAdjacentHTML('beforeend', row);
+
+                    })
+
+                } catch (error) {
+                    console.error(error);
+
                 }
+            }
         </script>
     @endsection
 @endpush
