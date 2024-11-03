@@ -11,7 +11,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Penjualan Dengan Resep</h1>
+                <h1>Penjualan </h1>
 
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
@@ -42,7 +42,14 @@
                                                 <div class="form-group col-md-3">
                                                     <label for="merek_obat">Merek Obat</label>
                                                     <input type="text" name="merek_obat" id="merek_obat"
-                                                        class="form-control">
+                                                        class="form-control @error('merek_obat') is-invalid @enderror">
+
+                                                    @error('merek_obat')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                    <span id="error_message" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-1">
                                                     <label for="stok_obat">Stok</label>
@@ -56,8 +63,13 @@
                                                 </div>
                                                 <div class="form-group col-md-2">
                                                     <label for="jumlah">Jumlah Beli</label>
-                                                    <input type="number" name="jumlah" value="1"
-                                                        class="form-control">
+                                                    <input type="number" name="jumlah" value="1" class="form-control @error('jumlah') is-invalid @enderror">
+                                                    
+                                                    @error('jumlah')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
                                                 </div>
                                                 <div class="form-group col-md-2 mt-2">
                                                     <button type="submit" class="btn btn-primary mt-4">Tambah</button>
@@ -175,37 +187,29 @@
     <script>
         $(document).ready(function() {
             $('#merek_obat').on('input', function() {
-                // Ambil nilai ID obat dari input
                 var nama = $(this).val();
+                $('#error_message').text(''); // Hapus pesan error sebelumnya
+
                 $.ajax({
                     url: "{{ url('/penjualan/cari-obat') }}",
                     method: 'POST',
                     data: {
                         _token: "{{ csrf_token() }}",
-                        nama_obat: nama
+                        merek_obat: nama
                     },
                     success: function(response) {
-                        $('#nama_obat').val(response.nama_obat);
+                        console.log(response); // Debugging respons
+                        $('#nama_obat').val(response.merek_obat);
                         $('#stok_obat').val(response.stok_obat);
                         $('#harga_obat').val(response.harga_obat);
                     },
-                    error: function(error) {
-                        console.log(error);
+                    error: function(xhr) {
+                        console.log(xhr.responseJSON); // Debugging respons error
+                        if (xhr.status === 404) {
+                            $('#error_message').text(xhr.responseJSON.error);
+                        }
                     }
                 });
-            });
-
-            $('#jumlah_dibayar').on('input', function() {
-                // Ambil nilai total bayar dan jumlah dibayar
-                var totalBayar = parseFloat('{{ $totalBayar }}');
-                var jumlahDibayar = parseFloat($(this).val());
-
-                // Hitung kembalian
-                var kembalian = jumlahDibayar - totalBayar;
-
-                // Perbarui nilai input kembalian
-                $('#kembalian').val(kembalian
-                    .toFixed()); // Menampilkan kembalian dengan dua angka di belakang koma
             });
         });
     </script>

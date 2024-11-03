@@ -27,9 +27,15 @@ class PenjualanController extends Controller
 
     public function cariObat(Request $request)
     {
-        $nama = $request->input('nama_obat');
-        $obat = DetailObat::whereHas('obat', function ($query) use ($nama) {
-            $query->where('merek_obat', $nama);
+        $request->validate([
+            'merek_obat' => 'required|string',
+        ], [
+            'merek_obat.required' => 'merek obat harus diisi.',
+        ]);
+
+        $merek = $request->input('merek_obat');
+        $obat = DetailObat::whereHas('obat', function ($query) use ($merek) {
+            $query->where('merek_obat', $merek);
         })
             ->where('stok_obat', '>', 0)
             ->where('tanggal_kadaluarsa', '>', now())
@@ -37,11 +43,16 @@ class PenjualanController extends Controller
             ->first();
 
         if (!$obat) {
-            return response()->json(['error' => 'Obat tidak ditemukan atau sudah habis/stok tidak mencukupi'], 404);
+            return response()->json(['error' => 'Obat tidak ditemukan.'], 404);
+        } else if ($obat->stok_obat == 0) {
+            return response()->json(['error' => 'stok tidak mencukupi.'], 404);
+        } else if ($obat->tanggal_kadaluarsa < now()) {
+            return response()->json(['error' => 'obat telah kadaluarsa.'], 404);
         }
 
+
         return response()->json([
-            'nama_obat' => $obat->merek_obat,
+            'merek_obat' => $obat->merek_obat,
             'stok_obat' => $obat->stok_obat,
             'harga_obat' => $obat->harga_jual,
         ]);
@@ -51,7 +62,11 @@ class PenjualanController extends Controller
     {
         $request->validate([
             'merek_obat' => 'required',
-            'jumlah' => 'required|numeric|min:1',
+            'jumlah' => 'required|integer|min:1',
+        ], [
+            'jumlah.required' => 'Jumlah beli harus diisi.',
+            'jumlah.integer' => 'Jumlah beli harus berupa angka.',
+            'jumlah.min' => 'Jumlah beli minimal adalah 1.',
         ]);
 
         $namaObat = $request->merek_obat;
@@ -86,9 +101,9 @@ class PenjualanController extends Controller
             'jumlah' => $jumlah,
             'stok_obat' => $obat->stok_obat,
             'total_harga' => $obat->harga_jual * $jumlah,
-            'tanggal_kadaluarsa'=>$obat->tanggal_kadaluarsa,
-            'Satuan'=>$obat->obat->kemasan,
-            'id_obat'=>$obat->id_obat
+            'tanggal_kadaluarsa' => $obat->tanggal_kadaluarsa,
+            'Satuan' => $obat->obat->kemasan,
+            'id_obat' => $obat->id_obat
         ];
 
         $keranjang = session('keranjang', []);
@@ -126,7 +141,7 @@ class PenjualanController extends Controller
                 'harga_beli_satuan' => $detailPembelian->harga_beli_satuan,
             ]);
         }
-        
+
         // $penjualan = Penjualan::all();
         $totalBayar = 0;
 
@@ -160,14 +175,14 @@ class PenjualanController extends Controller
             $item = $keranjang[$index];
             // Mulai transaksi database
             DB::beginTransaction();
-            $namaObat=$item['nama_obat'];
+            $namaObat = $item['nama_obat'];
 
             try {
                 $obat = DetailObat::whereHas('obat', function ($query) use ($namaObat) {
                     $query->where('merek_obat', $namaObat);
                 })
-                ->where('tanggal_kadaluarsa', $item['tanggal_kadaluarsa'])
-                ->first();
+                    ->where('tanggal_kadaluarsa', $item['tanggal_kadaluarsa'])
+                    ->first();
                 $obat->stok_obat += $item['jumlah'];
                 $obat->save();
 
@@ -196,12 +211,12 @@ class PenjualanController extends Controller
         foreach ($keranjang as $item) {
             $stokObat = $item['stok_obat'] + $item['jumlah'];
             $namaObat = $item['nama_obat'];
-        $obat = DetailObat::whereHas('obat', function ($query) use ($namaObat) {
-            $query->where('merek_obat', $namaObat);
-        })
-        ->where('tanggal_kadaluarsa', $item['tanggal_kadaluarsa'])
-        ->first()
-        ->update(['stok_obat'=>$stokObat]);
+            $obat = DetailObat::whereHas('obat', function ($query) use ($namaObat) {
+                $query->where('merek_obat', $namaObat);
+            })
+                ->where('tanggal_kadaluarsa', $item['tanggal_kadaluarsa'])
+                ->first()
+                ->update(['stok_obat' => $stokObat]);
         }
         session()->forget('keranjang');
 
