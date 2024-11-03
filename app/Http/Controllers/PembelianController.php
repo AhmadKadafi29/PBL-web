@@ -29,11 +29,14 @@ class PembelianController extends Controller
     public function create(Request $request)
     {
         $supplier = Supplier::all();
-        $obat = Obat::all();
-     
+        $obat = Obat::with('detailsatuan.satuan')->get();
 
+        
+    
+    
         return view('pages.pembelian.create', compact('obat', 'supplier'));
     }
+    
      public function search(Request $request)
 
         {
@@ -48,8 +51,7 @@ class PembelianController extends Controller
      */
     public function store(Request $request)
     {
-
-        
+      
         $nama_supplier = $request->input("id_supplier");
         $no_faktur = $request->input('no_faktur');
         $tanggal_pembelian = $request->input('tanggal_pembelian');
@@ -73,9 +75,8 @@ class PembelianController extends Controller
         $no_batchs = $request->input('no_batch');
         $harga_juals = $request->input('harga_jual');
         $jumlah_obats = $request->input('jumlah_obat');
-
-
         for($i=0; $i<count($merek_obats) ; $i++){
+           
             DetailPembelian::create([
                 'id_pembelian'=>  $id_pembelian,
                 'id_obat'=>$merek_obats[$i],
@@ -87,10 +88,13 @@ class PembelianController extends Controller
         }
 
         for($i=0; $i<count($merek_obats) ; $i++){
+            $obat = Obat::with('detailsatuan')->find($merek_obats[$i]);
+            $konversi_ke_satuan_terkecil = $obat->detailsatuan->max('satuan_konversi');
+
             DetailObat::create([
                 'id_pembelian' => $idpembelian->id_pembelian, 
                 'id_obat'=>$merek_obats[$i],
-                'stok_obat' => $jumlah_obats[$i],
+                'stok_obat' => $jumlah_obats[$i] * $konversi_ke_satuan_terkecil,
                 'tanggal_kadaluarsa' => $tanggal_kadaluarsas[$i],
                 'harga_jual'=>$harga_juals[$i],
                 'no_batch' => $no_batchs[$i]
@@ -118,7 +122,7 @@ class PembelianController extends Controller
         $obat = Obat::all();
         $detailpembelian = DetailPembelian::where('id_pembelian', $id_pembelian)->get();
         return view('pages.pembelian.show', compact('pembelian', 'supplier', 'obat', 'detailpembelian'));
-    }
+    }   
 
     /**
      * Remove the specified resource from storage.

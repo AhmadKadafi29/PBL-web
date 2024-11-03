@@ -27,15 +27,24 @@
                                 <div class="col-xs-6 col-sm-6 col-md-6">
                                     <div class="form-group">
                                         <strong>Nama Supplier</strong>
-                                        <input type="text" name="nama_supplier" class="form-control">
+                                        <input type="text" name="nama_supplier" class="form-control" value="{{ old('nama_supplier') }}">
+                                        @error('nama_supplier')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="form-group">
                                         <strong>No Telepon</strong>
-                                        <input type="text" name="no_telpon" class="form-control">
+                                        <input type="text" name="no_telpon" class="form-control" value="{{ old('no_telpon') }}">
+                                        @error('no_telpon')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="form-group">
                                         <strong>Alamat</strong>
-                                        <input type="text" name="alamat" class="form-control">
+                                        <input type="text" name="alamat" class="form-control" value="{{ old('alamat') }}">
+                                        @error('alamat')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 text-left">
@@ -43,7 +52,6 @@
                                 </div>
                             </div>
                         </div>
-                        
                     </form>
                 </div>
             </div>

@@ -17,7 +17,6 @@
                     <div class="breadcrumb-item">User Baru</div>
                 </div>
             </div>
-
             <div class="section-body">
                 <div class="card">
                     <form action="{{ route('user.store') }}" method="POST">

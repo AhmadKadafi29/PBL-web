@@ -43,6 +43,7 @@ class PengembalianObatController extends Controller
                             'no_batch' => $detail->no_batch,
                             'merek_obat' => $detail->obat->merek_obat,
                             'harga_satuan'=>$detail->harga_beli_satuan
+                            
                         ];
                     }),
             
@@ -130,7 +131,7 @@ class PengembalianObatController extends Controller
 
 
         } else {
-            return redirect()->back()->with('error', 'Detail obat tidak ditemukan untuk no_batch: ' . $no_batches[$i]);
+            return redirect()->back()->with('error', 'Detail obat tidsak ditemukan untuk no_batch: ' . $no_batches[$i]);
              
         }
 

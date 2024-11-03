@@ -40,6 +40,8 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('home', [DashboardController::class, 'index'])->name('home');
     Route::resource('Obat', ObatController::class);
+    Route::get('Obat/detailsatuan/{id}', [ObatController::class, 'create_detailsatuan'])->name('create-detailsatuan');
+    Route::post('Obat/detailsatuan/{id}', [ObatController::class, 'store_detailsatuan'])->name('store-detailsatuan');
     Route::resource('Kategori', KategoriobatController::class);
     Route::resource('user', UserController::class);
     Route::resource('Supplier', SupplierController::class);
@@ -68,6 +70,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/search-obat', [PembelianController::class, 'search'])->name('search-obat');
     Route::resource('/pengembalian-obat',PengembalianObatController::class);
     Route::get('/search-faktur', [PengembalianObatController::class, 'searchFaktur'])->name('search-faktur');
+    Route::resource('user', UserController::class);
+    Route::resource('Supplier', SupplierController::class);
 
 
 
@@ -101,8 +105,8 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware(['can:isPemilik'])->group(function () {
-        Route::resource('Supplier', SupplierController::class);
-        Route::resource('user', UserController::class);
+      
+       
     });
 });
 }); 

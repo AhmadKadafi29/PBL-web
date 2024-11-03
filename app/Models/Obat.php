@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Obat extends Model
 {
@@ -44,5 +45,11 @@ class Obat extends Model
     public function stokopname()
     {
         return $this->hasMany(StokOpname::class, 'id_obat');
+    }
+
+    public function detailsatuan(): HasMany
+    {
+        return $this->hasMany(detailsatuan::class,'id_obat');
+
     }
 }

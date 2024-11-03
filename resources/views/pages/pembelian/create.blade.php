@@ -36,7 +36,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="no_faktur">No Faktur</label>
-                                        <input type="text" name="no_faktur" id="no_faktur" class="form-control" readonly>
+                                        <input type="text" name="no_faktur" id="no_faktur" class="form-control" >
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -46,13 +46,14 @@
                                             name="tanggal_pembelian" onchange="updateNoFaktur()">
                                     </div>
                                     <div class="form-group">
-                                        <label for="total_harga">Total Harga</label>
-                                        <input type="text" name="total_harga" id="total_harga" class="form-control" readonly>
+                                        <label for="ongkos_kirim">Ongkos Kirim</label>
+                                        <input type="text" name="ongkos_kirim" id="ongkos_kirim" class="form-control" >
                                     </div>
+                                    
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-12 text-left">
+                                <div class="col-lg-6">
                                     <!-- Button untuk membuka modal daftar obat -->
                                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#obatModal" style="margin-right: 10px;">
                                         + Obat
@@ -61,8 +62,13 @@
                                     <button type="submit" class="btn btn-success" style="margin-right: 10px;">Simpan</button>
                                 </div>
 
-                                <!-- Modal -->
+                               <div class="col-lg-6"> 
+                                 <!-- Modal -->
+                                 <div>
+                                    <input type="text" name="total_harga" id="total_harga" class="form-control" readonly >
+                                </div>
                             
+                               </div>
                             </div>
 
                             <hr style="margin-top: 20px; margin-bottom: 20px;">
@@ -76,14 +82,14 @@
                                             <th>Aksi</th>
                                             <th>Nama Obat</th>
                                             <th>Satuan</th>
-                                            <th>Jumlah Obat</th>
-                                            <th>Harga Beli Satuan</th>
+                                            <th>Jumlah Beli</th> 
+                                            <th>Harga beli per satuan</th>
                                             <th>Tanggal Kadaluarsa</th>
                                             <th>Margin</th>
-                                            <th>Ongkos Kirim</th>
+                                            {{-- <th>Ongkos Kirim</th> --}}
                                             <th>No Batch</th>
-                                            <th>Harga Jual Sataun</th>
-                                            <th>Total</th>
+                                            <th>Harga Jual Satuan</th>
+                                            <th>Sub Total</th>
                                         </tr>
                                     </thead>
                                     <tbody id="obat-list">
@@ -158,7 +164,7 @@
                             <tbody id="tableDataObat">
                                 @foreach ($obat as $ob)
                                     <tr>
-                                        <td><input type="checkbox" class="obat-checkbox" data-idobat ="{{ $ob->id_obat }}" data-nama="{{ $ob->merek_obat}}" data-kategori="{{  $ob->kategoriObat->nama_kategori }}" data-satuan="{{ $ob->kemasan }}"></td>
+                                        <td><input type="checkbox" class="obat-checkbox" data-idobat ="{{ $ob->id_obat }}" data-nama="{{ $ob->merek_obat}}" data-kategori="{{  $ob->kategoriObat->nama_kategori }}" data-satuan='@json($ob->detailsatuan)' data-konversi-satuan-terkecil='@json($ob->detailsatuan)'></td>
                                         <td>{{ $ob->merek_obat }}</td>
                                         <td>{{ $ob->dosis }}</td>
                                         <td>{{ $ob->kemasan }}</td>
@@ -215,26 +221,44 @@
                     const namaObat = checkbox.getAttribute('data-nama');
                     const idobat = checkbox.getAttribute('data-idobat');
                     const hargaBeli = checkbox.getAttribute('data-harga');
-                    const satuan = checkbox.getAttribute('data-satuan');
+                    const satuan = JSON.parse(checkbox.getAttribute('data-satuan')); 
+                                    
+                    let satuanTerbesar = null; 
+                    let konversiTerbesar = 0; 
+
+                    satuan.forEach(satuanItem => {
+                        
+                        if (satuanItem.satuan_konversi > konversiTerbesar) {
+                            konversiTerbesar = satuanItem.satuan_konversi;
+                            satuanTerbesar = satuanItem.satuan.nama_satuan; 
+                        }
+                        
+                    });
+
+                 
+                    console.log('Satuan Terbesar:', satuanTerbesar);
+                    console.log('Satuan Terbesar:', konversiTerbesar);
+
 
                     const newRow = document.createElement('tr');
                     newRow.setAttribute('id', `obat.${rowCount + index + 1}`)
+                    newRow.setAttribute('st', konversiTerbesar)
                     newRow.innerHTML = `
                         <td>${rowCount + index + 1}</td>
                         <td><button onclick="hapusItemObat(this)"  class="btn btn-link"><i class="fa-solid fa-trash""></i></button></td>
                         <td>${namaObat} <input type="hidden" name="merek_obat[]" value="${idobat}"></td>
-                        <td>${satuan} <input type="hidden" name="satuan[]" value="${satuan}"></td>
+                       <td>${satuanTerbesar} <input type="hidden" name="satuan[]" value="${satuanTerbesar}"></td>
                         <td><input type="number" name="jumlah_obat[]" class="jumlah-obat" onchange="updateHarga(this)"></td>
                         <td><input type="number" name="harga_beli[]" class="harga-beli" value="${hargaBeli}" onchange="updateHarga(this)"></td>
                         <td><input type="date"   name="tanggal_kadaluarsa[]" class="tanggal-kadaluarsa"></td>
                         <td><input type="number" name="margin[]" class="margin" onchange="updateHarga(this)"></td>
-                        <td><input type="number" name="ongkir[]" class="ongkir" onchange="updateHarga(this)"></td>
                         <td><input type="number" name="no_batch[]"  class="no_batch"></td>
                         <td><input type="number" name="harga_jual[]" readonly class="harga-jual"></td>
                         <td><input type="number" name="total[]" class="total" ></td>
                     `;
                     obatList.appendChild(newRow);
                 });
+
                 const allCheckboxes = document.querySelectorAll('.obat-checkbox');
                 allCheckboxes.forEach((checkbox)=>{
                     checkbox.checked=false;
@@ -254,16 +278,19 @@
 
                 }
    
-                function updateHarga(element) {
+                function updateHarga(element) {                
                     const row = element.closest('tr');
+                    const konversiTerbesar = row.getAttribute('st'); 
                     const jumlahObat = parseFloat(row.querySelector('.jumlah-obat').value) || 0;
                     const hargaBeli = parseFloat(row.querySelector('.harga-beli').value) || 0;
                     const margin = parseFloat(row.querySelector('.margin').value) || 0;
-                    const ongkir = parseFloat(row.querySelector('.ongkir').value) || 0;
-                    const hargaJual = hargaBeli  + (ongkir/jumlahObat) + margin;
+                    // const ongkir = document.getElementById('ongkos_kirim').value || 0 ;
+                    // const ongkir_satuan = ongkir/konversiTerbesar;
+                    const hargaJual = (hargaBeli/konversiTerbesar)  + margin;
                     const total = hargaBeli * jumlahObat;
                     row.querySelector('.harga-jual').value = hargaJual.toFixed(2);
                     row.querySelector('.total').value = total.toFixed(2);
+                  
 
                     totalHarga()
                 }
@@ -336,3 +363,5 @@
         </script>
     @endsection
 @endpush
+
+{{-- <td><input type="number" name="ongkir[]" class="ongkir" onchange="updateHarga(this)"></td> --}}

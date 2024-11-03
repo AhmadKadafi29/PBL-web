@@ -233,7 +233,7 @@
                             totalHarga += parseFloat(subtotal.value || 0); // Pastikan nilainya diubah menjadi float
                         });
 
-                        // Tampilkan hasil total pada input totalpengembalian
+                        // Tampilkan hasil total pada input totalpengembalian${stok[index].id_detail_obat}
                         elementTotal.value = totalHarga;
                     }
 

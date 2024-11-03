@@ -40,7 +40,8 @@
                                                 <th>Nama Obat</th>
                                                 <th>No Batch</th>
                                                 <th>Harga Beli Obat Satuan</th>
-                                                <th>Quantity</th>
+                                                <th>Kuantitas</th>
+                                                
 
                                             </tr>
                                         </thead>
@@ -55,6 +56,7 @@
                                                     <td>{{ $item->no_batch }}</td>
                                                     <td>{{ $item->harga_beli_satuan }}</td>
                                                     <td>{{ $item->quantity }}</td>
+                                                   
                                                 </tr>
                                             @endforeach
 

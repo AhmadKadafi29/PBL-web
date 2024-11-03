@@ -22,7 +22,31 @@
 
                 <div class="row">
                     <div class="col-12">
-                        @include('layouts.alert')
+                        @if ($errors->any())
+                        <div class="alert alert-danger alert-dismissible show fade">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>x</span>
+                                </button>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    @endif
+                    
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-success alert-dismissible show fade">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>x</span>
+                                </button>
+                                <p>{{ $message }}</p>
+                            </div>
+                        </div>
+                    @endif
                     </div>
                 </div>
                 <div class="row mt-2">
