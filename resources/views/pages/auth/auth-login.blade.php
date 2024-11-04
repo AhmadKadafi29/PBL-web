@@ -13,12 +13,12 @@
             <h4>Login</h4>
         </div>
         <div class="card-body">
-            <form method="POST" action="{{ route('login') }}" class="needs-validation" novalidate="">
+            <form method="POST" action="{{ route('login') }}" novalidate="">
                 @csrf
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                        name="email" tabindex="1" autofocus>
+                        name="email">
                     @error('email')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -29,7 +29,7 @@
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                        name="password" tabindex="2">
+                        name="password">
                     @error('password')
                         <div class="invalid-feedback">
                             {{ $message }}

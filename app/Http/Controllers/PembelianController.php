@@ -29,18 +29,18 @@ class PembelianController extends Controller
     public function create(Request $request)
     {
         $supplier = Supplier::all();
-        $obat = Obat::all();
-
+        $obat = Obat::with('detailsatuan.satuan')->get();
 
         return view('pages.pembelian.create', compact('obat', 'supplier'));
     }
-     public function search(Request $request)
 
-        {
-            $name = $request->get('name');
-            $obat = Obat::where('merek_obat', 'LIKE', '%' . $name . '%')->get();
-            return response()->json($obat);
-        }
+    public function search(Request $request)
+
+    {
+        $name = $request->get('name');
+        $obat = Obat::where('merek_obat', 'LIKE', '%' . $name . '%')->get();
+        return response()->json($obat);
+    }
 
 
     /**
@@ -49,17 +49,16 @@ class PembelianController extends Controller
     public function store(Request $request)
     {
 
-
         $nama_supplier = $request->input("id_supplier");
         $no_faktur = $request->input('no_faktur');
         $tanggal_pembelian = $request->input('tanggal_pembelian');
         $total_harga = $request->input('total_harga');
-        $idpembelian =Pembelian::create([
+        $idpembelian = Pembelian::create([
             'id_supplier' => $nama_supplier,
-            'tanggal_pembelian'=>$tanggal_pembelian,
-            'no_faktur'=>$no_faktur,
-            'total_harga'=>$total_harga,
-            'status_pembayaran'=>'lunas',
+            'tanggal_pembelian' => $tanggal_pembelian,
+            'no_faktur' => $no_faktur,
+            'total_harga' => $total_harga,
+            'status_pembayaran' => 'lunas',
 
         ]);
         $id_pembelian = $idpembelian->id_pembelian;
@@ -73,33 +72,33 @@ class PembelianController extends Controller
         $no_batchs = $request->input('no_batch');
         $harga_juals = $request->input('harga_jual');
         $jumlah_obats = $request->input('jumlah_obat');
+        for ($i = 0; $i < count($merek_obats); $i++) {
 
-
-        for($i=0; $i<count($merek_obats) ; $i++){
             DetailPembelian::create([
-                'id_pembelian'=>  $id_pembelian,
-                'id_obat'=>$merek_obats[$i],
+                'id_pembelian' =>  $id_pembelian,
+                'id_obat' => $merek_obats[$i],
                 'harga_beli_satuan' => $harga_belis[$i],
-                'quantity'=>$jumlah_obats[$i],
+                'quantity' => $jumlah_obats[$i],
                 'no_batch' => $no_batchs[$i]
             ]);
-
         }
 
-        for($i=0; $i<count($merek_obats) ; $i++){
+        for ($i = 0; $i < count($merek_obats); $i++) {
+            $obat = Obat::with('detailsatuan')->find($merek_obats[$i]);
+            $konversi_ke_satuan_terkecil = $obat->detailsatuan->max('satuan_konversi');
+
             DetailObat::create([
                 'id_pembelian' => $idpembelian->id_pembelian,
-                'id_obat'=>$merek_obats[$i],
-                'stok_obat' => $jumlah_obats[$i],
+                'id_obat' => $merek_obats[$i],
+                'stok_obat' => $jumlah_obats[$i] * $konversi_ke_satuan_terkecil,
                 'tanggal_kadaluarsa' => $tanggal_kadaluarsas[$i],
-                'harga_jual'=>$harga_juals[$i],
+                'harga_jual' => $harga_juals[$i],
                 'no_batch' => $no_batchs[$i]
             ]);
-
         }
 
 
-         return redirect()->route('Pembelian.index')->with('success', 'Pembelian berhasil ditambahkan');
+        return redirect()->route('Pembelian.index')->with('success', 'Pembelian berhasil ditambahkan');
     }
 
     private function generateNoFaktur($request)

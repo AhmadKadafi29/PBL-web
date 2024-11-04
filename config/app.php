@@ -160,7 +160,7 @@ return [
          * Package Service Providers...
          */
         Barryvdh\DomPDF\ServiceProvider::class,
-        App\Providers\FortifyServiceProvider::class,
+        // App\Providers\FortifyServiceProvider::class,
         /*
          * Application Service Providers...
          */

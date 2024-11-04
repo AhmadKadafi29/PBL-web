@@ -43,7 +43,7 @@
                                         <strong>Nama Obat</strong>
                                         <input type="text" name="merek_obat" class="form-control">
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <strong for="dosis">Dosis</strong>
                                         <input type="text" class="form-control @error('dosis') is-invalid @enderror"
@@ -70,7 +70,7 @@
                                             <Strong for="kegunaan">Kegunaan</Strong>
                                             <input type="text"
                                                 class="form-control @error('kegunaan') is-invalid @enderror" id="kegunaan"
-                                                name="kegunaan" >
+                                                name="kegunaan">
                                             @error('kegunaan')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -90,7 +90,7 @@
                                             <select class="form-control @error('kategori_obat_id') is-invalid @enderror"
                                                 id="kategori_obat_id" name="kategori_obat_id">
                                                 @foreach ($kategori as $k)
-                                                    <option value="{{ $k->id_kategori}}">{{ $k->nama_kategori }}</option>
+                                                    <option value="{{ $k->id_kategori }}">{{ $k->nama_kategori }}</option>
                                                 @endforeach
                                             </select>
                                             @error('kategori_obat_id')

@@ -55,7 +55,6 @@
                                                 <th>Dosis Obat</th>
                                                 <th>Kegunaan</th>
                                                 <th>Efek Samping</th>
-                                                <th>Kemasan</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -68,12 +67,17 @@
                                                     <td>{{ $ob->dosis }}</td>
                                                     <td>{{ $ob->kegunaan }}</td>
                                                     <td>{{ $ob->efek_samping }}</td>
-                                                    <td>{{ $ob->kemasan }}</td>
+                                                   
                                                     <td>
                                                         <div class="d-flex">
-                                                            <a href="{{ route('Obat.show', $ob->id_obat) }}" class="btn btn-sm btn-warning btn-icon">
+                                                            <a class="btn btn-sm btn-link btn-icon ml-2" href="{{ route('create-detailsatuan', $ob->id_obat) }}">
+                                                                <i class="fas fa-cube"></i> satuan
+                                                            </a>
+
+                                                            <a href="{{ route('Obat.show', $ob->id_obat) }}" class="btn btn-sm btn-warning btn-icon  ml-2">
                                                                 <i class="fas fa-eye"></i> Detail
                                                             </a>
+                                                          
                                                             <a href="{{ route('Obat.edit', $ob->id_obat) }}" class="btn btn-sm btn-info btn-icon ml-2">
                                                                 <i class="fas fa-edit"></i> Edit
                                                             </a>

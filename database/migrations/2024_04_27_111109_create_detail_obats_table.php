@@ -13,15 +13,19 @@ return new class extends Migration
     {
         Schema::create('detail_obat', function (Blueprint $table) {
             $table->bigIncrements('id_detail_obat');
-            $table->unsignedBigInteger('id_obat');
+            $table->unsignedBigInteger('id_obat'); // Ini merujuk ke tabel obat
+           
             $table->unsignedBigInteger('id_pembelian');
             $table->bigInteger('stok_obat');
             $table->date('tanggal_kadaluarsa');
             $table->bigInteger('harga_jual');
             $table->timestamps();
+            
             $table->foreign('id_obat')->references('id_obat')->on('obat')->onDelete('cascade');
             $table->foreign('id_pembelian')->references('id_pembelian')->on('pembelian')->onDelete('cascade');
+            
         });
+        
     }
 
     /**

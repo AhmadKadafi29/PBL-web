@@ -20,15 +20,15 @@ class PengembalianObatController extends Controller
     }
 
     public function searchFaktur(Request $request)
-        
+
     {
-       
+
             $noFaktur = $request->query('no_faktur');
-            
+
             $pembelian = Pembelian::where('no_faktur', $noFaktur)
             ->with('supplier')
             ->with('detailPembelian.obat')
-            ->with('detailobat') 
+            ->with('detailobat')
             ->get();
 
             $response = $pembelian->map(function ($item) {
@@ -37,16 +37,17 @@ class PengembalianObatController extends Controller
                     'tanggal_pembelian' => $item->tanggal_pembelian,
                     'nama_supplier' => $item->supplier->nama_supplier,
                     'id_pembelian' => $item->id_pembelian,
-            
+
                     'detail_pembelian' => $item->detailPembelian->map(function ($detail) {
                         return [
                             'no_batch' => $detail->no_batch,
                             'merek_obat' => $detail->obat->merek_obat,
                             'harga_satuan'=>$detail->harga_beli_satuan
+
                         ];
                     }),
-            
-                   
+
+
                     'stok' => $item->detailobat->map(function ($stok) {
                         return [
                             'stok_tersedia' => $stok->stok_obat,
@@ -56,9 +57,9 @@ class PengembalianObatController extends Controller
                     })
                 ];
             });
-            
-            
-        
+
+
+
             return response()->json($response);
     }
 
@@ -73,9 +74,9 @@ class PengembalianObatController extends Controller
             'stok_tersedia' => 'required|array',
             'jumlah_retur' => 'required|array',
             'jumlah_retur.*' => 'numeric|min:0',
-            'no_batch.*' => 'string', 
+            'no_batch.*' => 'string',
         ]);
-        
+
         $no_faktur = $request->no_faktur;
         $tanggal_pengembalian = $request->tanggal_pengembalian;
         $totalhargapengembalian= $request->total;
@@ -92,7 +93,7 @@ class PengembalianObatController extends Controller
         $id_pengembalian = $idpengembalian->id;
 
         $merek_obats = $request->input('merek_obat');
-        $no_batches = $request->input('no_batch');       
+        $no_batches = $request->input('no_batch');
         $jumlah_returs = $request->input('jumlah_retur');
 
        for($i=0; $i<count($merek_obats) ; $i++){
@@ -104,9 +105,9 @@ class PengembalianObatController extends Controller
             $stokAwal =$detail_obat->stok_obat;
             $jumlah_retur = $jumlah_returs[$i];
 
-         
+
             if ($stokAwal < $jumlah_retur) {
-              
+
                 return redirect()->back()->with(['error' => 'Jumlah retur tidak boleh lebih dari stok tersedia untuk obat ' . $merek_obats[$i]]);
             }
 
@@ -128,17 +129,17 @@ class PengembalianObatController extends Controller
                 ]);
             }
         } else {
-            return redirect()->back()->with('error', 'Detail obat tidak ditemukan untuk no_batch: ' . $no_batches[$i]);            
+            return redirect()->back()->with('error', 'Detail obat tidsak ditemukan untuk no_batch: ' . $no_batches[$i]);
         }
 
-        
-           
+
+
     }
     return redirect()->route('pengembalian-obat.index')->with('success', 'data pengembalian obat berhasil ditambahkan');
-       
 
 
-       
+
+
     }
 
     public function show($id){
@@ -173,5 +174,5 @@ class PengembalianObatController extends Controller
     }
 
 
-    
+
 }

@@ -33,13 +33,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->merge([
-        //     'name' => trim($request->input('name')),
-        // ]);
-
-        // // Debugging untuk melihat isi request
-        // dd($request->all());
-
         $request->validate([
             'name' => 'required|min:5|max:30',
             'email' => 'required|email|unique:users,email',
