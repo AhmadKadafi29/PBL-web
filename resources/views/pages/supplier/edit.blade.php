@@ -26,10 +26,7 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label>Nama Supplier</label>
-                                <input type="text"
-                                    class="form-control @error('nama_supplier')
-                                is-invalid
-                            @enderror"
+                                <input type="text" class="form-control @error('nama_supplier') is-invalid @enderror"
                                     name="nama_supplier" value="{{ $supplier->nama_supplier }}">
                                 @error('nama_supplier')
                                     <div class="invalid-feedback">
@@ -39,12 +36,22 @@
                             </div>
                             <div class="form-group">
                                 <label>No Telpon</label>
-                                <input type="text" class="form-control" name="no_telpon"
+                                <input type="text" class="form-control @error('no_telpon') is-invalid @enderror" name="no_telpon"
                                     value="{{ $supplier->no_telpon }}">
+                                @error('no_telpon')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
                             <div class="form-group mb-0">
                                 <label>Alamat</label>
-                                <input type="text" class="form-control" name="alamat" value="{{ $supplier->alamat }}">
+                                <input type="text" class="form-control @error('alamat') is-invalid @enderror" name="alamat" value="{{ $supplier->alamat }}">
+                                @error('alamat')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
                         </div>
                         <div class="card-footer text-right">

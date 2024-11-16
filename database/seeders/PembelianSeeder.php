@@ -27,5 +27,7 @@ class PembelianSeeder extends Seeder
             ['id_supplier' => 9, 'no_faktur' => '123464', 'total_harga' => 500000, 'tanggal_pembelian' => Carbon::now(), 'status_pembayaran' => 'lunas'],
             ['id_supplier' => 10, 'no_faktur' => '123465', 'total_harga' => 550000, 'tanggal_pembelian' => Carbon::now(), 'status_pembayaran' => 'lunas'],
         ]);
+
+        
     }
 }

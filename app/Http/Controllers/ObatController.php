@@ -11,6 +11,7 @@ use App\Models\satuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ObatController extends Controller
 {
@@ -37,15 +38,38 @@ class ObatController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'kategori_obat_id' => 'integer',
-            'merek_obat' => 'required',
-            'dosis' => 'required',
-            'kemasan' => 'required',
-            'kegunaan' => 'required',
-            'efek_samping' => 'required',
-
+        $validator = Validator::make($request->all(), [
+            'kategori_obat_id' => 'required|integer|exists:kategori_obat,id_kategori',
+            'merek_obat' => 'required|string|min:5|max:255',
+            'dosis' => 'required|string|max:100',
+            'kemasan' => 'required|string|max:100',
+            'kegunaan' => 'required|string|min:10|max:255',
+            'efek_samping' => 'required|string|min:10|max:255',
+        ], [
+            'kategori_obat_id.required' => 'Kategori obat wajib diisi.',
+            'kategori_obat_id.integer' => 'Kategori obat harus berupa angka.',
+            'kategori_obat_id.exists' => 'Kategori obat yang dipilih tidak valid.',
+            'merek_obat.required' => 'Merek obat wajib diisi.',
+            'merek_obat.string' => 'Merek obat harus berupa teks.',
+            'merek_obat.min' => 'Merek obat minimal 5 karakter.',
+            'merek_obat.max' => 'Merek obat maksimal 255 karakter.',
+            'dosis.required' => 'Dosis obat wajib diisi.',
+            'dosis.string' => 'Dosis harus berupa teks.',
+            'dosis.max' => 'Dosis maksimal 100 karakter.',
+            'kemasan.required' => 'Kemasan obat wajib diisi.',
+            'kemasan.string' => 'Kemasan harus berupa teks.',
+            'kemasan.max' => 'Kemasan maksimal 100 karakter.',
+            'kegunaan.required' => 'Kegunaan obat wajib diisi.',
+            'kegunaan.string' => 'Kegunaan harus berupa teks.',
+            'kegunaan.max' => 'Kegunaan maksimal 500 karakter.',
+            'efek_samping.required' => 'Efek samping obat wajib diisi.',
+            'efek_samping.string' => 'Efek samping harus berupa teks.',
+            'efek_samping.max' => 'Efek samping maksimal 500 karakter.',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
         Obat::create($request->all());
         return redirect()->route('Obat.index')->with('success', 'Obat Baru berhasil ditambah');
     }
@@ -53,8 +77,6 @@ class ObatController extends Controller
     public function show($id_obat)
     {
         $itemObat = DetailObat::with('obat.detailsatuan')->where('id_obat', $id_obat)->get();
-
-
         return view('pages.obat.show', compact('itemObat'));
     }
 
@@ -69,15 +91,38 @@ class ObatController extends Controller
 
     public function update(Request $request, $id_obat)
     {
-        $request->validate([
-            'kategori_obat_id' => 'integer',
-            'merek_obat' => 'required',
-            'dosis' => 'required',
-            'kemasan' => 'required',
-            'kegunaan' => 'required',
-            'efek_samping' => 'required',
-
+        $validator = Validator::make($request->all(), [
+            'kategori_obat_id' => 'required|integer|exists:kategori_obat,id_kategori',
+            'merek_obat' => 'required|string|min:5|max:255',
+            'dosis' => 'required|string|max:100',
+            'kemasan' => 'required|string|max:100',
+            'kegunaan' => 'required|string|min:10|max:255',
+            'efek_samping' => 'required|string|min:10|max:255',
+        ], [
+            'kategori_obat_id.required' => 'Kategori obat wajib diisi.',
+            'kategori_obat_id.integer' => 'Kategori obat harus berupa angka.',
+            'kategori_obat_id.exists' => 'Kategori obat yang dipilih tidak valid.',
+            'merek_obat.required' => 'Merek obat wajib diisi.',
+            'merek_obat.string' => 'Merek obat harus berupa teks.',
+            'merek_obat.min' => 'Merek obat minimal 5 karakter.',
+            'merek_obat.max' => 'Merek obat maksimal 255 karakter.',
+            'dosis.required' => 'Dosis obat wajib diisi.',
+            'dosis.string' => 'Dosis harus berupa teks.',
+            'dosis.max' => 'Dosis maksimal 100 karakter.',
+            'kemasan.required' => 'Kemasan obat wajib diisi.',
+            'kemasan.string' => 'Kemasan harus berupa teks.',
+            'kemasan.max' => 'Kemasan maksimal 100 karakter.',
+            'kegunaan.required' => 'Kegunaan obat wajib diisi.',
+            'kegunaan.string' => 'Kegunaan harus berupa teks.',
+            'kegunaan.max' => 'Kegunaan maksimal 500 karakter.',
+            'efek_samping.required' => 'Efek samping obat wajib diisi.',
+            'efek_samping.string' => 'Efek samping harus berupa teks.',
+            'efek_samping.max' => 'Efek samping maksimal 500 karakter.',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
         $obat = Obat::findOrFail($id_obat);
         $obat->update($request->all());
 

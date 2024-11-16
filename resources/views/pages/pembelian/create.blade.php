@@ -32,26 +32,42 @@
                                         <select class="form-control" name="id_supplier" onchange="updateNoFaktur()"
                                             id="nama_supplier">
                                             @foreach ($supplier as $sp)
-                                                <option value="{{ $sp->id_supplier }}">{{ $sp->nama_supplier }}</option>
+                                                <option value="{{ $sp->id_supplier }}"
+                                                    {{ old('id_supplier') == $sp->id_supplier ? 'selected' : '' }}>
+                                                    {{ $sp->nama_supplier }}
+                                                </option>
                                             @endforeach
                                         </select>
+                                        @error('id_supplier')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="form-group">
                                         <label for="no_faktur">No Faktur</label>
-                                        <input type="text" name="no_faktur" id="no_faktur" class="form-control">
+                                        <input type="text" name="no_faktur" id="no_faktur" class="form-control"
+                                            value="{{ old('no_faktur') }}">
+                                        @error('no_faktur')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label for="tanggal_pembelian">Tanggal Pembelian</label>
                                         <input type="date" class="form-control datepicker" id="tanggal_pembelian"
-                                            name="tanggal_pembelian" onchange="updateNoFaktur()">
+                                            name="tanggal_pembelian" value="{{ old('tanggal_pembelian') }}">
+                                        @error('tanggal_pembelian')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="form-group">
                                         <label for="ongkos_kirim">Ongkos Kirim</label>
-                                        <input type="text" name="ongkos_kirim" id="ongkos_kirim" class="form-control">
+                                        <input type="text" name="ongkos_kirim" id="ongkos_kirim" class="form-control"
+                                            value="{{ old('ongkos_kirim') }}">
+                                        @error('ongkos_kirim')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
-
                                 </div>
                             </div>
                             <div class="row">
@@ -262,7 +278,7 @@
                         <td>${rowCount + index + 1}</td>
                         <td><button onclick="hapusItemObat(this)"  class="btn btn-link"><i class="fa-solid fa-trash""></i></button></td>
                         <td>${namaObat} <input type="hidden" name="merek_obat[]" value="${idobat}"></td>
-                       <td>${satuanTerbesar} <input type="hidden" name="satuan[]" value="${satuanTerbesar}"></td>
+                        <td>${satuanTerbesar} <input type="hidden" name="satuan[]" value="${satuanTerbesar}"></td>
                         <td><input type="number" name="jumlah_obat[]" class="jumlah-obat" onchange="updateHarga(this)"></td>
                         <td><input type="number" name="harga_beli[]" class="harga-beli" value="${hargaBeli}" onchange="updateHarga(this)"></td>
                         <td><input type="date"   name="tanggal_kadaluarsa[]" class="tanggal-kadaluarsa"></td>

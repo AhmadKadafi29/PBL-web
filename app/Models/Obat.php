@@ -39,7 +39,7 @@ class Obat extends Model
 
     public function kategoriObat()
     {
-        return $this->belongsTo(Kategoriobat::class, 'kategori_obat_id');
+        return $this->belongsTo(Kategoriobat::class, 'kategori_obat_id', 'id_kategori');
     }
 
     public function stokopname()
@@ -49,7 +49,6 @@ class Obat extends Model
 
     public function detailsatuan(): HasMany
     {
-        return $this->hasMany(detailsatuan::class,'id_obat');
-
+        return $this->hasMany(detailsatuan::class, 'id_obat');
     }
 }

@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class SupplierController extends Controller
 {
     public function index(Request $request)
     {
-        $supplier = Supplier::when($request->input('name'), function($query, $name){
-            return $query->where('nama_supplier', 'like' ,'%'.$name.'%');
+        $supplier = Supplier::when($request->input('name'), function ($query, $name) {
+            return $query->where('nama_supplier', 'like', '%' . $name . '%');
         })->paginate(10);
         return view('pages.supplier.index', compact('supplier'));
     }
@@ -20,7 +21,7 @@ class SupplierController extends Controller
     }
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'nama_supplier' => 'required|string|min:5|max:30|regex:/^[a-zA-Z\s]*$/',
             'no_telpon' => 'required|digits:12|regex:/^08[0-9]*$/',
             'alamat' => 'required|string|min:5|max:255'
@@ -38,9 +39,13 @@ class SupplierController extends Controller
             'alamat.min' => 'Alamat minimal 5 karakter.',
             'alamat.max' => 'Alamat maksimal 255 karakter.',
         ]);
-    
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         Supplier::create($request->all());
-    
+
         return redirect()->route('Supplier.index')
             ->with('success', 'Supplier telah tersimpan.');
     }
@@ -53,11 +58,28 @@ class SupplierController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'nama_supplier' => 'required|max:100',
-            'no_telpon' => 'required',
-            'alamat' => 'required|String|max:255'
+        $validator = Validator::make($request->all(), [
+            'nama_supplier' => 'required|string|min:5|max:30|regex:/^[a-zA-Z\s]*$/',
+            'no_telpon' => 'required|digits:12|regex:/^08[0-9]*$/',
+            'alamat' => 'required|string|min:5|max:255'
+        ], [
+            'nama_supplier.required' => 'Nama supplier harus diisi.',
+            'nama_supplier.string' => 'Nama supplier harus berupa teks.',
+            'nama_supplier.min' => 'Nama supplier minimal 5 karakter.',
+            'nama_supplier.max' => 'Nama supplier maksimal 30 karakter.',
+            'nama_supplier.regex' => 'Nama supplier hanya boleh mengandung huruf dan spasi.',
+            'no_telpon.required' => 'Nomor telepon harus diisi.',
+            'no_telpon.digits' => 'Nomor telepon harus terdiri dari 12 digit.',
+            'no_telpon.regex' => 'Nomor telepon harus diawali dengan 08.',
+            'alamat.required' => 'Alamat harus diisi.',
+            'alamat.string' => 'Alamat harus berupa teks.',
+            'alamat.min' => 'Alamat minimal 5 karakter.',
+            'alamat.max' => 'Alamat maksimal 255 karakter.',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         $supplier = Supplier::find($id);
         $supplier->update($request->all());

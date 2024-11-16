@@ -11,8 +11,8 @@ class Kategoriobat extends Model
     protected $table = 'kategori_obat';
     protected $primaryKey = 'id_kategori';
     protected $fillable = ['nama_kategori'];
-    public function Obat()
+    public function obat()
     {
-        return $this->belongsTo(Obat::class, 'kategori_obat_id');
+        return $this->hasMany(Obat::class, 'kategori_obat_id', 'id_kategori');
     }
 }

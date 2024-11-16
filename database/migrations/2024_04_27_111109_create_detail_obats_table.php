@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('detail_obat', function (Blueprint $table) {
             $table->bigIncrements('id_detail_obat');
-            $table->unsignedBigInteger('id_obat'); // Ini merujuk ke tabel obat
-           
+            $table->unsignedBigInteger('id_obat'); 
             $table->unsignedBigInteger('id_pembelian');
             $table->bigInteger('stok_obat');
             $table->date('tanggal_kadaluarsa');

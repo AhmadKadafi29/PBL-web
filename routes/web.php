@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [AuthController::class, 'showLoginForm']);
+Route::get('/', [AuthController::class, 'showLoginForm'])->name('loginform');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -79,7 +79,7 @@ Route::middleware(['auth'])->group(function () {
         // Rute-rute yang membutuhkan izin 'isKaryawan'
         Route::get('penjualan/index', [PenjualanController::class, 'index'])->name('penjualan.index');
         Route::post('/penjualan/cari-obat', [PenjualanController::class, 'cariObat']);
-        Route::post('/penjualan/checkout', [PenjualanController::class, 'checkout']);
+        Route::post('/penjualan/checkout', [PenjualanController::class, 'checkout'])->name('penjualan.checkout');
         Route::post('/penjualan/tambah-keranjang', [PenjualanController::class, 'tambahKeKeranjang']);
         Route::delete('/penjualan/hapus-keranjang', [PenjualanController::class, 'hapusKeranjang'])->name('penjualan.hapus-keranjang');
         Route::delete('/penjualan/hapus-itemkeranjang/{index}', [PenjualanController::class, 'hapusItemKeranjang'])->name('penjualan.hapusItemKeranjang');

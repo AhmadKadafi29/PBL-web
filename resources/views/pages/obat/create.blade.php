@@ -40,11 +40,6 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <strong>Nama Obat</strong>
-                                        <input type="text" name="merek_obat" class="form-control">
-                                    </div>
-
-                                    <div class="form-group">
                                         <strong for="dosis">Dosis</strong>
                                         <input type="text" class="form-control @error('dosis') is-invalid @enderror"
                                             id="dosis" name="dosis" value="{{ old('dosis') }}">

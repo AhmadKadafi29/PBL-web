@@ -45,21 +45,18 @@ class LaporanPembelianController extends Controller
             ->whereBetween('pembelian.tanggal_pembelian', [$tanggalMulai, $tanggalSelesai])
             ->get();
 
-        $total = DB::table('detail_pembelian')
-            ->join('pembelian', 'detail_pembelian.id_pembelian', '=', 'pembelian.id_pembelian')
-            ->whereBetween('pembelian.tanggal_pembelian', [$tanggalMulai, $tanggalSelesai])
-            ->get();
-
-        foreach ($total as $jumlah) {
-            $totalharga += $jumlah->harga_beli_satuan * $jumlah->quantity;
+        foreach ($laporanPembelian as $item) {
+            $totalharga += $item->harga_beli_satuan * $item->quantity;
         }
-        
+
+        $message = $laporanPembelian->isEmpty() ? "Tidak ada pembelian untuk periode ini." : null;
+
         return view('pages.laporan_pembelian.index', [
             'laporanPembelian' => $laporanPembelian,
             'total' => $totalharga,
-            'data' => $total,
             'tanggal_mulai' => $tanggalMulai,
             'tanggal_selesai' => $tanggalSelesai,
+            'message' => $message,
         ]);
     }
 
@@ -88,13 +85,12 @@ class LaporanPembelianController extends Controller
             })
             ->get();
 
-        $total = DB::table('detail_pembelian')
-            ->join('pembelian', 'detail_pembelian.id_pembelian', '=', 'pembelian.id_pembelian')
-            ->whereBetween('pembelian.tanggal_pembelian', [$tanggalMulai, $tanggalSelesai])
-            ->get();
+        foreach ($laporanPembelian as $item) {
+            $totalharga += $item->harga_beli_satuan * $item->quantity;
+        }
 
-        foreach ($total as $jumlah) {
-            $totalharga += $jumlah->harga_beli_satuan * $jumlah->quantity;
+        if ($laporanPembelian->isEmpty()) {
+            return redirect()->back()->with('message', 'Tidak ada pembelian untuk periode ini.');
         }
 
         $pdf = PDF::loadView('pages.laporan_pembelian.cetak_pembelian', [
@@ -104,6 +100,6 @@ class LaporanPembelianController extends Controller
             'tanggal_selesai' => $tanggalSelesai,
         ]);
 
-        return $pdf->stream('laporan_pembelian_' . $tanggalMulai . '_to_' . $tanggalSelesai . '.pdf');
+        return $pdf->stream('laporan_pembelian_' . $tanggalMulai . 'to' . $tanggalSelesai . '.pdf');
     }
 }

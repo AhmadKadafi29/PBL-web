@@ -14,7 +14,6 @@
             Schema::create('obat', function (Blueprint $table) {
                 $table->bigIncrements('id_obat');
                 $table->unsignedBigInteger('kategori_obat_id');
-              
                 $table->string('merek_obat');
                 $table->string('dosis');
                 $table->string('kemasan');

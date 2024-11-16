@@ -27,21 +27,24 @@
                                 <div class="col-xs-6 col-sm-6 col-md-6">
                                     <div class="form-group">
                                         <strong>Nama Supplier</strong>
-                                        <input type="text" name="nama_supplier" class="form-control" value="{{ old('nama_supplier') }}">
+                                        <input type="text" name="nama_supplier" class="form-control"
+                                            value="{{ old('nama_supplier') }}">
                                         @error('nama_supplier')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group">
                                         <strong>No Telepon</strong>
-                                        <input type="text" name="no_telpon" class="form-control" value="{{ old('no_telpon') }}">
+                                        <input type="text" name="no_telpon" class="form-control"
+                                            value="{{ old('no_telpon') }}">
                                         @error('no_telpon')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group">
                                         <strong>Alamat</strong>
-                                        <input type="text" name="alamat" class="form-control" value="{{ old('alamat') }}">
+                                        <input type="text" name="alamat" class="form-control"
+                                            value="{{ old('alamat') }}">
                                         @error('alamat')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
