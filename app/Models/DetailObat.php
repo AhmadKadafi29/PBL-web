@@ -12,12 +12,13 @@ class DetailObat extends Model
     protected $table = 'detail_obat';
     protected $primaryKey = 'id_detail_obat';
     protected $fillable = [
-        'id_detail_obat',
         'id_obat',
         'id_pembelian',
-        'stok_obat',
+        'stok_satuan_terkecil_1',
+        'stok_satuan_terkecil_2',
+        'harga_jual_1',
+        'harga_jual_2',
         'tanggal_kadaluarsa',
-        'harga_jual',
         'no_batch'
     ];
 
@@ -31,8 +32,8 @@ class DetailObat extends Model
         return $this->belongsTo(Obat::class, 'id_obat');
     }
 
-    public function detail_pengembalian():HasMany
+    public function detail_pengembalian(): HasMany
     {
-        return $this->hasMany(detail_pengembalian_obat::class,'id_detail_obat');
+        return $this->hasMany(detail_pengembalian_obat::class, 'id_detail_obat');
     }
 }

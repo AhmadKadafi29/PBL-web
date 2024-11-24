@@ -11,19 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('satuans', function (Blueprint $table) {
+        Schema::create('detail_satuans', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_satuan');
+            $table->foreignId('id_satuan')->constrained('satuans')->onDelete('cascade')->nullable();
+            $table->string('satuan_terkecil')->nullable();
+            $table->integer('jumlah')->nullable();
+
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('satuans');
+        Schema::dropIfExists('detailsatuans');
     }
 };

@@ -41,8 +41,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
     Route::get('home', [DashboardController::class, 'index'])->name('home');
     Route::resource('Obat', ObatController::class);
-    Route::get('Obat/detailsatuan/{id}', [ObatController::class, 'create_detailsatuan'])->name('create-detailsatuan');
-    Route::post('Obat/detailsatuan/{id}', [ObatController::class, 'store_detailsatuan'])->name('store-detailsatuan');
+    Route::get('/obat/{id_obat}/detail-satuan', [ObatController::class, 'showDetailSatuan'])->name('detail-satuan');
     Route::resource('Kategori', KategoriobatController::class);
     Route::resource('user', UserController::class);
     Route::resource('Supplier', SupplierController::class);

@@ -14,17 +14,17 @@ class SupplierSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('obat')->insert([
-            ['kategori_obat_id' => 1, 'merek_obat' => 'Panadol', 'dosis' => '500mg', 'kemasan' => 'Tablet', 'kegunaan' => 'Analgesik', 'efek_samping' => 'Mual'],
-            ['kategori_obat_id' => 2, 'merek_obat' => 'Amoxicillin', 'dosis' => '500mg', 'kemasan' => 'Kapsul', 'kegunaan' => 'Antibiotik', 'efek_samping' => 'Alergi'],
-            ['kategori_obat_id' => 3, 'merek_obat' => 'Betadine', 'dosis' => '10%', 'kemasan' => 'Cairan', 'kegunaan' => 'Antiseptik', 'efek_samping' => 'Iritasi'],
-            ['kategori_obat_id' => 4, 'merek_obat' => 'Cetirizine', 'dosis' => '10mg', 'kemasan' => 'Tablet', 'kegunaan' => 'Antihistamin', 'efek_samping' => 'Ngantuk'],
-            ['kategori_obat_id' => 5, 'merek_obat' => 'Paracetamol', 'dosis' => '500mg', 'kemasan' => 'Tablet', 'kegunaan' => 'Antipiretik', 'efek_samping' => 'Pusing'],
-            ['kategori_obat_id' => 6, 'merek_obat' => 'Buscopan', 'dosis' => '10mg', 'kemasan' => 'Tablet', 'kegunaan' => 'Antispasmodik', 'efek_samping' => 'Mulut kering'],
-            ['kategori_obat_id' => 7, 'merek_obat' => 'Ibuprofen', 'dosis' => '400mg', 'kemasan' => 'Tablet', 'kegunaan' => 'Antiinflamasi', 'efek_samping' => 'Sakit perut'],
-            ['kategori_obat_id' => 8, 'merek_obat' => 'Vitamin C', 'dosis' => '500mg', 'kemasan' => 'Tablet', 'kegunaan' => 'Vitamin', 'efek_samping' => 'Diare'],
-            ['kategori_obat_id' => 9, 'merek_obat' => 'Calcium', 'dosis' => '600mg', 'kemasan' => 'Tablet', 'kegunaan' => 'Mineral', 'efek_samping' => 'Sembelit'],
-            ['kategori_obat_id' => 10, 'merek_obat' => 'Fish Oil', 'dosis' => '1000mg', 'kemasan' => 'Kapsul', 'kegunaan' => 'Suplemen', 'efek_samping' => 'Bau mulut'],
+        DB::table('supplier')->insert([
+            ['nama_supplier' => 'Supplier A', 'no_telpon' => '081234567890', 'alamat' => 'Jl. Mawar No. 1', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_supplier' => 'Supplier B', 'no_telpon' => '081234567891', 'alamat' => 'Jl. Melati No. 2', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_supplier' => 'Supplier C', 'no_telpon' => '081234567892', 'alamat' => 'Jl. Kamboja No. 3', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_supplier' => 'Supplier D', 'no_telpon' => '081234567893', 'alamat' => 'Jl. Kenanga No. 4', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_supplier' => 'Supplier E', 'no_telpon' => '081234567894', 'alamat' => 'Jl. Anggrek No. 5', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_supplier' => 'Supplier F', 'no_telpon' => '081234567895', 'alamat' => 'Jl. Tulip No. 6', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_supplier' => 'Supplier G', 'no_telpon' => '081234567896', 'alamat' => 'Jl. Dahlia No. 7', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_supplier' => 'Supplier H', 'no_telpon' => '081234567897', 'alamat' => 'Jl. Teratai No. 8', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_supplier' => 'Supplier I', 'no_telpon' => '081234567898', 'alamat' => 'Jl. Mawar No. 9', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_supplier' => 'Supplier J', 'no_telpon' => '081234567899', 'alamat' => 'Jl. Melati No. 10', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }

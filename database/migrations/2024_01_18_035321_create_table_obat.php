@@ -14,11 +14,10 @@
             Schema::create('obat', function (Blueprint $table) {
                 $table->bigIncrements('id_obat');
                 $table->unsignedBigInteger('kategori_obat_id');
+                $table->string('nama_obat');
                 $table->string('merek_obat');
-                $table->string('dosis');
-                $table->string('kemasan');
-                $table->string('kegunaan');
-                $table->string('efek_samping');
+                $table->text('deskripsi_obat')->nullable();
+                $table->string('efek_samping')->nullable();
                 $table->timestamps();
 
                 $table->foreign('kategori_obat_id')->references('id_kategori')->on('kategori_obat');

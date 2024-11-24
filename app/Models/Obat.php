@@ -13,12 +13,10 @@ class Obat extends Model
     protected $primaryKey = 'id_obat';
     protected $fillable = [
         'kategori_obat_id',
-        'kode_obat',
+        'nama_obat',
         'merek_obat',
-        'dosis',
-        'kegunaan',
+        'deskripsi_obat',
         'efek_samping',
-        'kemasan',
     ];
 
 
@@ -47,8 +45,8 @@ class Obat extends Model
         return $this->hasMany(StokOpname::class, 'id_obat');
     }
 
-    public function detailsatuan(): HasMany
+    public function satuans()
     {
-        return $this->hasMany(detailsatuan::class, 'id_obat');
+        return $this->hasMany(Satuan::class, 'id_obat', 'id_obat');
     }
 }

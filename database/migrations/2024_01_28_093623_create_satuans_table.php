@@ -11,22 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('detail_satuans', function (Blueprint $table) {
+        Schema::create('satuans', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_obat');
-            $table->unsignedBigInteger('id_satuan');
-            $table->integer('satuan_konversi');
-       
-
+            $table->foreignId('id_obat')->references('id_obat')->on('obat')->onDelete('cascade');
+            $table->string('satuan_terbesar');
+            $table->string('satuan_terkecil_1');
+            $table->integer('jumlah_satuan_terkecil_1');
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('detailsatuans');
+        Schema::dropIfExists('satuans');
     }
 };

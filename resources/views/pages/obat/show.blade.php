@@ -38,9 +38,10 @@
                                                 <th>No</th>
                                                 <th>Nama Supplier</th>
                                                 <th>No Batch</th>
-                                                <th>Stok Obat</th>
-                                                {{-- <th>Satuan</th> --}}
-                                                <th>Harga Jual Obat Satuan</th>
+                                                <th>Stok Obat 1 (strips)</th>
+                                                <th>Stok obat 2</th>
+                                                <th>Harga Jual 1</th>
+                                                <th>Harga Jual 2</th>
                                                 <th>Tanggal Kadaluarsa</th>
 
                                             </tr>
@@ -52,11 +53,15 @@
                                             @foreach ($itemObat as $item)
                                                 <tr>
                                                     <td>{{ $no++ }}</td>
-                                                    <td>{{ $item->pembelian->supplier->nama_supplier}}</td>
+                                                    <td>{{ $item->pembelian->supplier->nama_supplier }}</td>
                                                     <td>{{ $item->no_batch }}</td>
-                                                    <td>{{ $item->stok_obat }}</td>
-                                                    {{-- <td>{{ $item->obat->detailsatuan}}</td> --}}
-                                                    <td>{{ $item->harga_jual }}</td>
+                                                    <td>{{ $item->stok_satuan_terkecil_1 }}
+                                                        {{ $item->obat->satuans[0]->satuan_terkecil_1 }}
+                                                    </td>
+                                                    <td>{{ $item->stok_satuan_terkecil_2 }}
+                                                        {{ $item->obat->satuans[0]->detailSatuans[0]->satuan_terkecil }}</td>
+                                                    <td>{{ $item->harga_jual_1 }}</td>
+                                                    <td>{{ $item->harga_jual_2 }}</td>
                                                     <td>{{ $item->tanggal_kadaluarsa }}</td>
                                                 </tr>
                                             @endforeach

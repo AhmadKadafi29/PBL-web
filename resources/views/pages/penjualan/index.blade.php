@@ -64,7 +64,7 @@
                                                 <div class="form-group col-md-2">
                                                     <label for="jumlah">Jumlah Beli</label>
                                                     <input type="number" name="jumlah" value="1" class="form-control @error('jumlah') is-invalid @enderror">
-                                                    
+
                                                     @error('jumlah')
                                                         <div class="invalid-feedback">
                                                             {{ $message }}
@@ -210,6 +210,19 @@
                         }
                     }
                 });
+            });
+
+            $('#jumlah_dibayar').on('input', function() {
+                // Ambil nilai total bayar dan jumlah dibayar
+                var totalBayar = parseFloat('{{ $totalBayar }}');
+                var jumlahDibayar = parseFloat($(this).val());
+
+                // Hitung kembalian
+                var kembalian = jumlahDibayar - totalBayar;
+
+                // Perbarui nilai input kembalian
+                $('#kembalian').val(kembalian
+                    .toFixed()); // Menampilkan kembalian dengan dua angka di belakang koma
             });
         });
     </script>

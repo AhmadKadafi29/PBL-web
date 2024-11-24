@@ -38,7 +38,8 @@
                                 <div class="float-right">
                                     <form method="GET" action="{{ route('Obat.index') }}">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Search" name="merek_obat">
+                                            <input type="text" class="form-control" placeholder="Search"
+                                                name="merek_obat">
                                             <div class="input-group-append">
                                                 <button class="btn btn-primary"><i class="fas fa-search"></i></button>
                                             </div>
@@ -51,9 +52,9 @@
                                             <tr>
                                                 <th>No.</th>
                                                 <th>Kategori Obat</th>
-                                                <th>Merek Obat</th>
-                                                <th>Dosis Obat</th>
-                                                <th>Kegunaan</th>
+                                                <th>Merek </th>
+                                                <th>Nama Obat</th>
+                                                <th>Deskripsi</th>
                                                 <th>Efek Samping</th>
                                                 <th>Action</th>
                                             </tr>
@@ -64,21 +65,24 @@
                                                     <td>{{ $index + $obat->firstItem() }}</td>
                                                     <td>{{ $ob->kategoriObat->nama_kategori }}</td>
                                                     <td>{{ $ob->merek_obat }}</td>
-                                                    <td>{{ $ob->dosis }}</td>
-                                                    <td>{{ $ob->kegunaan }}</td>
+                                                    <td>{{ $ob->nama_obat }}</td>
+                                                    <td>{{ $ob->deskripsi_obat }}</td>
                                                     <td>{{ $ob->efek_samping }}</td>
-                                                   
+
                                                     <td>
                                                         <div class="d-flex">
-                                                            <a class="btn btn-sm btn-link btn-icon ml-2" href="{{ route('create-detailsatuan', $ob->id_obat) }}">
+                                                            <a class="btn btn-sm btn-link btn-icon ml-2"
+                                                                href="{{ route('detail-satuan', $ob->id_obat) }}">
                                                                 <i class="fas fa-cube"></i> satuan
                                                             </a>
 
-                                                            <a href="{{ route('Obat.show', $ob->id_obat) }}" class="btn btn-sm btn-warning btn-icon  ml-2">
+                                                            <a href="{{ route('Obat.show', $ob->id_obat) }}"
+                                                                class="btn btn-sm btn-warning btn-icon  ml-2">
                                                                 <i class="fas fa-eye"></i> Detail
                                                             </a>
-                                                          
-                                                            <a href="{{ route('Obat.edit', $ob->id_obat) }}" class="btn btn-sm btn-info btn-icon ml-2">
+
+                                                            <a href="{{ route('Obat.edit', $ob->id_obat) }}"
+                                                                class="btn btn-sm btn-info btn-icon ml-2">
                                                                 <i class="fas fa-edit"></i> Edit
                                                             </a>
                                                         </div>
@@ -100,7 +104,8 @@
     </div>
 
     <!-- Modal Konfirmasi Hapus -->
-    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog"
+        aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">

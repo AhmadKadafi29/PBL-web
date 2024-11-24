@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ObatResource;
 use App\Models\DetailObat;
-use App\Models\detailsatuan;
+use App\Models\Detailsatuan;
 use App\Models\Kategoriobat;
 use App\Models\Obat;
-use App\Models\satuan;
+use App\Models\Satuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -38,45 +38,76 @@ class ObatController extends Controller
 
     public function store(Request $request)
     {
+        // Validasi data
         $validator = Validator::make($request->all(), [
             'kategori_obat_id' => 'required|integer|exists:kategori_obat,id_kategori',
+            'nama_obat' => 'required|string|max:255',
             'merek_obat' => 'required|string|min:5|max:255',
-            'dosis' => 'required|string|max:100',
-            'kemasan' => 'required|string|max:100',
-            'kegunaan' => 'required|string|min:10|max:255',
-            'efek_samping' => 'required|string|min:10|max:255',
-        ], [
-            'kategori_obat_id.required' => 'Kategori obat wajib diisi.',
-            'kategori_obat_id.integer' => 'Kategori obat harus berupa angka.',
-            'kategori_obat_id.exists' => 'Kategori obat yang dipilih tidak valid.',
-            'merek_obat.required' => 'Merek obat wajib diisi.',
-            'merek_obat.string' => 'Merek obat harus berupa teks.',
-            'merek_obat.min' => 'Merek obat minimal 5 karakter.',
-            'merek_obat.max' => 'Merek obat maksimal 255 karakter.',
-            'dosis.required' => 'Dosis obat wajib diisi.',
-            'dosis.string' => 'Dosis harus berupa teks.',
-            'dosis.max' => 'Dosis maksimal 100 karakter.',
-            'kemasan.required' => 'Kemasan obat wajib diisi.',
-            'kemasan.string' => 'Kemasan harus berupa teks.',
-            'kemasan.max' => 'Kemasan maksimal 100 karakter.',
-            'kegunaan.required' => 'Kegunaan obat wajib diisi.',
-            'kegunaan.string' => 'Kegunaan harus berupa teks.',
-            'kegunaan.max' => 'Kegunaan maksimal 500 karakter.',
-            'efek_samping.required' => 'Efek samping obat wajib diisi.',
-            'efek_samping.string' => 'Efek samping harus berupa teks.',
-            'efek_samping.max' => 'Efek samping maksimal 500 karakter.',
+            'deskripsi_obat' => 'nullable|string',
+            'efek_samping' => 'nullable|string|min:10|max:255',
+            'satuan_terbesar' => 'required|string',
+            'satuan_terkecil_1' => 'required|string',
+            'jumlah_satuan_terkecil_1' => 'required|integer|min:1',
         ]);
 
+        // dd($validator);
+
+        // Validasi untuk input dinamis (satuan terkecil 2 hingga 5)
+        for ($i = 2; $i <= 5; $i++) {
+            $validator->after(function ($validator) use ($request, $i) {
+                if ($request->has("satuan_terkecil_{$i}") && $request->has("jumlah_satuan_terkecil_{$i}")) {
+                    $validator->sometimes("satuan_terkecil_{$i}", 'nullable|string', function ($input) use ($i) {
+                        return !empty($input->{"satuan_terkecil_{$i}"});
+                    });
+                    $validator->sometimes("jumlah_satuan_terkecil_{$i}", 'nullable|integer|min:1', function ($input) use ($i) {
+                        return !empty($input->{"jumlah_satuan_terkecil_{$i}"});
+                    });
+                }
+            });
+        }
+
+        // dd($request->all());
+
+        // Cek apakah validasi gagal
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-        Obat::create($request->all());
-        return redirect()->route('Obat.index')->with('success', 'Obat Baru berhasil ditambah');
+
+        // Simpan data obat
+        $obat = Obat::create([
+            'kategori_obat_id' => $request->kategori_obat_id,
+            'merek_obat' => $request->merek_obat,
+            'nama_obat' => $request->nama_obat,
+            'deskripsi_obat' => $request->deskripsi_obat,
+            'efek_samping' => $request->efek_samping,
+        ]);
+
+        // Simpan data satuan
+        $satuan = Satuan::create([
+            'id_obat' => $obat->id_obat,
+            'satuan_terbesar' => $request->satuan_terbesar,
+            'satuan_terkecil_1' => $request->satuan_terkecil_1,
+            'jumlah_satuan_terkecil_1' => $request->jumlah_satuan_terkecil_1,
+        ]);
+
+        foreach (range(2, 5) as $i) {
+            if ($request->has("satuan_terkecil_{$i}") && $request->has("jumlah_satuan_terkecil_{$i}")) {
+                Detailsatuan::create([
+                    'id_satuan' => $satuan->id,
+                    'satuan_terkecil' => $request->input("satuan_terkecil_{$i}"),
+                    'jumlah' => $request->input("jumlah_satuan_terkecil_{$i}"),
+                ]);
+            }
+        }
+
+        return redirect()->route('Obat.index')->with('success', 'Obat berhasil ditambahkan!');
     }
+
 
     public function show($id_obat)
     {
-        $itemObat = DetailObat::with('obat.detailsatuan')->where('id_obat', $id_obat)->get();
+        $itemObat = DetailObat::with('pembelian.supplier', 'obat.satuans.detailSatuans')->where('id_obat', $id_obat)->get();
+
         return view('pages.obat.show', compact('itemObat'));
     }
 
@@ -129,40 +160,10 @@ class ObatController extends Controller
         return redirect()->route('Obat.index')->with('success', 'Obat berhasil diubah');
     }
 
-
-    public function create_detailsatuan($id)
+    // Controller
+    public function showDetailSatuan($id_obat)
     {
-        $id_obat = $id;
-        $satuan = satuan::get();
-        return view('pages.obat.create_detailsatuan', compact('id_obat', 'satuan'));
-    }
-
-    public function store_detailsatuan(Request $request, $id)
-    {
-        //dd($request);
-        $id_obat = $id;
-        $nama_obat = Obat::find($id_obat);
-        $satuan_terkecil = $request->input('satuan_terkecil');
-        $satuan_konversi_terkecil = 1;
-
-        detailsatuan::create([
-            'id_obat' => $id_obat,
-            'id_satuan' => $satuan_terkecil,
-            'satuan_konversi' => 1
-        ]);
-
-        $satuan_ke1 = $request->input('nama_satuan');
-        $konversi = $request->input('konversi');
-        if ($satuan_ke1) {
-            for ($i = 0; $i < count($satuan_ke1); $i++) {
-                detailsatuan::create([
-                    'id_obat' => $id_obat,
-                    'id_satuan' => $satuan_ke1[$i],
-                    'satuan_konversi' => $konversi[$i]
-                ]);
-            }
-        }
-
-        return redirect()->route('Obat.index')->with('success', 'Detail detail satuan ' . $nama_obat->merek_obat . ' berhasil diubah.');
+        $satuans = Satuan::where('id_obat', $id_obat)->with('detailSatuans')->get();
+        return view('pages.Obat.detailsatuan', compact('satuans'));
     }
 }

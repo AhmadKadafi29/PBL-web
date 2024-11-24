@@ -31,7 +31,7 @@ class PengembalianObatController extends Controller
             ->with('detailPembelian.obat')
             ->with('detailobat')
             ->get();
-
+        $stuan = 
         $response = $pembelian->map(function ($item) {
             return [
                 'no_faktur' => $item->no_faktur,
@@ -52,13 +52,14 @@ class PengembalianObatController extends Controller
 
                 'stok' => $item->detailobat->map(function ($stok) {
                     return [
-                        'stok_tersedia' => $stok->stok_obat,
+                        'stok_tersedia' => $stok->stok_obat / 20,
                         'tanggal_kadaluarsa' => $stok->tanggal_kadaluarsa,
                         'id_detail_obat' => $stok->id_detail_obat
                     ];
                 })
             ];
         });
+        // dd($response);
 
         return response()->json($response);
     }
@@ -100,7 +101,7 @@ class PengembalianObatController extends Controller
 
         for ($i = 0; $i < count($merek_obats); $i++) {
 
-            $detail_obat = DetailObat::where('id_obat', $id[$i])->first();
+            $detail_obat = DetailObat::where('id_obat', $id[$i]);
 
             // dd($detail_obat);
 

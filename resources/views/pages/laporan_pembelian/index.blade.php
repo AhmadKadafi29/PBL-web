@@ -38,8 +38,9 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="tanggal_mulai">Tanggal Mulai</label>
-                                    <input type="date" name="tanggal_mulai" class="form-control @error('tanggal_mulai') is-invalid @enderror"
-                                           value="{{ old('tanggal_mulai') }}">
+                                    <input type="date" name="tanggal_mulai"
+                                        class="form-control @error('tanggal_mulai') is-invalid @enderror"
+                                        value="{{ old('tanggal_mulai') }}">
                                     @error('tanggal_mulai')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -48,8 +49,9 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="tanggal_selesai">Tanggal Selesai</label>
-                                    <input type="date" name="tanggal_selesai" class="form-control @error('tanggal_selesai') is-invalid @enderror"
-                                           value="{{ old('tanggal_selesai') }}">
+                                    <input type="date" name="tanggal_selesai"
+                                        class="form-control @error('tanggal_selesai') is-invalid @enderror"
+                                        value="{{ old('tanggal_selesai') }}">
                                     @error('tanggal_selesai')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -64,7 +66,7 @@
                     @if (isset($laporanPembelian))
                         <h3>Laporan Pembelian dari {{ $tanggal_mulai }} sampai {{ $tanggal_selesai }}</h3>
 
-                        @if($laporanPembelian->isEmpty())
+                        @if ($laporanPembelian->isEmpty())
                             <div class="alert alert-warning">Tidak ada pembelian untuk periode ini.</div>
                         @else
                             <table class="table table-bordered">
@@ -85,7 +87,9 @@
                                             <td>{{ $pembelian->merek_obat }}</td>
                                             <td>{{ $pembelian->quantity }}</td>
                                             <td>Rp {{ number_format($pembelian->harga_beli_satuan, 2) }}</td>
-                                            <td>Rp {{ number_format($pembelian->harga_beli_satuan * $pembelian->quantity, 2) }}</td>
+                                            <td>Rp
+                                                {{ number_format($pembelian->harga_beli_satuan * $pembelian->quantity, 2) }}
+                                            </td>
                                             <td>{{ $pembelian->tanggal_pembelian }}</td>
                                         </tr>
                                     @endforeach
