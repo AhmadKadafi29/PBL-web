@@ -9,14 +9,15 @@ class StokOpname extends Model
 {
     use HasFactory;
     protected $table = 'stok_opname';
-    protected $primaryKey ='id_stok_opname';
+    protected $primaryKey = 'id_stok_opname';
     protected $fillable = [
         'id_obat',
         'id_user',
-        'stok_fisik',
-        'tanggal_opname',
-        'harga_jual_satuan',
-        'stok_sistem'
+        'stok_fisik_1',
+        'stok_fisik_2',
+        'stok_sistem_1',
+        'stok_sistem_2',
+        'tanggal_opname'
     ];
 
     public function obat()
