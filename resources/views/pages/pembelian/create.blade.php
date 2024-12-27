@@ -4,6 +4,7 @@
 
 @push('style')
     <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 @endpush
 
 @section('main')
@@ -20,7 +21,7 @@
 
             <div class="section-body">
                 <div class="card">
-                    <form action="{{ route('Pembelian.store') }}" method="POST">
+                    <form id="myForm"> 
                         @csrf
                         <div class="container-fluid">
                             <div class="row">
@@ -45,6 +46,7 @@
                                         <label for="no_faktur">No Faktur</label>
                                         <input type="text" name="no_faktur" id="no_faktur" class="form-control"
                                             value="{{ old('no_faktur') }}">
+                                            <small id="error-no-faktur" style="color: red; display: none;"></small>
                                         @error('no_faktur')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -55,6 +57,7 @@
                                         <label for="tanggal_pembelian">Tanggal Pembelian</label>
                                         <input type="date" class="form-control datepicker" id="tanggal_pembelian"
                                             name="tanggal_pembelian" value="{{ old('tanggal_pembelian') }}">
+                                        <small id="error-tanggal-pembelian" style="color: red; display: none;"></small>
                                         @error('tanggal_pembelian')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -63,6 +66,7 @@
                                         <label for="ongkos_kirim">Ongkos Kirim</label>
                                         <input type="text" name="ongkos_kirim" id="ongkos_kirim" class="form-control"
                                             value="{{ old('ongkos_kirim') }}">
+                                        <small id="error-ongkos-kirim" style="color: red; display: none;"></small>
                                         @error('ongkos_kirim')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -86,7 +90,8 @@
                                     <!-- Modal -->
                                     <div>
                                         <input type="text" name="total_harga" id="total_harga" class="form-control"
-                                            readonly>
+                                            >
+                                        <small id="error-total-harga" style="color: red; display: none;"></small>
                                     </div>
 
                                 </div>
@@ -203,11 +208,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        {{-- <div class="d-flex justify-content-center">
-
-                                {{ $obat->withQueryString()->links() }}
-                        </div> --}}
-
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -224,38 +224,184 @@
 
 @push('scripts')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @section('js')
         <script>
-            function updateNoFaktur() {
-                var idSupplier = document.getElementsByName('id_supplier')[0].value;
-                var tanggalPembelian = document.getElementsByName('tanggal_pembelian')[0].value;
+            document.getElementById('myForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const idobat = document.getElementById('obat-list').querySelectorAll('.idobat');
+            const inputKuantitas = document.getElementById('obat-list').querySelectorAll('.jumlah-obat');
+            const inputHargaBeli = document.getElementById('obat-list').querySelectorAll('.harga-beli');
+            const tanggalExp = document.getElementById('obat-list').querySelectorAll('.tanggal-kadaluarsa');
+            const marginterkecil = document.getElementById('obat-list').querySelectorAll('.margin');
+            const nobatch = document.getElementById('obat-list').querySelectorAll('.no_batch');
+            const hargajual1 = document.getElementById('obat-list').querySelectorAll('.harga_jual1');
+            const hargajual2 = document.getElementById('obat-list').querySelectorAll('.harga_jual2');
+            const subtotal = document.getElementById('obat-list').querySelectorAll('.total');
+            const tanggalpembelian = document.getElementById('tanggal_pembelian');
+            const idsupplier = document.getElementById('nama_supplier');
+            const ongkir = document.getElementById('ongkos_kirim');
+            const nofaktur = document.getElementById('no_faktur');
+            const totalharga = document.getElementById('total_harga');
+            const tanggal = new Date();
+            const tanggalsekarang = tanggal.toLocaleDateString('en-CA');  
+            
+            
+            const errorMessagetanggalpembelian = document.getElementById('error-tanggal-pembelian');
+            const errorMessageongkir = document.getElementById('error-ongkos-kirim');
+            const errorMessagenfaktur= document.getElementById('error-no-faktur');
+            const errorMessagetotalharga = document.getElementById('error-total-harga');
 
-                // Buat noFaktur dari kombinasi id supplier dan tanggal pembelian
-                if (idSupplier && tanggalPembelian) {
-                    var noFaktur = idSupplier + tanggalPembelian.replace(/-/g, '');
-                    document.getElementsByName('no_faktur')[0].value = noFaktur;
+            let isValid = false;
+            const dataObat = [];
+            const datapembelian = [];
+
+
+            idobat.forEach((item, index)=>{
+                const errorMessagekuantias = document.getElementById(inputKuantitas[index].dataset.error);
+                const errorMessagehargabeli = document.getElementById(inputHargaBeli[index].dataset.error);
+                const errorMessagetanggalexp = document.getElementById(tanggalExp[index].dataset.error);
+                const errorMessagemargin = document.getElementById(marginterkecil[index].dataset.error);
+                const errorMessagenobatch = document.getElementById(nobatch[index].dataset.error);
+                const errorMessagehargajual1 = document.getElementById(hargajual1[index].dataset.error);
+                const errorMessagehargajual2 = document.getElementById(hargajual2[index].dataset.error);
+                const errorMessagesubtotal = document.getElementById(subtotal[index].dataset.error);
+                const errorMessagekuant = document.getElementById(inputKuantitas[index].dataset.error);
+
+               a = validate(inputKuantitas[index],  inputKuantitas[index].value <= 0,errorMessagekuantias, 'inputan harus diatas 0');
+               b = validate(inputHargaBeli[index], inputHargaBeli[index].value <=0,errorMessagehargabeli, 'inputan harus diatas 0');
+               c = validate(marginterkecil[index], marginterkecil[index].value <= 0, errorMessagemargin,'inputan harus diatas 0');
+               d = validate(hargajual1[index], hargajual1[index].value <=0, errorMessagehargajual1, 'inputan harus diatas 0'); 
+               e = validate(tanggalExp[index], tanggalExp[index].value <= tanggalsekarang, errorMessagetanggalexp, 'tanggal harus melebihi tanggal saat ini');  
+               f = validate(subtotal[index], subtotal[index].value <= 0, errorMessagesubtotal, 'inputan harus diatas 0');
+               g = validateNoBatch(nobatch[index], errorMessagenobatch);
+               h = validate(hargajual2[index], hargajual2[index].value <0, errorMessagehargajual2, 'inputan harus diatas 0');
+               
+             
+
+               if(a && b && c && d && e && e && f && g && h){
+                const dataobat = {
+                    id_obat: item.value,
+                    jumlah: inputKuantitas[index].value,
+                    harga_beli: inputHargaBeli[index].value,
+                    tanggal_exp: tanggalExp[index].value,
+                    margin: marginterkecil[index].value,
+                    no_batch: nobatch[index].value,
+                    harga_jual1 : hargajual1[index].value,
+                    harga_jual2 : hargajual2[index].value,
+                    subtotal: subtotal[index].value
+                };
+                dataObat.push(dataobat);
+               }
+               
+            });
+                i = validate(nofaktur, /[^a-zA-Z0-9]/.test(nofaktur.value), errorMessagenfaktur, 'Inputan harus angka huruf atau kombinasi');
+                j = validate(ongkir, ongkir.value <= 0,errorMessageongkir, 'inputan harus diatas 0' );
+                k = validate(tanggalpembelian, tanggalpembelian.value > tanggalsekarang, errorMessagetanggalpembelian, 'input tanggal pembelian tidak boleh melebihi tanggal sekarang');
+                l = validate(totalharga, totalharga.value <= 0, errorMessagetotalharga, 'Inputan harus diatas 0');
+            
+                if(a && b && c && d && e && f && g && h && i && j && k && l){
+                    const pembelian = {
+                    id_supplier : 1,
+                    tanggal_pembelian: tanggalpembelian.value,
+                    ongkos_kirim: ongkir.value,
+                    no_faktur: nofaktur.value,
+                    total_harga: totalharga.value,
+                    obat_list: dataObat
+                };
+                datapembelian.push(pembelian);
+                isValid= true;     
+                console.log(datapembelian)  
                 }
+               
+                if(isValid){
+                  postData(datapembelian );
+                    
+                }
+
+        });
+
+        function validateNoBatch(nobatchElement, errorMessageElement) {
+            if (nobatchElement.value.trim() === "") {
+                return validate(nobatchElement, true, errorMessageElement, 'Inputan wajib diisi');
+            } 
+            if (nobatchElement.value.length < 5) {
+                return validate(nobatchElement, true, errorMessageElement, 'min 5 karakter');
             }
+            if (nobatchElement.value.length > 15) {
+                return validate(nobatchElement, true, errorMessageElement, 'max 15 karakter');
+            }
+            if (/[^a-zA-Z0-9]/.test(nobatchElement.value)) {
+                return validate(nobatchElement, true, errorMessageElement, 'harus angka huruf / kombinasi');
+            }
+            return validate(nobatchElement, false, errorMessageElement, ''); // Valid
+        }
+
+
+        async function postData(data){
+            try{
+                const response = await fetch('{{ route('Pembelian.store') }}', {
+                    method: 'POST',
+                    headers : {
+                         'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+                    },
+                    body : JSON.stringify(data)
+                });
+                const result = await response.json();
+                if(response.ok){
+                    console.log(result);
+                    if (result.success && result.redirect_url) {
+                        window.location.href = result.redirect_url;
+                    }
+                } else {
+                    console.error('Server error: ', result.message);
+                    const nofaktur = document.getElementById('no_faktur');
+                    const errorMessagenfaktur= document.getElementById('error-no-faktur');
+                    validate(nofaktur, true, errorMessagenfaktur, result.message );
+                 
+                } 
+            }
+            catch(error){
+                console.error(error);
+            }
+        }
+        function validate(element, kondisi,errorMessageElement, errorMessageText){
+            if(element.value.trim() === ""){
+                errorMessageElement.style.display= 'block';
+                errorMessageElement.innerHTML = 'Inputan wajib diisi';
+                return false;
+
+            }
+            if(kondisi) {
+                errorMessageElement.style.display = 'block';
+                errorMessageElement.innerHTML = errorMessageText;
+                return  false;    
+            } else{
+                errorMessageElement.style.display = 'none';
+                return true;
+            }
+        }
+
 
             function tambahkanObat() {
-                // Ambil data dari checkbox yang dicentang di modal
+               
                 const selectedObat = document.querySelectorAll('.obat-checkbox:checked');
                 const obatList = document.getElementById('obat-list');
                 let rowCount = obatList.rows.length;
+                console.log(selectedObat);
 
                 selectedObat.forEach((checkbox, index) => {
+                    console.log('iiniii', checkbox);
+                    console.log('satuan', checkbox.getAttribute('data-satuan'));
+                    console.log('Detail Satuan:', checkbox.getAttribute('data-detail-satuan'));
                     const namaObat = checkbox.getAttribute('data-nama');
                     const idobat = checkbox.getAttribute('data-idobat');
                     const hargaBeli = checkbox.getAttribute('data-harga');
-                    const satuan = JSON.parse(checkbox.getAttribute('data-satuan'));
+                    const satuan = JSON.parse(checkbox.getAttribute('data-satuan').replace(/&quot;/g, '"'));
                     const detailSatuanJumlah = JSON.parse(checkbox.getAttribute('data-detail-satuan'));
-
-                    console.log('Detail Satuan:', detailSatuanJumlah);
-
                     let satuan_terkecil_1 = 0;
                     let satuan_terkecil_2 = 0;
 
@@ -266,8 +412,8 @@
                     });
                     satuan_terkecil_2 = detailSatuanJumlah[0];
 
-                    console.log(satuan_terkecil_1)
-                    console.log(satuan_terkecil_2)
+                    // console.log(satuan_terkecil_1)
+                    // console.log(satuan_terkecil_2)
 
                     const newRow = document.createElement('tr');
                     newRow.setAttribute('id', `obat.${rowCount + index + 1}`)
@@ -276,16 +422,50 @@
                     newRow.innerHTML = `
                         <td>${rowCount + index + 1}</td>
                         <td><button onclick="hapusItemObat(this)"  class="btn btn-link"><i class="fa-solid fa-trash""></i></button></td>
-                        <td>${namaObat} <input type="hidden" name="merek_obat[]" value="${idobat}"></td>
+                        <td>${namaObat}
+                            <input type="hidden" name="merek_obat[]" class="idobat" data-error="error-idobat-${ rowCount + index + 1}" value="${idobat}">
+                            <small id="error-idobat-${rowCount + index + 1 }" style="color: red; display: none;"></small>
+                        </td>
                         <td>${satuanTerbesar} <input type="hidden" name="satuan[]" value="${satuanTerbesar}"></td>
-                        <td><input type="number" name="jumlah_obat[]" class="jumlah-obat" onchange="updateHarga(this)"></td>
-                        <td><input type="number" name="harga_beli[]" class="harga-beli" value="${hargaBeli}" onchange="updateHarga(this)"></td>
-                        <td><input type="date"   name="tanggal_kadaluarsa[]" class="tanggal-kadaluarsa"></td>
-                        <td><input type="number" name="margin[]" class="margin" onchange="updateHarga(this)"></td>
-                        <td><input type="number" name="no_batch[]"  class="no_batch"></td>
-                        <td><input type="number" name="harga_jual1[]" class="harga_jual"></td>
-                        <td><input type="number" name="harga_jual2[]" class="harga_jual "></td>
-                        <td><input type="number" name="total[]" class="total" ></td>
+                        <td>
+                            <input type="number" name="jumlah_obat[]" class="jumlah-obat" data-error="error-jumlah-${ rowCount + index + 1}" onchange="updateHarga(this)">
+                            <small id="error-jumlah-${rowCount + index + 1 }" style="color: red; display: none;"></small>
+                        </td>
+
+                        <td>
+                            <input type="number" name="harga_beli[]" class="harga-beli" data-error="error-harga-beli-${ rowCount + index + 1}" value="${hargaBeli}"onchange="updateHarga(this)">
+                            <small id="error-harga-beli-${rowCount + index + 1 }" style="color: red; display: none;"></small>
+                        </td>
+                        <td>
+                            <input type="date"   name="tanggal_kadaluarsa[]" data-error="error-tanggal-kadaluarsa-${ rowCount + index + 1}" class="tanggal-kadaluarsa">
+                            <small id="error-tanggal-kadaluarsa-${rowCount + index + 1 }" style="color: red; display: none;">Jumlah harus positif</small>
+                        </td>
+                        <td>
+                            <input type="number" name="margin[]" class="margin" data-error="error-margin-${ rowCount + index + 1}" onchange="updateHarga(this)">
+                            <small id="error-margin-${rowCount + index + 1 }" style="color: red; display: none;">Jumlah harus positif</small>
+                        
+                        </td>
+                        <td>
+                            <input type="text" name="no_batch[]" data-error="error-no-batch-${ rowCount + index + 1}" class="no_batch">
+                            <small id="error-no-batch-${rowCount + index + 1 }" style="color: red; display: none;">Jumlah harus positif</small>
+                        
+                        </td>
+                        <td>
+                            <input type="number" name="harga_jual1[]"  data-error="error-harga-jual1-${ rowCount + index + 1}"  class="harga_jual1">
+                            <small id="error-harga-jual1-${rowCount + index + 1 }" style="color: red; display: none;">Jumlah harus positif</small>
+                        
+                        </td>
+                        <td>
+                            <input type="number" name="harga_jual2[]"  data-error="error-harga-jual2-${ rowCount + index + 1}"  class="harga_jual2">
+                            <small id="error-harga-jual2-${rowCount + index + 1 }" style="color: red; display: none;">Jumlah harus positif</small>
+                        
+                        </td>
+                        <td>
+                            <input type="number" name="total[]" data-error="error-total-${ rowCount + index + 1}" class="total" >
+                            <small id="error-total-${rowCount + index + 1 }" style="color: red; display: none;">Jumlah harus positif</small>
+                        
+                        </td>
+
                     `;
                     obatList.appendChild(newRow);
                 });
@@ -327,10 +507,6 @@
 
                     console.log(satuanTerkecil1)
                     console.log(satuanTerkecil2)
-                    // if (satuanTerkecil2 > 0) {
-                    //     return hargaJual2;
-                    // }
-
                     const inputHargaJual1 = row.cells[9].querySelector('input');
                     const inputHargaJual2 = row.cells[10].querySelector('input') || 0;
                     const inputTotal = row.cells[11].querySelector('input');
@@ -369,7 +545,6 @@
             }
 
             async function fetchDataObat()
-
             {
                 const searchQuery = document.getElementById('searchObat').value;
                 const url = "{{ route('search-obat') }}";
@@ -389,19 +564,29 @@
                     }
 
                     const data = await response.json();
+                    const obats = JSON.stringify(data);
+
                     const tableDataObat = document.getElementById('tableDataObat');
                     tableDataObat.innerHTML = "";
-                    data.forEach(function(obat, index) {
-                        const row = `<tr>
-                                    <td><input type="checkbox" class="obat-checkbox" data-idobat="${obat.id_obat}" data-nama="${obat.merek_obat}" "></td>
+
+                    data.forEach(function(obat) {
+                    var satuan = obat.satuans[0];
+                    const arraySatuan = [satuan]; 
+                    var detailsatuan = obat.satuans[0].detail_satuans[0]?.jumlah ?? 0;
+                    const encodedSatuan = JSON.stringify(arraySatuan).replace(/"/g, '&quot;');
+                    const encodedDetailSatuan = JSON.stringify(detailsatuan);
+
+                    const row = `<tr>
+                                    <td><input type="checkbox" class="obat-checkbox" data-idobat="${obat.id_obat}" data-nama="${obat.merek_obat}" data-satuan="${encodedSatuan}" data-detail-satuan="${encodedDetailSatuan}"></td>
                                     <td>${obat.merek_obat}</td>
                                     <td>${obat.nama_obat}</td>
                                     <td>${obat.deskripsi_obat}</td>
                                     <td>${obat.efek_samping}</td>
                                 </tr>`;
-                        tableDataObat.insertAdjacentHTML('beforeend', row);
+                    tableDataObat.insertAdjacentHTML('beforeend', row);  
+                });
 
-                    })
+                    console.log(`data : ${data}`);
 
                 } catch (error) {
                     console.error(error);

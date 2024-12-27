@@ -24,7 +24,7 @@ class SupplierController extends Controller
         $validator = Validator::make($request->all(), [
             'nama_supplier' => 'required|string|min:5|max:30|regex:/^[a-zA-Z\s]*$/',
             'no_telpon' => 'required|digits:12|regex:/^08[0-9]*$/',
-            'alamat' => 'required|string|min:5|max:255'
+            'alamat' => 'required|string|min:20|max:255'
         ], [
             'nama_supplier.required' => 'Nama supplier harus diisi.',
             'nama_supplier.string' => 'Nama supplier harus berupa teks.',
@@ -36,7 +36,7 @@ class SupplierController extends Controller
             'no_telpon.regex' => 'Nomor telepon harus diawali dengan 08.',
             'alamat.required' => 'Alamat harus diisi.',
             'alamat.string' => 'Alamat harus berupa teks.',
-            'alamat.min' => 'Alamat minimal 5 karakter.',
+            'alamat.min' => 'Alamat minimal 20 karakter.',
             'alamat.max' => 'Alamat maksimal 255 karakter.',
         ]);
 

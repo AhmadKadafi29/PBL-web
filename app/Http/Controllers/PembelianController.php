@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Log;
 
 class PembelianController extends Controller
 {
@@ -39,7 +40,8 @@ class PembelianController extends Controller
 
     {
         $name = $request->get('name');
-        $obat = Obat::where('merek_obat', 'LIKE', '%' . $name . '%')->get();
+        $obat = Obat::where('merek_obat', 'LIKE', '%' . $name . '%')
+        ->with('satuans.detailSatuans')->get();
         return response()->json($obat);
     }
 
@@ -49,90 +51,64 @@ class PembelianController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi input
-        $validator = Validator::make($request->all(), [
-            'id_supplier' => 'required|integer|exists:supplier,id_supplier',
-            'no_faktur' => 'required|string|max:255|unique:pembelian,no_faktur',
-            'tanggal_pembelian' => 'required|date',
-            'total_harga' => 'required|numeric|min:0',
-            'merek_obat' => 'required|array|min:1',
-            'merek_obat.*' => 'required|integer|exists:obat,id_obat',
-            'jumlah_obat' => 'required|array|min:1',
-            'jumlah_obat.*' => 'required|integer|min:1',
-            'harga_beli' => 'required|array|min:1',
-            'harga_beli.*' => 'required|numeric|min:0',
-            'tanggal_kadaluarsa' => 'required|array|min:1',
-            'tanggal_kadaluarsa.*' => 'required|date',
-            'no_batch' => 'required|array|min:1',
-            'no_batch.*' => 'required|string|max:50',
-            'harga_jual' => 'required|array|min:1',
-            'harga_jual.*' => 'required|array|min:2',
-            'harga_jual.*.*' => 'required|numeric|min:0',
+       
+     
+    	Log::debug('Received data: ', $request->all());
+        $data = $request->all(); 
+        $nama_supplier = $data[0]['id_supplier']; 
+        $no_faktur = $data[0]['no_faktur'];
+        $tanggal_pembelian = $data[0]['tanggal_pembelian'];
+        $total_harga = $data[0]['total_harga'];
+
+        if(Pembelian::where('no_faktur', $no_faktur)->first()){
+            return response()->json([
+                'succes' => 'false',
+                'message' =>'No faktur sudah ada dalam database. Silakan gunakan nomor faktur yang berbeda.'
+            ], 400);
+
+        }
+        $idpembelian =Pembelian::create([
+            'id_supplier' => $nama_supplier,
+            'tanggal_pembelian'=>$tanggal_pembelian,
+            'no_faktur'=>$no_faktur,
+            'total_harga'=>$total_harga,
+            'status_pembayaran'=>'lunas',
         ]);
-
-        // dd($request->all());
-
-        // if ($validator->fails()) {
-        //     return redirect()->back()->withErrors($validator);
-        // }
-
-        // Simpan data pembelian
-        $pembelian = Pembelian::create([
-            'id_supplier' => $request->id_supplier,
-            'no_faktur' => $request->no_faktur,
-            'tanggal_pembelian' => $request->tanggal_pembelian,
-            'total_harga' => $request->total_harga,
-            'status_pembayaran' => 'lunas',
-        ]);
-
-        // Simpan detail pembelian dan stok
-        $merek_obats = $request->input('merek_obat');
-        $jumlah_obats = $request->input('jumlah_obat');
-        $harga_belis = $request->input('harga_beli');
-        $tanggal_kadaluarsas = $request->input('tanggal_kadaluarsa');
-        $no_batchs = $request->input('no_batch');
-        $harga_jual1 = $request->input('harga_jual1');
-        $harga_jual2 = $request->input('harga_jual2');
-
-        // dd($harga_jual1[0]);
-
-        foreach ($merek_obats as $i => $id_obat) {
-            $obat = Obat::with('satuans.detailSatuans')->find($id_obat);
-            $detail_satuan = $obat->satuans->first();
-
-            $satuan_terkecil_1 = $obat->satuan_terkecil_1;
-            $jumlah_satuan_terkecil_1 = $obat->jumlah_satuan_terkecil_1;
-
-            $detail_satuan_terkecil_2 = $detail_satuan->detailSatuans->first();
-            $satuan_terkecil_2 = $detail_satuan_terkecil_2?->satuan_terkecil;
-            $jumlah_satuan_terkecil_2 = $detail_satuan_terkecil_2?->jumlah ?? 0;
-
-            $stok_terkecil_1 = $jumlah_obats[$i] * $jumlah_satuan_terkecil_1;
-            $stok_terkecil_2 = $jumlah_obats[$i] * $jumlah_satuan_terkecil_1 * $jumlah_satuan_terkecil_2;
+       
+        $id_pembelian = $idpembelian->id_pembelian;
 
 
+        $dataobat = $data[0]['obat_list'];
 
+        for($i = 0; $i < count($dataobat); $i++) {
             DetailPembelian::create([
-                'id_pembelian' => $pembelian->id_pembelian,
-                'id_obat' => $id_obat,
-                'harga_beli_satuan' => $harga_belis[$i],
-                'quantity' => $jumlah_obats[$i],
-                'no_batch' => $no_batchs[$i],
+               'id_pembelian' => $id_pembelian,
+                'id_obat' => $dataobat[$i]['id_obat'],  
+                'harga_beli_satuan' => $dataobat[$i]['harga_beli'],
+                'quantity' => $dataobat[$i]['jumlah'],
+                'no_batch' => $dataobat[$i]['no_batch'],
             ]);
-
+            
+            $obat = Obat::with('satuans.detailSatuans')->find(1);
+            $jumlah_satuan_terkecil1 = $obat->satuans[0]->jumlah_satuan_terkecil_1;
+            $jumlah_satuan_terkecil = $obat->satuans[0]->detailSatuans[0]->jumlah;
             DetailObat::create([
-                'id_pembelian' => $pembelian->id_pembelian,
-                'id_obat' => $id_obat,
-                'stok_obat_terkecil_1' => $stok_terkecil_1,
-                'stok_obat_terkecil_2' => $stok_terkecil_2,
-                'harga_jual_1' => $harga_jual1[0],
-                'harga_jual_2' => $harga_jual2[0],
-                'tanggal_kadaluarsa' => $tanggal_kadaluarsas[$i],
-                'no_batch' => $no_batchs[$i],
+                'id_pembelian' => $id_pembelian, 
+                'id_obat'=>$dataobat[$i]['id_obat'],
+                'stok_satuan_terkecil_1'=> $dataobat[$i]['jumlah'] * $jumlah_satuan_terkecil1,
+                'stok_satuan_terkecil_2'=> ( $dataobat[$i]['jumlah'] * $jumlah_satuan_terkecil1) * $jumlah_satuan_terkecil,
+                'tanggal_kadaluarsa' =>$dataobat[$i]['tanggal_exp'],
+                'harga_jual_1'=>$dataobat[$i]['harga_jual1'],
+                'harga_jual_2'=>$dataobat[$i]['harga_jual2'],
+                'no_batch' => $dataobat[$i]['no_batch'],
+               
             ]);
         }
+        session()->flash('success', 'Pembelian berhasil ditambahkan!');
+        return response()->json(['success' => true, 'redirect_url' => route('Pembelian.index')]);
 
-        return redirect()->route('Pembelian.index')->with('success', 'Pembelian berhasil ditambahkan.');
+    
+   
     }
 
 

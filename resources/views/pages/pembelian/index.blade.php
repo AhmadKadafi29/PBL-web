@@ -85,12 +85,12 @@
                                                             <i class="fas fa-eye"></i>
                                                             Detail
                                                         </a>
-                                                        <button class="btn btn-sm btn-danger btn-icon confirm-delete ml-2"
+                                                        {{-- <button class="btn btn-sm btn-danger btn-icon confirm-delete ml-2"
                                                             data-id="{{ $beli->id_pembelian }}" data-toggle="modal"
                                                             data-target="#deleteConfirmationModal">
                                                             <i class="fas fa-times"></i>
                                                             Delete
-                                                        </button>
+                                                        </button> --}}
                                                     </div>
                                                 </td>
 
