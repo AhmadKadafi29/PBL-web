@@ -100,7 +100,7 @@
                                             <th>Nama Obat</th>
                                             <th>No Batch</th>
                                             <th>Tanggal Kadaluarsa</th>
-                                            <th>Kuantitas Obat</th>
+                                            <th>Stok Obat</th>
                                             <th>Harga Satuan</th>
                                             <th>Jumlah Dikembalikan</th>
                                             <th>Subtotal</th>
