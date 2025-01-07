@@ -65,7 +65,7 @@
                                     <div class="form-group">
                                         <label for="ongkos_kirim">Ongkos Kirim</label>
                                         <input type="text" name="ongkos_kirim" id="ongkos_kirim" class="form-control"
-                                            value="{{ old('ongkos_kirim') }}">
+                                            value="{{ old('ongkos_kirim') }}" oninput="totalHarga()">
                                         <small id="error-ongkos-kirim" style="color: red; display: none;"></small>
                                         @error('ongkos_kirim')
                                             <div class="text-danger">{{ $message }}</div>
@@ -296,7 +296,7 @@
                }
                
             });
-                i = validate(nofaktur, /[^a-zA-Z0-9]/.test(nofaktur.value), errorMessagenfaktur, 'Inputan harus angka huruf atau kombinasi');
+                i = validateNoFaktur(nofaktur,errorMessagenfaktur )
                 j = validate(ongkir, ongkir.value <= 0,errorMessageongkir, 'inputan harus diatas 0' );
                 k = validate(tanggalpembelian, tanggalpembelian.value > tanggalsekarang, errorMessagetanggalpembelian, 'input tanggal pembelian tidak boleh melebihi tanggal sekarang');
                 l = validate(totalharga, totalharga.value <= 0, errorMessagetotalharga, 'Inputan harus diatas 0');
@@ -321,6 +321,23 @@
                 }
 
         });
+
+        function validateNoFaktur(nofakturElement, errorMessageElement){
+            if (nofakturElement.value.trim() === "") {
+                return validate(nofakturElement, true, errorMessageElement, 'Inputan wajib diisi');
+            } 
+            if (nofakturElement.value.length < 8) {
+                return validate(nofakturElement, true, errorMessageElement, 'min 8 karakter');
+            }
+            if (nofakturElement.value.length > 16) {
+                return validate(nofakturElement, true, errorMessageElement, 'max 16 karakter');
+            }
+            if (/[^a-zA-Z0-9]/.test(nofakturElement.value)) {
+                return validate(nofakturElement, true, errorMessageElement, 'harus angka huruf / kombinasi');
+            }
+            return validate(nofakturElement, false, errorMessageElement, ''); // Valid
+
+        }
 
         function validateNoBatch(nobatchElement, errorMessageElement) {
             if (nobatchElement.value.trim() === "") {
@@ -351,6 +368,7 @@
                     body : JSON.stringify(data)
                 });
                 const result = await response.json();
+                console.log(response)
                 if(response.ok){
                     console.log(result);
                     if (result.success && result.redirect_url) {
@@ -522,6 +540,7 @@
 
 
             function totalHarga() {
+                const ongkir = document.getElementById('ongkos_kirim');
                 const totalElements = document.querySelectorAll(
                     '#obat-list .total');
                 const totalHargaInput = document.getElementById('total_harga');
@@ -532,6 +551,8 @@
                         0;
                     grandTotal += totalValue;
                 });
+                const ongkosKirimValue = parseFloat(ongkir.value) || 0;
+                grandTotal += ongkosKirimValue;
                 console.log('Grand Total: ', grandTotal);
                 totalHargaInput.value = grandTotal.toFixed(2);
             }

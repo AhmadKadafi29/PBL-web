@@ -60,12 +60,11 @@ class PembelianController extends Controller
         $tanggal_pembelian = $data[0]['tanggal_pembelian'];
         $total_harga = $data[0]['total_harga'];
 
-        if(Pembelian::where('no_faktur', $no_faktur)->first()){
+        if (Pembelian::where('no_faktur', $no_faktur)->first()) {
             return response()->json([
-                'succes' => 'false',
-                'message' =>'No faktur sudah ada dalam database. Silakan gunakan nomor faktur yang berbeda.'
+                'success' => false,
+                'message' => 'No faktur sudah ada dalam database. Silakan gunakan nomor faktur yang berbeda.'
             ], 400);
-
         }
         $idpembelian =Pembelian::create([
             'id_supplier' => $nama_supplier,
@@ -89,9 +88,9 @@ class PembelianController extends Controller
                 'no_batch' => $dataobat[$i]['no_batch'],
             ]);
             
-            $obat = Obat::with('satuans.detailSatuans')->find(1);
+            $obat = Obat::with('satuans.detailSatuans')->find($dataobat[$i]['id_obat']);
             $jumlah_satuan_terkecil1 = $obat->satuans[0]->jumlah_satuan_terkecil_1;
-            $jumlah_satuan_terkecil = $obat->satuans[0]->detailSatuans[0]->jumlah;
+            $jumlah_satuan_terkecil = isset($obat->satuans[0]->detailSatuans[0]->jumlah) ? $obat->satuans[0]->detailSatuans[0]->jumlah : 0;
             DetailObat::create([
                 'id_pembelian' => $id_pembelian, 
                 'id_obat'=>$dataobat[$i]['id_obat'],

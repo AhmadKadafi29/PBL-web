@@ -62,15 +62,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/laporan-labarugi/cetaklaporan', [LabaRugiController::class, 'printLabaRugi'])->name('labarugi.cetak');
     Route::get('/penjualan/index', [PenjualanController::class, 'index'])->name('penjualan.index');
     Route::post('/penjualan/cari-obat', [PenjualanController::class, 'cariObat']);
-    Route::post('/penjualan/checkout', [PenjualanController::class, 'checkout'])->name('penjualan.checkout');
-    Route::post('/penjualan/tambah-keranjang', [PenjualanController::class, 'tambahKeKeranjang']);
-    Route::delete('/penjualan/hapus-keranjang', [PenjualanController::class, 'hapusKeranjang'])->name('penjualan.hapus-keranjang');
-    Route::delete('/penjualan/hapus-itemkeranjang/{index}', [PenjualanController::class, 'hapusItemKeranjang'])->name('penjualan.hapusItemKeranjang');
-    Route::get('/penjualan/cetaknota', [PenjualanController::class, 'cetakNota'])->name('penjualan.cetaknota');
-    Route::get('/search-obat', [PembelianController::class, 'search'])->name('search-obat');
     Route::resource('/pengembalian-obat', PengembalianObatController::class);
     Route::get('/search-faktur', [PengembalianObatController::class, 'searchFaktur'])->name('search-faktur');
     Route::post('/pengembalian-obat/undo/{id}', [PengembalianObatController::class, 'undo'])->name('pengembalian-obat.undo');
+
+    Route::post('/cari-obat', [PenjualanController::class, 'cariObat'])->name('cari.obat');
+    Route::get('/search-obat', [PembelianController::class, 'search'])->name('search-obat');
+
 
 
 
@@ -79,7 +77,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('penjualan/index', [PenjualanController::class, 'index'])->name('penjualan.index');
         Route::post('/penjualan/cari-obat', [PenjualanController::class, 'cariObat']);
         Route::post('/penjualan/checkout', [PenjualanController::class, 'checkout'])->name('penjualan.checkout');
-        Route::post('/penjualan/tambah-keranjang', [PenjualanController::class, 'tambahKeKeranjang']);
+        Route::post('/penjualan/tambah-keranjang', [PenjualanController::class, 'tambahKeKeranjang'])->name('penjualan.tambah-keranjang');
         Route::delete('/penjualan/hapus-keranjang', [PenjualanController::class, 'hapusKeranjang'])->name('penjualan.hapus-keranjang');
         Route::delete('/penjualan/hapus-itemkeranjang/{index}', [PenjualanController::class, 'hapusItemKeranjang'])->name('penjualan.hapusItemKeranjang');
         Route::get('/penjualan/cetaknota', [PenjualanController::class, 'cetakNota'])->name('penjualan.cetaknota');

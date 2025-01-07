@@ -107,7 +107,7 @@ class ObatController extends Controller
     public function show($id_obat)
     {
         $itemObat = DetailObat::with('pembelian.supplier', 'obat.satuans.detailSatuans')->where('id_obat', $id_obat)->get();
-
+       
         return view('pages.obat.show', compact('itemObat'));
     }
 

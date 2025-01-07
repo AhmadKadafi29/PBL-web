@@ -11,12 +11,11 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Penjualan </h1>
+                <h1>Penjualan</h1>
 
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Pejualan</a></div>
-
+                    <div class="breadcrumb-item"><a href="#">Penjualan</a></div>
                 </div>
             </div>
             <div class="section-body">
@@ -35,62 +34,76 @@
                             <div class="card-body">
                                 <div class="container">
                                     <div class="row">
-                                        <form action="{{ url('/penjualan/tambah-keranjang') }}" method="post"
-                                            class="mb-3">
+                                        <form action="{{ url('/cari-obat') }}" method="post" class="mb-3">
                                             @csrf
                                             <div class="form-row">
-                                                <div class="form-group col-md-3">
+                                                <div class="form-group ">
                                                     <label for="merek_obat">Merek Obat</label>
                                                     <input type="text" name="merek_obat" id="merek_obat"
-                                                        class="form-control @error('merek_obat') is-invalid @enderror">
+                                                        class="form-control @error('merek_obat') is-invalid @enderror" value="{{ old('merek_obat') }}">
 
                                                     @error('merek_obat')
                                                         <div class="invalid-feedback">
                                                             {{ $message }}
                                                         </div>
                                                     @enderror
-                                                    <span id="error_message" class="text-danger"></span>
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    <label for="stok_obat">Stok</label>
-                                                    <input type="text" name="stok_obat" id="stok_obat"
-                                                        class="form-control" readonly>
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label for="harga_obat">Harga</label>
-                                                    <input type="text" name="harga_obat" id="harga_obat"
-                                                        class="form-control" readonly>
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label for="jumlah">Jumlah Beli</label>
-                                                    <input type="number" name="jumlah" value="1" class="form-control @error('jumlah') is-invalid @enderror">
-
-                                                    @error('jumlah')
-                                                        <div class="invalid-feedback">
-                                                            {{ $message }}
-                                                        </div>
-                                                    @enderror
                                                 </div>
                                                 <div class="form-group col-md-2 mt-2">
-                                                    <button type="submit" class="btn btn-primary mt-4">Tambah</button>
+                                                    <button type="submit" class="btn btn-primary mt-4">Cari</button>
                                                 </div>
                                             </div>
                                         </form>
-                                        <form action="{{ route('penjualan.hapus-keranjang') }}" method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-danger btn-icon confirm-delete ml-2">
-                                                <i class="fas fa-trash"></i> Hapus Keranjang
-                                            </button>
-                                        </form>
                                     </div>
-
                                 </div>
-                                <div class="container">
+                                @if (session('stok_satuan_1'))
+                                    <form action="{{ url('/penjualan/tambah-keranjang') }}" method="post" class="mb-3">
+                                        @csrf
+                                        <input type="hidden" name="merek_obat" value="{{ old('merek_obat', session('merek_obat')) }}">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="satuan">Pilih Satuan</label>
+                                                <select name="satuan" id="satuan" class="form-control">
+                                                    <option value="1">Satuan 1</option>
+                                                    <option value="2">Satuan 2</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="stok_obat">Stok</label>
+                                                <input type="text" name="stok_obat" id="stok_obat"
+                                                    class="form-control" value="{{ session('stok_satuan_1') }}" readonly>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="harga_obat">Harga</label>
+                                                <input type="text" name="harga_obat" id="harga_obat"
+                                                    class="form-control" value="{{ session('harga_jual_1') }}" readonly>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="jumlah">Jumlah Beli</label>
+                                                <input type="number" name="jumlah" value="1" class="form-control @error('jumlah') is-invalid @enderror">
+
+                                                @error('jumlah')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group col-md-2 mt-2">
+                                                <button type="submit" class="btn btn-primary mt-4">Tambah</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                @endif
+                                <form action="{{ route('penjualan.hapus-keranjang') }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-danger btn-icon confirm-delete ml-2">
+                                        <i class="fas fa-trash"></i> Hapus Keranjang
+                                    </button>
+                                </form>
+                                <div class="">
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
                                             <tr>
-                                                <th>Kode Obat</th>
                                                 <th>Merek Obat</th>
                                                 <th>Harga</th>
                                                 <th>Jumlah</th>
@@ -98,10 +111,8 @@
                                                 <th>Total</th>
                                                 <th>Action</th>
                                             </tr>
-                                            {{-- @dd($keranjang) --}}
                                             @foreach ($keranjang as $index => $item)
                                                 <tr>
-                                                    <td>{{ $item['kode_obat'] }}</td>
                                                     <td>{{ $item['nama_obat'] }}</td>
                                                     <td>{{ $item['harga_jual_obat'] }}</td>
                                                     <td>{{ $item['jumlah'] }}</td>
@@ -186,30 +197,13 @@
 
     <script>
         $(document).ready(function() {
-            $('#merek_obat').on('input', function() {
-                var nama = $(this).val();
-                $('#error_message').text(''); // Hapus pesan error sebelumnya
+            $('#satuan').on('change', function() {
+                let satuan = $(this).val();
+                let stok = satuan == 1 ? '{{ session('stok_satuan_1') }}' : '{{ session('stok_satuan_2') }}';
+                let harga = satuan == 1 ? '{{ session('harga_jual_1') }}' : '{{ session('harga_jual_2') }}';
 
-                $.ajax({
-                    url: "{{ url('/penjualan/cari-obat') }}",
-                    method: 'POST',
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        merek_obat: nama
-                    },
-                    success: function(response) {
-                        console.log(response); // Debugging respons
-                        $('#nama_obat').val(response.merek_obat);
-                        $('#stok_obat').val(response.stok_obat);
-                        $('#harga_obat').val(response.harga_obat);
-                    },
-                    error: function(xhr) {
-                        console.log(xhr.responseJSON); // Debugging respons error
-                        if (xhr.status === 404) {
-                            $('#error_message').text(xhr.responseJSON.error);
-                        }
-                    }
-                });
+                $('#stok_obat').val(stok);
+                $('#harga_obat').val(harga);
             });
 
             $('#jumlah_dibayar').on('input', function() {

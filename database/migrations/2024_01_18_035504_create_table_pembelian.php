@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pembelian', function (Blueprint $table) {
             $table->bigIncrements('id_pembelian');
             $table->bigInteger('id_supplier')->unsigned();
-            $table->bigInteger('no_faktur');
+            $table->text('no_faktur');
             $table->double('total_harga');
             $table->date('tanggal_pembelian');
             $table->string('status_pembayaran')->default('lunas');

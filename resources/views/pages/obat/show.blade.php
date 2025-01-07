@@ -50,6 +50,8 @@
                                             <?php
                                             $no = 1;
                                             ?>
+                                       
+
                                             @foreach ($itemObat as $item)
                                                 <tr>
                                                     <td>{{ $no++ }}</td>
@@ -58,8 +60,8 @@
                                                     <td>{{ $item->stok_satuan_terkecil_1 }}
                                                         {{ $item->obat->satuans[0]->satuan_terkecil_1 }}
                                                     </td>
-                                                    <td>{{ $item->stok_satuan_terkecil_2 }}
-                                                        {{ $item->obat->satuans[0]->detailSatuans[0]->satuan_terkecil }}</td>
+                                                    <td>{{ $item->stok_satuan_terkecil_2}}
+                                                        </td>
                                                     <td>{{ $item->harga_jual_1 }}</td>
                                                     <td>{{ $item->harga_jual_2 }}</td>
                                                     <td>{{ $item->tanggal_kadaluarsa }}</td>

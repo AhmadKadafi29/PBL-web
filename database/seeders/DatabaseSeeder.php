@@ -22,9 +22,9 @@ class DatabaseSeeder extends Seeder
             SupplierSeeder::class,
             ObatSeeder::class,
             SatuanSeeder::class,
-            PembelianSeeder::class,
-            DetailPembelianSeeder::class,
-            DetailObatSeeder::class
+            // PembelianSeeder::class,
+            // DetailPembelianSeeder::class,
+            // DetailObatSeeder::class
         ]);
     }
 }
