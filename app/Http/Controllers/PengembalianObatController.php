@@ -31,34 +31,54 @@ class PengembalianObatController extends Controller
             ->with('detailPembelian.obat')
             ->with('detailobat')
             ->get();
-        $stuan = 
-        $response = $pembelian->map(function ($item) {
-            return [
-                'no_faktur' => $item->no_faktur,
-                'tanggal_pembelian' => $item->tanggal_pembelian,
-                'nama_supplier' => $item->supplier->nama_supplier,
-                'id_pembelian' => $item->id_pembelian,
+        $stuan =
+            $response = $pembelian->map(function ($item) {
+                return [
+                    'no_faktur' => $item->no_faktur,
+                    'tanggal_pembelian' => $item->tanggal_pembelian,
+                    'nama_supplier' => $item->supplier->nama_supplier,
+                    'id_pembelian' => $item->id_pembelian,
 
-                'detail_pembelian' => $item->detailPembelian->map(function ($detail) {
-                    return [
-                        'id_obat' => $detail->id_obat,
-                        'no_batch' => $detail->no_batch,
-                        'merek_obat' => $detail->obat->merek_obat,
-                        'harga_satuan' => $detail->harga_beli_satuan
+                    'detail_pembelian' => $item->detailPembelian->map(function ($detail) {
+                        return [
+                            'id_obat' => $detail->id_obat,
+                            'no_batch' => $detail->no_batch,
+                            'merek_obat' => $detail->obat->merek_obat,
+                            'harga_satuan' => $detail->harga_beli_satuan
 
-                    ];
-                }),
+                        ];
+                    }),
 
+                    'stok' => $item->detailobat->map(function ($stok) {
+                        $satuan = $stok->obat->satuan; // Relasi dari model `Obat` ke model `Satuan`
 
-                'stok' => $item->detailobat->map(function ($stok) {
-                    return [
-                        'stok_tersedia' => $stok->stok_obat / 20,
-                        'tanggal_kadaluarsa' => $stok->tanggal_kadaluarsa,
-                        'id_detail_obat' => $stok->id_detail_obat
-                    ];
-                })
-            ];
-        });
+                        // Default nilai konversi jika satuan tidak tersedia
+                        $jumlahPerBox = 1;
+                        if ($satuan) {
+                            if ($satuan->jumlah_satuan_terkecil_1 > 0) {
+                                $jumlahPerBox = $satuan->jumlah_satuan_terkecil_1;
+                            }
+                        }
+
+                        $stokSatuanTerkecil = $stok->stok_satuan_terkecil_1;
+
+                        // Hitung jumlah box dan sisa terkecil
+                        $stokBox = 0;
+                        $stokTerkecil = $stokSatuanTerkecil;
+                        while ($stokTerkecil >= $jumlahPerBox) {
+                            $stokBox++;
+                            $stokTerkecil -= $jumlahPerBox;
+                        }
+
+                        return [
+                            'stok_box' => $stokBox,
+                            'stok_terkecil' => $stokTerkecil,
+                            'tanggal_kadaluarsa' => $stok->tanggal_kadaluarsa,
+                            'id_detail_obat' => $stok->id_detail_obat
+                        ];
+                    })
+                ];
+            });
         // dd($response);
 
         return response()->json($response);

@@ -36,4 +36,8 @@ class DetailObat extends Model
     {
         return $this->hasMany(detail_pengembalian_obat::class, 'id_detail_obat');
     }
+    public function satuans()
+    {
+        return $this->hasOne(Satuan::class, 'id_obat', 'id_obat');
+    }
 }

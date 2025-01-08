@@ -20,30 +20,49 @@
 
             <div class="section-body">
                 <div class="card">
-                    <form action="{{ route('Stok_opname.store') }}" method="POST">
+                    <form action="{{ route('Stok_opname.store') }}" method="POST" novalidate>
                         @csrf
                         <div class="container-fluid">
                             <div class="row mt-3">
                                 <div class="col-lg-6">
-    
+
                                     <div class="form-group">
                                         <strong>Nama Obat</strong>
                                         <select class="form-control" name="id_obat">
+                                            <option value="">--Pilih Obat--</option>
                                             @foreach ($obat as $ob)
                                                 <option value="{{ $ob->id_obat }}">{{ $ob->merek_obat }}</option>
                                             @endforeach
                                         </select>
+                                        @error('id_obat')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
+
                                     <div class="form-group">
-                                        <label for="stok_fisik">Stok Fisik</label>
-                                        <input type="text" name="stok_fisik" class="form-control">
+                                        <label for="stok_fisik_1">Stok Fisik 1</label>
+                                        <input type="text" name="stok_fisik_1" class="form-control">
+                                        @error('stok_fisik_1')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
-    
+
+                                    <div class="form-group">
+                                        <label for="stok_fisik_2">Stok Fisik 2</label>
+                                        <input type="text" name="stok_fisik_2" class="form-control">
+                                        @error('stok_fisik_2')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
                                     <div class="form-group">
                                         <label for="tanggal_opname">Tanggal opname</label>
                                         <input type="date" name="tanggal_opname" class="form-control">
+                                        @error('tanggal_opname')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
-    
+
                                     <div class="card-footer text-right">
                                         <button class="btn btn-primary"
                                             style="width: 90px; height:40px; font-size:15px">Submit</button>
@@ -51,7 +70,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </form>
                 </div>
             </div>
