@@ -71,34 +71,16 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Online Users</h4>
+                                <h4>Pembelian</h4>
                             </div>
                             <div class="card-body">
-                                47
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-8 col-md-12 col-12 col-sm-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Statistics</h4>
-                            <div class="card-header-action">
-                                <div class="btn-group">
-                                    <a href="#" class="btn btn-primary" id="btnWeek">Week</a>
-                                    <a href="#" class="btn" id="btnMonth">Month</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <!-- Canvas for Chart -->
-                            <canvas id="myChart" height="300"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </section>
     </div>
 @endsection
@@ -111,62 +93,4 @@
     <script src="{{ asset('library/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script>
 
     <!-- Page Specific JS File -->
-    <script>
-        // Fetch real data from your database using AJAX
-        function fetchData(duration) {
-            // Replace this with your actual API endpoint
-            fetch(`/chart/${duration}`)
-                .then(response => response.json())
-                .then(data => {
-                    updateChart(data);
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        }
-
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat',
-                    'Sabtu'
-                ], // Labels will be populated dynamically
-                datasets: [{
-                    label: 'Weekly Sales',
-                    data: [0, 10, 5, 2, 20], // Data will be populated dynamically
-                    fill: false,
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        // Event listeners for the Week and Month buttons
-        document.getElementById('btnWeek').addEventListener('click', function() {
-            fetchData('weekly');
-        });
-
-        document.getElementById('btnMonth').addEventListener('click', function() {
-            fetchData('monthly');
-        });
-
-        // Function to update chart with new data
-        function updateChart(data) {
-            myChart.data.labels = data.labels;
-
-            // Assign data directly without multiplication
-            myChart.data.datasets[0].data = data.data;
-
-            myChart.update();
-        }
-
-        // Initial fetch for week data
-        fetchData('weekly');
-    </script>
 @endpush

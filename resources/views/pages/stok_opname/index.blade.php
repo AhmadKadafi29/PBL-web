@@ -31,7 +31,8 @@
                             <div class="card-header">
                                 <h4>Stok Opname</h4>
                                 <div class="section-header-button">
-                                    <a href="{{ route('Stok_opname.create') }}" class="btn btn-primary">Tambah Stok Opname</a>
+                                    <a href="{{ route('Stok_opname.create') }}" class="btn btn-primary">Tambah Stok
+                                        Opname</a>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -41,30 +42,44 @@
                                         <tr>
                                             <th>Nama Obat</th>
                                             <th>Nama User</th>
-                                            <th>Stok Sistem</th>
-                                            <th>Stok Fisik</th>
-                                            <th>Hasil Selisih Opname</th>
-                                            <th>Tanggal opname</th>
-                                            {{-- <th> Action</th> --}}
-
+                                            <th>Stok Sistem 1</th>
+                                            <th>Stok Sistem 2</th>
+                                            <th>Stok Fisik 1</th>
+                                            <th>Stok Fisik 2</th>
+                                            <th>Selisih 1</th>
+                                            <th>Selisih 2</th>
+                                            <th>Tanggal Opname</th>
                                         </tr>
 
                                         @foreach ($opname as $op)
                                             <tr>
                                                 <td>{{ $op->obat->merek_obat }}</td>
-                                                <td>{{ $op->user->name }} </td>
-                                                <td> {{ $op->stok_sistem }}</td>
-                                                <td>{{ $op->stok_fisik }}</td>
-                                                <td>{{ $op->harga_jual_satuan }}</td>     
+                                                <td>{{ $op->user->name }}</td>
+                                                <td>{{ $op->stok_sistem_1 }}
+                                                    <small>{{ $op->obat->satuans->first()->satuan_terkecil_1 ?? ' ' }}</small>
+                                                </td>
+                                                <td>{{ $op->stok_sistem_2 }}
+                                                    <small>
+                                                        {{ optional(optional($op->obat->satuans->first())->detailSatuans->first())->satuan_terkecil ?? ' ' }}
+                                                    </small>
+                                                </td>
+                                                <td>{{ $op->stok_fisik_1 }}
+                                                    <small>{{ $op->obat->satuans->first()->satuan_terkecil_1 ?? '' }}</small>
+                                                </td>
+                                                <td>{{ $op->stok_fisik_2 }}
+                                                    <small>
+                                                        {{ optional(optional($op->obat->satuans->first())->detailSatuans->first())->satuan_terkecil ?? '' }}
+                                                    </small>
+                                                </td>
+                                                <td>{{ abs($op->stok_fisik_1 - $op->stok_sistem_1) }}
+                                                    <small>{{ $op->obat->satuans->first()->satuan_terkecil_1 ?? '' }}</small>
+                                                </td>
+                                                <td>{{ abs($op->stok_fisik_2 - $op->stok_sistem_2) }}
+                                                    <small>
+                                                        {{ optional(optional($op->obat->satuans->first())->detailSatuans->first())->satuan_terkecil ?? '' }}
+                                                    </small>
+                                                </td>
                                                 <td>{{ $op->tanggal_opname }}</td>
-                                                {{-- <td>
-                                                    <div class="d-flex">
-                                                        <a href="{{ route('Stok_opname.edit', $op->id_stok_opname) }}" class="btn btn-sm btn-info">
-                                                            <i class="fas fa-edit"></i> Edit
-                                                        </a>
-
-                                                    </div>
-                                                </td> --}}
                                             </tr>
                                         @endforeach
                                     </table>

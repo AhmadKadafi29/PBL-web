@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Pembelian')
+@section('title', 'Tambah Pengembalian Obat')
 
 @push('style')
     <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
@@ -15,99 +15,79 @@
                 <h1>Tambah Data Pengembalian Obat</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Pembelian</a></div>
-                    <div class="breadcrumb-item">Tambah Pembelian</div>
+                    <div class="breadcrumb-item"><a href="#">Pengembalian</a></div>
+                    <div class="breadcrumb-item">Tambah Pengembalian</div>
                 </div>
             </div>
 
             <div class="section-body">
-                <div class="row">
-                    <div class="col-12">
-                        @include('layouts.alert')
-                    </div>
-                </div>
                 <div class="card">
                     <form method="POST" action="{{ route('pengembalian-obat.store') }}">
-
                         @csrf
                         <div class="container-fluid">
                             <div class="row">
+                                <!-- Form Input Faktur -->
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label for="no_faktur">No Faktur</label>
                                         <div class="input-group">
                                             <input type="text" name="no_faktur" id="no_faktur" class="form-control"
                                                 placeholder="Masukkan No Faktur">
-                                            <div class="input-group-append">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-primary" type="button"
-                                                        onclick="fetchDataFaktur()"><i class="fas fa-search"></i></button>
-                                                </div>
-                                            </div>
+                                            <button class="btn btn-primary input-group-append" type="button"
+                                                onclick="fetchDataFaktur()"><i class="fas fa-search"></i></button>
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         <label for="tanggal_pembelian">Tanggal Pembelian</label>
-                                        <input type="date" class="form-control datepicker" id="tanggal_pembelian"
-                                            name="tanggal_pembelian" onchange="updateNoFaktur()">
+                                        <input type="date" class="form-control" id="tanggal_pembelian"
+                                            name="tanggal_pembelian" readonly>
                                     </div>
-
                                 </div>
+
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label for="supplier">Supplier</label>
-                                        <input type="text" name="supplier" id="supplier" class="form-control">
+                                        <input type="text" name="supplier" id="supplier" class="form-control" readonly>
                                     </div>
                                     <div class="form-group">
                                         <label for="tanggal_pengembalian">Tanggal Pengembalian</label>
-                                        <input type="date" class="form-control datepicker" id="tanggal_pengembalian"
-                                            name="tanggal_pengembalian" onchange="updateNoFaktur()">
+                                        <input type="date" class="form-control" id="tanggal_pengembalian"
+                                            name="tanggal_pengembalian">
                                     </div>
-
                                 </div>
                             </div>
+
+                            <!-- Tombol Aksi -->
                             <div class="row">
-                                <div class="col-lg-6 text-left">
-                                    <button type="reset" class="btn btn-secondary" style="margin-right: 10px;"
-                                        data-toggle="modal" data-target="#deleteConfirmationModal">Reset</button>
-                                    <button type="submit" class="btn btn-success"
-                                        style="margin-right: 10px;">Simpan</button>
-
+                                <div class="col-lg-6">
+                                    <button type="reset" class="btn btn-secondary"
+                                        onclick="resetDataObat()">Reset</button>
+                                    <button type="submit" class="btn btn-success">Simpan</button>
                                 </div>
-                                <div class="col-lg-6 ">
-                                    <div class="form-group">
-                                        <input type="number" name="total" id="totalpengembalian" class="form-control "
-                                            readonly>
-                                    </div>
-
-
+                                <div class="col-lg-6">
+                                    <input type="number" name="total" id="totalpengembalian" class="form-control"
+                                        readonly>
                                 </div>
-
-                                <!-- Modal -->
-
                             </div>
 
-                            <hr style="margin-top: 20px; margin-bottom: 20px;">
-
-                            <!-- Tabel Pembelian Obat -->
-                            <div class="table-responsive">
+                            <!-- Tabel Pengembalian Obat -->
+                            <div class="table-responsive mt-3">
                                 <table class="table">
                                     <thead>
                                         <tr>
-
                                             <th>Aksi</th>
                                             <th>Nama Obat</th>
                                             <th>No Batch</th>
                                             <th>Tanggal Kadaluarsa</th>
-                                            <th>Kuantitas Obat</th>
+                                            <th>Stok Obat (Box)</th>
+                                            <th>Stok Obat Terkecil</th>
                                             <th>Harga Satuan</th>
-                                            <th>Jumlah Dikembalikan</th>
+                                            <th>Jumlah Dikembalikan (Box)</th>
                                             <th>Subtotal</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tableDataFaktur">
-                                        <!-- Data obat yang dipilih dari modal akan ditambahkan di sini -->
+                                        <!-- Data akan diisi oleh JavaScript -->
                                     </tbody>
                                 </table>
                             </div>
@@ -117,30 +97,8 @@
             </div>
         </section>
     </div>
-    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog"
-        aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteConfirmationModalLabel">Konfirmasi Hapus</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Apakah anda yakin ingin menghapus seluruh data obat<span id="deleteObjectName"></span>?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-danger" data-dismiss="modal"
-                        onclick="resetDataObat()">Hapus</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
 @endsection
+
 
 @push('scripts')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -192,7 +150,8 @@
                                                 <td><input type="text" name="merek_obat[]" class="total" value="${detail.merek_obat}" readonly></td>
                                                 <td><input type="text" name="no_batch[]" class="total" value="${detail.no_batch}"readonly></td>
                                                 <td><input type="date" name="tanggal_kadaluarsa[]" class="total" value="${stok[index].tanggal_kadaluarsa}"readonly></td>
-                                                <td><input type="number" name="stok_tersedia[]" class="stok_tersedia" value="${stok[index].stok_tersedia}"readonly ></td>
+                                                <td><input type="number" name="stok_box[]" class="stok_box" value="${stok[index].stok_box}"readonly ></td>
+                                                <td><input type="number" name="stok_terkecil[]" class="stok_terkecil" value="${stok[index].stok_terkecil}"readonly ></td>
                                                 <td>${detail.harga_satuan}<input type="hidden" class="harga_satuan" value="${detail.harga_satuan}"></td>
                                                 <td><input type="number" name="jumlah_retur[]" class="jumlah-retur" onchange="updatesubtotal(this)" ></td>
                                                 <td><input type="number" name="subtotal[]" class="subtotal" readonly></td>
@@ -216,32 +175,40 @@
 
             function hapusItemPembelianObat(element) {
                 const item = element.closest('tr');
-                item.remove()
+                item.remove();
+                TotalPengembalian();
             }
 
             function updatesubtotal(element) {
                 const row = element.closest('tr');
-                const jumlahretur = row.querySelector('.jumlah-retur').value;
-                const harga_satuan = row.querySelector('.harga_satuan').value;
+                const jumlahRetur = parseInt(row.querySelector('.jumlah-retur').value || 0);
+                const stok1 = parseInt(row.querySelector('.stok_1').value || 0);
+                const hargaSatuan = parseFloat(row.querySelector('.harga_satuan').value || 0);
                 const subtotal = row.querySelector('.subtotal');
-                const kuantitas = row.querySelector('.stok_tersedia').value;
-                subtotal.value = jumlahretur * harga_satuan;
-                TotalPengembalian()
 
+                if (jumlahRetur > stok1) {
+                    alert("Jumlah retur tidak boleh lebih besar dari stok!");
+                    row.querySelector('.jumlah-retur').value = 0;
+                    subtotal.value = 0;
+                } else {
+                    subtotal.value = jumlahRetur * hargaSatuan;
+                }
+                TotalPengembalian();
             }
 
             function TotalPengembalian() {
-                const elementTotal = document.getElementById('totalpengembalian');
+                const totalElement = document.getElementById('totalpengembalian');
                 const subtotals = document.querySelectorAll('.subtotal');
-                let totalHarga = 0;
-
-                // Loop melalui semua elemen subtotal dan tambahkan nilainya ke totalHarga
-                subtotals.forEach((subtotal) => {
-                    totalHarga += parseFloat(subtotal.value || 0); // Pastikan nilainya diubah menjadi float
+                let total = 0;
+                subtotals.forEach(sub => {
+                    total += parseFloat(sub.value || 0);
                 });
+                totalElement.value = total;
+            }
 
-                // Tampilkan hasil total pada input totalpengembalian${stok[index].id_detail_obat}
-                elementTotal.value = totalHarga;
+            function resetDataObat() {
+                document.getElementById('tableDataFaktur').innerHTML = '';
+                document.getElementById('totalpengembalian').value = 0;
             }
         </script>
     @endsection

@@ -49,4 +49,8 @@ class Obat extends Model
     {
         return $this->hasMany(Satuan::class, 'id_obat', 'id_obat');
     }
+    public function detailSatuans()
+    {
+        return $this->hasMany(DetailSatuan::class, 'id_obat', 'id');
+    }
 }
