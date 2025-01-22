@@ -54,14 +54,14 @@ class KategoriobatController extends Controller
 
     public function update(Request $request, $id_kategori)
     {
-        $validator = Validator::make($request->all(),[
-                'nama_kategori' => 'required|string|min:5|max:20|regex:/^[a-zA-Z\s]+$/|unique:kategori_obat,nama_kategori'
-        ],[
-                'nama_kategori.required' => 'nama kategori wajib diisi',
-                'nama_kategori.min' => 'nama kategori tidak boleh kurang 5 karakter',
-                'nama_kategori.unique' => 'nama kategori sudah ada',
-                'nama_kategori.regex' => 'nama kategori tidak boleh mengandung angka',
-                'nama_kategori.string' => 'nama kategori harus huruf',
+        $validator = Validator::make($request->all(), [
+            'nama_kategori' => 'required|string|min:5|max:20|regex:/^[a-zA-Z\s]+$/|unique:kategori_obat,nama_kategori,' . $id_kategori . ',id_kategori'
+        ], [
+            'nama_kategori.required' => 'nama kategori wajib diisi',
+            'nama_kategori.min' => 'nama kategori tidak boleh kurang 5 karakter',
+            'nama_kategori.unique' => 'nama kategori sudah ada',
+            'nama_kategori.regex' => 'nama kategori tidak boleh mengandung angka',
+            'nama_kategori.string' => 'nama kategori harus huruf',
         ]);
 
         if ($validator->fails()) {
